@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sofiia Matsiutsia — Designs for products & services</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="page">
+
+  <header class="header">
+    <nav class="nav" aria-label="Primary">
+      <a href="#about" class="nav__link">About,</a>
+      <a href="#work" class="nav__link">Work,</a>
+      <a href="#talks" class="nav__link">Talks.</a>
+    </nav>
+
+    <a href="#top" class="logo" aria-label="Sofiia Matsiutsia — home">
+      <img src="assets/images/logo.gif" alt="Sofiia Matsiutsia" class="logo__mark" />
+    </a>
+
+    <button type="button" class="sound-toggle" aria-label="Toggle sound" aria-pressed="false">
+      <img src="assets/icons/sound-vector-1.svg" alt="" class="sound-toggle__part sound-toggle__part--1" />
+      <img src="assets/icons/sound-vector-2.svg" alt="" class="sound-toggle__part sound-toggle__part--2" />
+      <img src="assets/icons/sound-vector-3.svg" alt="" class="sound-toggle__part sound-toggle__part--3" />
+    </button>
+  </header>
+
+  <section class="hero">
+    <h1 class="hero__heading">
+      <span class="hero__doodle-target">
+        <img src="assets/icons/doodle-circle.svg" alt="" class="hero__doodle" />
+        i do design for
+      </span>
+      <img src="assets/images/word-products.svg" alt="products" class="hero__word" />,
+      <img src="assets/images/word-services.svg" alt="services" class="hero__word" />,
+      and run
+      <img src="assets/images/word-ai-community.svg" alt="AI community" class="hero__word" />.
+    </h1>
+
+    <p class="hero__heading">
+      but also research, tinker, and design engineering.<br />
+      based in london.
+    </p>
+
+    <div class="actions">
+      <button type="button" class="action-btn">Copy email</button>
+      <a href="#" class="action-btn">LinkedIn</a>
+      <a href="#" class="action-btn">Twitter</a>
+    </div>
+  </section>
+
+  <div class="spacer" aria-hidden="true"></div>
+
+  <section class="marquee" aria-label="Selected projects">
+    <div class="marquee__track">
+
+      <article class="card card--wide">
+        <div class="card__media card__media--voyage">
+          <img src="assets/images/voyage-monitor.png" alt="Voyage Monitor product screenshot" />
+        </div>
+        <p class="card__label"><span class="card__dot">.</span>voyage monitor</p>
+      </article>
+
+      <article class="card card--square">
+        <div class="card__media card__media--skills">
+          <img src="assets/images/skills-trade.png" alt="Skills Trade product screenshot" />
+        </div>
+        <p class="card__label"><span class="card__dot">.</span>skills trade</p>
+      </article>
+
+      <article class="card card--square">
+        <div class="card__media card__media--realestate">
+          <img src="assets/images/real-estate.png" alt="Real Estate product screenshot" />
+        </div>
+        <p class="card__label"><span class="card__dot">.</span>real estate 1</p>
+      </article>
+
+      <article class="card card--wide" aria-hidden="true">
+        <div class="card__media card__media--voyage">
+          <img src="assets/images/voyage-monitor.png" alt="" />
+        </div>
+        <p class="card__label"><span class="card__dot">.</span>voyage monitor</p>
+      </article>
+
+      <article class="card card--square" aria-hidden="true">
+        <div class="card__media card__media--skills">
+          <img src="assets/images/skills-trade.png" alt="" />
+        </div>
+        <p class="card__label"><span class="card__dot">.</span>skills trade</p>
+      </article>
+
+      <article class="card card--square" aria-hidden="true">
+        <div class="card__media card__media--realestate">
+          <img src="assets/images/real-estate.png" alt="" />
+        </div>
+        <p class="card__label"><span class="card__dot">.</span>real estate 1</p>
+      </article>
+
+    </div>
+  </section>
+
+  <button type="button" class="menu-bar" id="menu-open" aria-haspopup="true" aria-controls="menu-overlay" aria-expanded="false">
+    Menu
+  </button>
+
+</div>
+
+<div class="menu-overlay" id="menu-overlay" hidden>
+  <a href="#top" class="logo" aria-label="Sofiia Matsiutsia — home">
+    <img src="assets/images/logo.gif" alt="Sofiia Matsiutsia" class="logo__mark" />
+  </a>
+
+  <nav class="menu-overlay__nav" aria-label="Primary">
+    <a href="#about" class="menu-overlay__link">About</a>
+    <a href="#work" class="menu-overlay__link">Work</a>
+    <a href="#talks" class="menu-overlay__link">talks</a>
+  </nav>
+
+  <div class="actions actions--full">
+    <button type="button" class="action-btn">Copy email</button>
+    <a href="#" class="action-btn">LinkedIn</a>
+    <a href="#" class="action-btn">Twitter</a>
+  </div>
+
+  <button type="button" class="menu-bar" id="menu-close" aria-controls="menu-overlay">
+    Close
+  </button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

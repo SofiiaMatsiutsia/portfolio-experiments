@@ -1,0 +1,390 @@
+@font-face {
+  font-family: "Folio Bk BT";
+  src: url("assets/fonts/FolioBkBT-Book.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Folio Bk BT";
+  src: url("assets/fonts/FolioBkBT-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Garrigos Ornamentos";
+  src: url("assets/fonts/Garrigos-Ornamentos.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --font-body: "Folio Bk BT", "Century Gothic", "Futura", Avenir, Helvetica, Arial, sans-serif;
+  --font-ornament: "Garrigos Ornamentos", var(--font-body);
+  --bg: #f3f3f3;
+  --fg: #000;
+  --fg-muted: rgba(0, 0, 0, 0.3);
+  --fg-faded: rgba(0, 0, 0, 0.4);
+  --gutter: 20px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+.page {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* Header */
+.header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 34px var(--gutter) 0;
+}
+
+.nav {
+  display: flex;
+  gap: 20px;
+  font-size: 24px;
+  text-transform: uppercase;
+}
+
+.nav__link {
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.nav__link--muted {
+  opacity: 0.3;
+}
+
+.logo {
+  position: absolute;
+  left: 50%;
+  top: 34px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+}
+
+.logo__mark {
+  height: 34px;
+  width: auto;
+}
+
+.sound-toggle {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
+.sound-toggle__part {
+  position: absolute;
+  height: 60%;
+  width: auto;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.sound-toggle__part--1 {
+  left: 8%;
+}
+
+.sound-toggle__part--2 {
+  left: 62%;
+}
+
+.sound-toggle__part--3 {
+  left: 76%;
+}
+
+/* Hero */
+.hero {
+  display: flex;
+  flex-direction: column;
+  padding: 98px var(--gutter) 0;
+}
+
+.hero__heading {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 42px;
+  line-height: 1.4;
+  text-transform: uppercase;
+  color: var(--fg);
+}
+
+.hero__doodle-target {
+  position: relative;
+  display: inline-block;
+}
+
+.hero__doodle {
+  position: absolute;
+  left: 0.262em;
+  top: -0.381em;
+  width: 6.238em;
+  height: 2em;
+  pointer-events: none;
+}
+
+.hero__word {
+  display: inline-block;
+  height: 0.762em;
+  width: auto;
+  vertical-align: middle;
+  margin: 0 0.048em;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+.action-btn {
+  background: #fff;
+  border: none;
+  padding: 6px 10px;
+  font-family: var(--font-body);
+  font-size: 16px;
+  letter-spacing: 0.16px;
+  text-transform: uppercase;
+  color: var(--fg);
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spacer {
+  flex: 1 1 auto;
+  min-height: 40px;
+}
+
+/* Bottom marquee */
+.marquee {
+  width: 100%;
+  overflow: hidden;
+  padding-bottom: var(--gutter);
+}
+
+.marquee__track {
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+  padding-left: var(--gutter);
+  width: max-content;
+  animation: marquee-scroll 32s linear infinite;
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-50% - 20px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track {
+    animation-duration: 120s;
+  }
+}
+
+.marquee:hover .marquee__track {
+  animation-play-state: paused;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 0 0 auto;
+}
+
+.card__media {
+  background: var(--card-fill, #fff);
+  overflow: hidden;
+  position: relative;
+  transition: background-color 0.25s ease;
+}
+
+.card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card--wide .card__media {
+  width: 548px;
+  height: 278px;
+}
+
+.card--square .card__media {
+  width: 278px;
+  height: 278px;
+}
+
+.card__media--voyage,
+.card__media--skills {
+  padding: 20px 56px;
+}
+
+.card__media--voyage img,
+.card__media--skills img {
+  border-radius: 2px;
+}
+
+.card__media--realestate {
+  padding: 0;
+}
+
+.card__label {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 24px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.card__dot {
+  font-family: var(--font-ornament);
+  font-size: 32px;
+  line-height: 1.1;
+}
+
+/* Mobile menu trigger / close bar (shared look) */
+.menu-bar {
+  display: none;
+  width: 100%;
+  flex: 0 0 auto;
+  background: #fff;
+  border: none;
+  padding: 8px 20px;
+  font-family: var(--font-body);
+  font-size: 24px;
+  text-transform: uppercase;
+  color: #171615;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Full-screen mobile menu overlay */
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: #4dccf9;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 26px var(--gutter) var(--gutter);
+}
+
+.menu-overlay[hidden] {
+  display: none;
+}
+
+.menu-overlay .logo {
+  position: static;
+  transform: none;
+  margin: 0 auto;
+}
+
+.menu-overlay__nav {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+.menu-overlay__link {
+  font-family: var(--font-body);
+  font-size: 48px;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.actions--full .action-btn {
+  flex: 1 1 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+/* Mobile layout */
+@media (max-width: 640px) {
+  :root {
+    --gutter: 12px;
+  }
+
+  .header {
+    justify-content: center;
+    padding: 26px var(--gutter) 0;
+  }
+
+  .nav,
+  .sound-toggle {
+    display: none;
+  }
+
+  .logo {
+    position: static;
+    transform: none;
+  }
+
+  .hero {
+    padding: 43px var(--gutter) 0;
+  }
+
+  .hero__heading {
+    font-size: 28px;
+  }
+
+  .hero .actions {
+    margin-top: 16px;
+  }
+
+  .menu-bar {
+    display: flex;
+  }
+}
