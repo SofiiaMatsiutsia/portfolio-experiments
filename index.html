@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Sofiia Matsiutsia — Designs for products & services</title>
-<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="styles.css?v=5" />
 </head>
 <body>
 <div class="page">
@@ -108,27 +108,31 @@
 </div>
 
 <div class="menu-overlay" id="menu-overlay" hidden>
-  <a href="#top" class="logo" aria-label="Sofiia Matsiutsia — home">
-    <img src="assets/images/logo.gif" alt="Sofiia Matsiutsia" class="logo__mark" />
-  </a>
-
-  <nav class="menu-overlay__nav" aria-label="Primary">
-    <a href="#about" class="menu-overlay__link">About</a>
-    <a href="#work" class="menu-overlay__link">Work</a>
-    <a href="#talks" class="menu-overlay__link">talks</a>
-  </nav>
-
-  <div class="actions actions--full">
-    <button type="button" class="action-btn">Copy email</button>
-    <a href="#" class="action-btn">LinkedIn</a>
-    <a href="#" class="action-btn">Twitter</a>
+  <div class="ring-stage" aria-hidden="true">
+    <div class="ring ring--1"></div>
+    <div class="ring ring--2"></div>
+    <div class="ring ring--3"></div>
+    <div class="ring ring--4"></div>
+    <div class="ring ring--5"></div>
   </div>
 
-  <button type="button" class="menu-bar" id="menu-close" aria-controls="menu-overlay">
+  <nav class="menu-overlay__nav" aria-label="Primary">
+    <a href="#about" class="menu-overlay__link menu-overlay__link--about">About</a>
+    <a href="#work" class="menu-overlay__link menu-overlay__link--work">Work</a>
+    <a href="#talks" class="menu-overlay__link menu-overlay__link--talks">talks</a>
+  </nav>
+
+  <div class="menu-overlay__contact">
+    <button type="button" class="menu-overlay__contact-link menu-overlay__contact-link--email">Copy email</button>
+    <a href="#" class="menu-overlay__contact-link menu-overlay__contact-link--linkedin">LinkedIn</a>
+    <a href="#" class="menu-overlay__contact-link menu-overlay__contact-link--twitter">Twitter</a>
+  </div>
+
+  <button type="button" class="menu-bar menu-overlay__close" id="menu-close" aria-controls="menu-overlay">
     Close
   </button>
 </div>
 
-<script src="script.js"></script>
+<script src="script.js?v=5"></script>
 </body>
 </html>
