@@ -107,33 +107,79 @@ img {
 }
 
 .sound-toggle {
-  position: relative;
+  --sound-ease: cubic-bezier(0.23, 1, 0.32, 1);
+  display: grid;
+  place-items: center;
   width: 32px;
   height: 32px;
   border: none;
   background: transparent;
   padding: 0;
+  color: var(--fg);
   cursor: pointer;
+  transition: transform 140ms var(--sound-ease);
 }
 
-.sound-toggle__part {
+.sound-toggle:active {
+  transform: scale(0.97);
+}
+
+.sound-toggle__swap {
+  position: relative;
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+
+.sound-toggle__layer {
   position: absolute;
-  height: 60%;
-  width: auto;
-  top: 50%;
-  transform: translateY(-50%);
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  transform-origin: 42% 50%;
+  transition:
+    opacity 180ms var(--sound-ease),
+    transform 220ms var(--sound-ease);
 }
 
-.sound-toggle__part--1 {
-  left: 8%;
+.sound-toggle__icon {
+  display: block;
+  width: 24px;
+  height: 24px;
+  overflow: visible;
 }
 
-.sound-toggle__part--2 {
-  left: 62%;
+.sound-toggle__layer--on {
+  opacity: 1;
+  transform: scale(1);
 }
 
-.sound-toggle__part--3 {
-  left: 76%;
+.sound-toggle__layer--off {
+  opacity: 0;
+  transform: scale(0.88) rotate(-10deg);
+}
+
+.sound-toggle.is-muted .sound-toggle__layer--on {
+  opacity: 0;
+  transform: scale(0.88) rotate(10deg);
+}
+
+.sound-toggle.is-muted .sound-toggle__layer--off {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sound-toggle,
+  .sound-toggle__layer {
+    transition: none;
+  }
+
+  .sound-toggle__layer--off,
+  .sound-toggle.is-muted .sound-toggle__layer--on {
+    transform: none;
+  }
 }
 
 /* Hero */

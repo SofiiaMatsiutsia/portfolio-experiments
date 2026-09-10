@@ -1,5 +1,15 @@
 const CARD_HOVER_COLORS = ["#4DCCF9", "#E8A7ED", "#86CD8B", "#F6AA81"];
 
+document.addEventListener("click", (event) => {
+  const soundToggle = event.target.closest(".sound-toggle");
+  if (!soundToggle) return;
+
+  const muted = soundToggle.getAttribute("aria-pressed") !== "true";
+  soundToggle.classList.toggle("is-muted", muted);
+  soundToggle.setAttribute("aria-pressed", String(muted));
+  soundToggle.setAttribute("aria-label", muted ? "Unmute sound" : "Mute sound");
+});
+
 document.querySelectorAll(".card__media").forEach((media) => {
   media.addEventListener("mouseenter", () => {
     const color = CARD_HOVER_COLORS[Math.floor(Math.random() * CARD_HOVER_COLORS.length)];
