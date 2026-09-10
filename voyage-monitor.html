@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Voyage Monitor dashboard — Sofiia Matsiutsia</title>
+<link rel="stylesheet" href="styles.css?v=23" />
+</head>
+<body class="case">
+
+  <header class="header">
+    <nav class="nav" aria-label="Primary">
+      <a href="index.html#about" class="nav__link nav__link--muted">About,</a>
+      <a href="index.html#work" class="nav__link" aria-current="page">Work,</a>
+      <a href="index.html#talks" class="nav__link nav__link--muted">Talks.</a>
+    </nav>
+
+    <a href="index.html" class="logo" aria-label="Sofiia Matsiutsia — home">
+      <img src="assets/images/logo.gif" alt="Sofiia Matsiutsia" class="logo__mark" />
+    </a>
+
+    <button type="button" class="sound-toggle" aria-label="Mute sound" aria-pressed="false">
+      <span class="sound-toggle__swap">
+        <span class="sound-toggle__layer sound-toggle__layer--on">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="sound-toggle__icon" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" />
+          </svg>
+        </span>
+        <span class="sound-toggle__layer sound-toggle__layer--off">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="sound-toggle__icon" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 9.75 19.5 12m0 0 2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6 4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" />
+          </svg>
+        </span>
+      </span>
+    </button>
+  </header>
+
+  <div class="case__layout">
+    <aside class="case__rail">
+      <div class="case__rail-inner">
+      <a href="index.html" class="case__back" aria-label="Back to work">
+        <img src="assets/icons/back-chevron.svg" alt="" width="38" height="26" />
+      </a>
+
+      <nav class="case__toc" aria-label="Page contents">
+        <p class="case__toc-title">content</p>
+        <ul class="case__toc-list">
+          <li><a href="#role">My role</a></li>
+          <li><a href="#improvements">Improvements</a></li>
+          <li><a href="#problem">Problem</a></li>
+          <li><a href="#solution">Solution</a></li>
+          <li>
+            <a href="#process">The process</a>
+            <ol class="case__toc-sub">
+              <li><a href="#mapping">Mapping roles and user flows</a></li>
+              <li><a href="#data-model">Data model</a></li>
+              <li><a href="#investigation">Investigation flow</a></li>
+              <li><a href="#explorations">Design explorations</a></li>
+              <li><a href="#final">Final design</a></li>
+            </ol>
+          </li>
+          <li><a href="#impact">Market impact</a></li>
+        </ul>
+      </nav>
+      </div>
+    </aside>
+
+    <main class="case__main">
+      <div class="case__hero-block">
+        <figure class="case__hero">
+          <video
+            class="case__hero-media"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="auto"
+            poster="assets/images/voyage/hero.png"
+            aria-label="Voyage Monitor dashboard animation showing a fleet map, vessel list, and KPI status bars"
+          >
+            <source src="assets/images/voyage/hero.webm" type="video/webm" />
+          </video>
+          <div class="case__hero-hover" aria-hidden="true">
+            <img
+              class="case__hero-still"
+              src="assets/images/voyage/hero-static.png"
+              alt=""
+            />
+          </div>
+        </figure>
+
+        <div class="case__heading">
+          <h1 class="case__title">Voyage Monitor dashboard</h1>
+
+          <dl class="case__meta">
+            <div class="case__meta-item">
+              <dt>timeline</dt>
+              <dd>2016-2019</dd>
+            </div>
+            <div class="case__meta-item">
+              <dt>Role</dt>
+              <dd>90 Percent of Everything</dd>
+            </div>
+            <div class="case__meta-item">
+              <dt>Team</dt>
+              <dd>Create a platform from scratch</dd>
+            </div>
+            <div class="case__meta-item">
+              <dt>tools</dt>
+              <dd>Sketch, Principle, HTML/CSS</dd>
+            </div>
+          </dl>
+
+          <p class="case__intro" id="problem">Fleet’s operational managers at maritime companies live in app-switching. They’ll have one browser tab open to check fuel consumption, another for performance metrics, a third for compliance data. Half the data was calculated manually in spreadsheets.</p>
+        </div>
+      </div>
+
+      <div class="case__body">
+        <section class="case-section" id="role">
+          <h2 class="case-section__title">My role</h2>
+          <ul class="case-section__list">
+            <li>End-to-end design</li>
+            <li>User research</li>
+            <li>Information architecture</li>
+            <li>Design system: Charts, Compass, KPIs</li>
+            <li>Prototyping</li>
+          </ul>
+        </section>
+
+        <section class="case-section" id="improvements">
+          <h2 class="case-section__title">Improvements</h2>
+          <ul class="case-section__list">
+            <li>Decision time: minutes → seconds</li>
+            <li>App-switching: 7 systems → 1 dashboard</li>
+            <li>Calculations: manually → automated</li>
+          </ul>
+        </section>
+
+        <section class="case-section" id="solution">
+          <h2 class="case-section__title">Solution</h2>
+          <div class="case-section__copy">
+            <p>A unified dashboard. One screen shows everything users need: real-time vessel data, performance against benchmarks, weather context, compliance status.</p>
+            <p>Metrics are grouped by vessel component: engine, propellers, weather, charter party. Each shows a status marker: gray (normal), yellow (caution), red (action).</p>
+          </div>
+          <figure class="case-figure">
+            <img src="assets/images/voyage/solution-strip.png" alt="KPI status strip with engine, propeller, weather, and charter party indicators" />
+          </figure>
+          <div class="case-section__copy">
+            <p>Users scan in 5 seconds. When something deviates, they click for historical context and weather data.</p>
+            <p>“Why did this happen?” → click for details.</p>
+          </div>
+        </section>
+
+        <section class="case-section case-section--process" id="process">
+          <h2 class="case-section__title">The process</h2>
+
+          <article class="case-step" id="mapping">
+            <h3 class="case-step__title"><span class="case-step__num">1.</span> Mapping roles and user flows (research)</h3>
+            <div class="case-section__copy">
+              <p>Before designing a single screen, I spent time understanding how operational managers work. Together with a researcher, I conducted interviews with captains and fleet managers, mapping their daily tasks, decision points, and pain points directly on the wall.</p>
+              <p>Key findings:</p>
+              <ul>
+                <li>Managers called a captain up to once per day to gather data that should have been automated.</li>
+                <li>7 separate tools meant critical context lived in different places, and sometimes fell through the gaps.</li>
+                <li>Manual entry created data accuracy issues that compounded downstream into compliance risk.</li>
+              </ul>
+            </div>
+            <figure class="case-figure">
+              <img src="assets/images/voyage/mapping.png" alt="Workshop wall covered with user-flow sketches and sticky notes" />
+            </figure>
+          </article>
+
+          <article class="case-step" id="data-model">
+            <h3 class="case-step__title"><span class="case-step__num">2.</span> Data model</h3>
+            <div class="case-section__copy">
+              <p>Before wireframing, I mapped the complete data model, what the system monitors, what it measures, and what additional context it surfaces.</p>
+              <ol>
+                <li>Monitored object: Vessel identity (name, status, voyage route, performance metrics).</li>
+                <li>KPIs/Monitored values: Grouped by compliance, efficiency, and route optimisation.</li>
+                <li>Contextual data: Charts, weather, events, and geospatial position that explain why a KPI is deviating.</li>
+              </ol>
+            </div>
+            <figure class="case-figure">
+              <img src="assets/images/voyage/data-model.png" alt="Information architecture diagram of vessel objects, KPIs, and contextual data" />
+            </figure>
+          </article>
+
+          <article class="case-step" id="investigation">
+            <h3 class="case-step__title"><span class="case-step__num">3.</span> Investigation flow</h3>
+            <div class="case-section__copy">
+              <p>This flow maps how an operational manager moves from noticing a KPI deviation to resolving it.</p>
+              <p>The core design insight:<br />Users don’t land on a dashboard and read it top to bottom. They arrive at a specific KPI because something flagged their attention. The IA needed to support investigation paths, not just display.</p>
+              <p>Each KPI category (compliance, efficiency, route performance) has its own investigation path, which data to check next, which chart to open, and when to escalate to vessel contact.</p>
+            </div>
+            <figure class="case-figure">
+              <img src="assets/images/voyage/investigation.png" alt="User flow mapping investigation paths from KPI alert to resolution" />
+            </figure>
+          </article>
+
+          <article class="case-step" id="explorations">
+            <h3 class="case-step__title"><span class="case-step__num">4.</span> Design explorations</h3>
+            <div class="case-section__copy">
+              <p>Later explorations focused on the fleet-level view: how managers monitor multiple vessels simultaneously and drill into a specific vessel’s voyage details.</p>
+              <p>Design decisions:</p>
+              <ul>
+                <li>Progressive disclosure: From summary KPIs at fleet level to full voyage detail on click. Users shouldn’t need to navigate away to answer “why is this vessel deviating?”</li>
+                <li>Event log alongside map: The vessel route and its event log sit side by side, so managers can correlate a position change with a reported incident without switching screens.</li>
+                <li>Vessel search with disambiguation: Search results show route context (origin to destination) to help managers identify vessels with similar names.</li>
+              </ul>
+            </div>
+
+            <div class="case-step__block">
+              <h4 class="case-step__subtitle">KPI status bar</h4>
+              <p class="case-section__copy">Early exploration of how to surface compliance and efficiency KPIs at a glance. The challenge: fleet managers needed to scan across multiple metric categories (compliance, efficiency, route performance) and immediately know which required action.</p>
+              <figure class="case-figure">
+                <img src="assets/images/voyage/kpi-status.png" alt="Exploration of a fleet KPI status bar with compliance and efficiency markers" />
+              </figure>
+            </div>
+
+            <div class="case-step__block" id="charts">
+              <h4 class="case-step__subtitle">Charts</h4>
+              <div class="case-section__copy">
+                <p>Data from charts needs to provide confidence. If data is missing, the representation must show it. I established three principles for every chart in the system:</p>
+                <ol>
+                  <li>Signal over noise. Show deviations clearly. Hide data that adds no decision value.</li>
+                  <li>Missing data is visible. A gap is not the same as zero. Users needed to know when the vessel stopped reporting.</li>
+                  <li>Tooltips are contextual. Hovering reveals the exact value and timestamp, not just an approximation.</li>
+                </ol>
+              </div>
+              <figure class="case-figure">
+                <img src="assets/images/voyage/charts.png" alt="Chart explorations for vessel performance with visible data gaps and tooltips" />
+              </figure>
+            </div>
+          </article>
+
+          <article class="case-step" id="final">
+            <h3 class="case-step__title"><span class="case-step__num">5.</span> Final design</h3>
+            <div class="case-section__copy">
+              <p>The Voyage Monitor dashboard became 90POE’s core product module, shipping from a single client engagement to the world’s leading maritime platform.</p>
+              <ol>
+                <li>7 to 1 tools consolidated into a single source of truth.</li>
+                <li>Minutes to Seconds decision time for fleet operational managers.</li>
+                <li>Core infrastructure: What started as one dashboard became the foundation of the entire OpenOcean platform.</li>
+              </ol>
+            </div>
+            <figure class="case-figure">
+              <img src="assets/images/voyage/final.png" alt="Final Voyage Monitor map view with vessel routes and event context" />
+            </figure>
+          </article>
+        </section>
+
+        <section class="case-section" id="impact">
+          <h2 class="case-section__title">Market impact</h2>
+          <div class="case-section__copy">
+            <p>The Voyage Monitoring design became 90POE’s core platform modules.</p>
+            <p>Real-time vessel performance and consumption data flow directly into commercial decision-making, with live P&amp;L statements reflecting every operational change.</p>
+            <p>What started as a single dashboard for one customer is now infrastructure. And my favourite project I have designed.</p>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <button type="button" class="menu-bar" id="menu-open" aria-haspopup="true" aria-controls="menu-overlay" aria-expanded="false">
+    Menu
+  </button>
+
+<div class="menu-overlay" id="menu-overlay" hidden>
+  <div class="ring-stage" aria-hidden="true">
+    <div class="ring ring--1"></div>
+    <div class="ring ring--2"></div>
+    <div class="ring ring--3"></div>
+    <div class="ring ring--4"></div>
+    <div class="ring ring--5"></div>
+  </div>
+
+  <nav class="menu-overlay__nav" aria-label="Primary">
+    <a href="index.html#about" class="menu-overlay__link menu-overlay__link--about">About</a>
+    <a href="index.html#work" class="menu-overlay__link menu-overlay__link--work">Work</a>
+    <a href="index.html#talks" class="menu-overlay__link menu-overlay__link--talks">talks</a>
+  </nav>
+
+  <div class="menu-overlay__contact">
+    <button type="button" class="menu-overlay__contact-link menu-overlay__contact-link--email">Copy email</button>
+    <a href="#" class="menu-overlay__contact-link menu-overlay__contact-link--linkedin">LinkedIn</a>
+    <a href="#" class="menu-overlay__contact-link menu-overlay__contact-link--twitter">Twitter</a>
+  </div>
+
+  <button type="button" class="menu-bar menu-overlay__close" id="menu-close" aria-controls="menu-overlay">
+    Close
+  </button>
+</div>
+
+<script src="script.js?v=20"></script>
+</body>
+</html>

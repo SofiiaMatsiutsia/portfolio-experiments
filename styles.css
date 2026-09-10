@@ -5,6 +5,14 @@
   font-style: normal;
   font-display: swap;
 }
+/* Book is the named cut (style "Book"), not a generic Regular 400 axis. */
+@font-face {
+  font-family: "Folio Bk BT Book";
+  src: url("assets/fonts/FolioBkBT-Book.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 @font-face {
   font-family: "Folio Bk BT";
   src: url("assets/fonts/FolioBkBT-Bold.ttf") format("truetype");
@@ -22,6 +30,7 @@
 
 :root {
   --font-body: "Folio Bk BT", "Century Gothic", "Futura", Avenir, Helvetica, Arial, sans-serif;
+  --font-book: "Folio Bk BT Book", var(--font-body);
   --font-ornament: "Garrigos Ornamentos", var(--font-body);
   --bg: #f3f3f3;
   --fg: #000;
@@ -503,5 +512,471 @@ img {
 
   .hero {
     padding-top: clamp(24px, 5dvh, 56px);
+  }
+}
+
+/* Case study / project template
+   Homepage keeps overflow:hidden. Case pages restore document scroll. */
+html:has(body.case) {
+  height: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+body.case {
+  --case-rail: 274px;
+  --case-main: 1175px;
+  --case-copy: 900px;
+  --case-gap: 20px;
+  --case-pad: 24px;
+  --case-accent: #00a5df;
+  --fg: #171615;
+  height: auto;
+  min-height: 100%;
+  overflow: visible;
+  scroll-padding-top: 32px;
+}
+
+body.case .logo {
+  position: absolute;
+  z-index: 5;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html:has(body.case) {
+    scroll-behavior: smooth;
+  }
+}
+
+.case__layout {
+  display: grid;
+  grid-template-columns: var(--case-rail) minmax(0, var(--case-main));
+  column-gap: var(--case-gap);
+  align-items: stretch;
+  max-width: 1512px;
+  margin: 0 auto;
+  padding: 40px var(--case-pad) 120px;
+}
+
+.case__rail {
+  min-height: 100%;
+}
+
+.case__rail-inner {
+  position: sticky;
+  top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  padding-top: 40px;
+}
+
+.case__back {
+  display: flex;
+  width: 38px;
+  height: 26px;
+  color: var(--fg);
+}
+
+.case__back img {
+  width: 38px;
+  height: 26px;
+  object-fit: contain;
+}
+
+.case__back:focus-visible,
+.case__toc a:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 3px;
+}
+
+.case__toc-title {
+  margin: 0 0 20px;
+  font-size: 24px;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.case__toc-list,
+.case__toc-sub {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.case__toc-list a {
+  color: var(--fg);
+  text-decoration: none;
+  font-size: 16px;
+  line-height: 1.5;
+  opacity: 0.6;
+  transition: opacity 160ms ease;
+}
+
+.case__toc-list a:hover,
+.case__toc-list a.is-active {
+  opacity: 1;
+}
+
+.case__toc-sub {
+  margin-top: 12px;
+  padding-left: 12px;
+}
+
+.case__main {
+  display: flex;
+  flex-direction: column;
+  gap: 100px;
+  min-width: 0;
+  padding-top: 20px;
+}
+
+.case__hero-block {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+}
+
+.case__hero {
+  --hero-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --hero-dur: 340ms;
+  position: relative;
+  isolation: isolate;
+  margin: 0;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 8px;
+  border: 1px solid #fff;
+  overflow: hidden;
+  background: #eee;
+  transition:
+    border-radius var(--hero-dur) var(--hero-ease),
+    box-shadow var(--hero-dur) var(--hero-ease);
+}
+
+.case__hero img,
+.case__hero-media {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.case__hero-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  object-fit: cover;
+  transition: opacity var(--hero-dur) var(--hero-ease);
+}
+
+.case__hero-hover {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  background: #eee;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--hero-dur) var(--hero-ease);
+}
+
+.case__hero img.case__hero-still {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 6%;
+  box-sizing: border-box;
+  background: #eee;
+  --zoom-x: 50%;
+  --zoom-y: 50%;
+  object-fit: contain;
+  transform: scale(1);
+  transform-origin: var(--zoom-x) var(--zoom-y);
+  transition: transform var(--hero-dur) var(--hero-ease);
+}
+
+@media (hover: hover) {
+  .case__hero:hover {
+    border-radius: 12px;
+    box-shadow:
+      0 76px 80px rgba(216, 216, 216, 0.1),
+      0 26px 114px rgba(0, 0, 0, 0.1);
+  }
+
+  .case__hero:hover .case__hero-media {
+    opacity: 0;
+  }
+
+  .case__hero:hover .case__hero-hover {
+    opacity: 1;
+  }
+
+  .case__hero:hover .case__hero-still {
+    transform: scale(2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .case__hero,
+  .case__hero-media,
+  .case__hero-hover,
+  .case__hero-still {
+    transition: none;
+  }
+
+  .case__hero:hover .case__hero-still {
+    transform: none;
+  }
+}
+
+.case__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+
+.case__title {
+  margin: 0;
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 400;
+  line-height: 1.2;
+  text-transform: uppercase;
+  text-wrap: pretty;
+}
+
+.case__meta {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+
+.case__meta-item {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.case__meta dt {
+  font-size: 24px;
+  line-height: 1.5;
+  text-transform: uppercase;
+  color: var(--case-accent);
+}
+
+.case__meta dd {
+  margin: 0;
+  font-family: var(--font-book);
+  font-size: 20px;
+  font-weight: normal;
+  line-height: 1.5;
+}
+
+.case__intro {
+  margin: 0;
+  max-width: var(--case-copy);
+  font-family: var(--font-book);
+  font-size: 24px;
+  font-weight: normal;
+  line-height: 1.5;
+  scroll-margin-top: 32px;
+}
+
+.case__body {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+  max-width: var(--case-copy);
+  width: 100%;
+}
+
+.case-section,
+.case-step,
+.case-step__block {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  scroll-margin-top: 32px;
+}
+
+.case-section--process {
+  gap: 60px;
+}
+
+.case-section__title {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.case-section__copy,
+.case-section__list {
+  margin: 0;
+  font-family: var(--font-book);
+  font-size: 20px;
+  font-weight: normal;
+  line-height: 1.5;
+  opacity: 0.7;
+}
+
+.case-section__copy p {
+  margin: 0 0 1em;
+}
+
+.case-section__copy p:last-child {
+  margin-bottom: 0;
+}
+
+.case-section__copy ul,
+.case-section__copy ol,
+.case-section__list {
+  padding-left: 1.4em;
+}
+
+.case-section__copy li + li,
+.case-section__list li + li {
+  margin-top: 0;
+}
+
+.case-step {
+  gap: 40px;
+  padding-bottom: 32px;
+}
+
+.case-step__title,
+.case-step__subtitle {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.24px;
+  text-transform: uppercase;
+}
+
+.case-step__num {
+  font-variant-numeric: tabular-nums;
+}
+
+.case-figure {
+  margin: 0;
+  width: 100%;
+}
+
+.case-figure img {
+  width: 100%;
+  height: auto;
+}
+
+a.card {
+  color: inherit;
+  text-decoration: none;
+}
+
+@media (hover: hover) {
+  a.card:hover .card__label {
+    opacity: 0.7;
+  }
+}
+
+@media (max-width: 1100px) {
+  .case__layout {
+    grid-template-columns: 1fr;
+    row-gap: 40px;
+    padding-top: 24px;
+  }
+
+  .case__rail {
+    min-height: 0;
+  }
+
+  .case__rail-inner {
+    position: static;
+    padding-top: 0;
+    gap: 24px;
+  }
+
+  .case__toc-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    column-gap: 20px;
+    row-gap: 8px;
+  }
+
+  .case__toc-sub {
+    display: none;
+  }
+
+  .case__main {
+    padding-top: 0;
+    gap: 64px;
+  }
+
+  .case__hero-block {
+    gap: 48px;
+  }
+
+  .case__heading {
+    gap: 32px;
+  }
+
+  .case__meta {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 20px;
+  }
+
+  .case__intro {
+    font-size: 20px;
+  }
+
+  .case__body {
+    gap: 56px;
+  }
+}
+
+@media (max-width: 1024px) {
+  body.case .menu-bar:not(.menu-overlay__close) {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 40;
+  }
+
+  body.case .case__layout {
+    padding-bottom: 88px;
+  }
+}
+
+@media (max-width: 640px) {
+  body.case {
+    --case-pad: 12px;
+  }
+
+  .case__title {
+    font-size: 28px;
+  }
+
+  .case-section__title {
+    font-size: 24px;
+  }
+
+  .case__meta dt,
+  .case-step__title,
+  .case-step__subtitle,
+  .case-section__copy,
+  .case-section__list {
+    font-size: 16px;
+  }
+
+  .case__meta {
+    grid-template-columns: 1fr;
   }
 }
