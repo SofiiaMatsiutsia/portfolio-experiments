@@ -34,6 +34,10 @@
   box-sizing: border-box;
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
 html,
 body {
   height: 100%;
@@ -65,6 +69,7 @@ img {
   align-items: center;
   justify-content: space-between;
   padding: 34px var(--gutter) 0;
+  min-height: 34px; /* logo is fixed-positioned (out of flow) — keep the space reserved */
 }
 
 .nav {
@@ -83,13 +88,17 @@ img {
   opacity: 0.3;
 }
 
+/* Fixed to the viewport (not the header) so it never moves and always
+   renders above the menu overlay, instead of a second logo living inside
+   the overlay at a slightly different offset. */
 .logo {
-  position: absolute;
+  position: fixed;
   left: 50%;
   top: 34px;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
+  z-index: 200;
 }
 
 .logo__mark {
@@ -98,6 +107,7 @@ img {
 }
 
 .sound-toggle {
+  --sound-ease: cubic-bezier(0.23, 1, 0.32, 1);
   display: grid;
   place-items: center;
   width: 32px;
@@ -107,64 +117,69 @@ img {
   padding: 0;
   color: var(--fg);
   cursor: pointer;
+  transition: transform 140ms var(--sound-ease);
 }
 
 .sound-toggle:active {
-  transform: scale(0.94);
+  transform: scale(0.97);
 }
 
-.sound-toggle svg {
+.sound-toggle__swap {
+  position: relative;
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+
+.sound-toggle__layer {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  transform-origin: 42% 50%;
+  transition:
+    opacity 180ms var(--sound-ease),
+    transform 220ms var(--sound-ease);
+}
+
+.sound-toggle__icon {
   display: block;
   width: 24px;
   height: 24px;
   overflow: visible;
 }
 
-.sound-toggle__wave {
-  transform-box: fill-box;
-  transform-origin: 0% 50%;
-  transition:
-    opacity 160ms ease,
-    transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+.sound-toggle__layer--on {
+  opacity: 1;
+  transform: scale(1);
 }
 
-.sound-toggle__mute-arm {
-  stroke-dasharray: 7px;
-  stroke-dashoffset: 7px;
-  transition: stroke-dashoffset 180ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.sound-toggle:not([aria-pressed="true"]) .sound-toggle__wave--inner {
-  transition-delay: 70ms;
-}
-
-.sound-toggle:not([aria-pressed="true"]) .sound-toggle__wave--outer {
-  transition-delay: 110ms;
-}
-
-.sound-toggle[aria-pressed="true"] .sound-toggle__wave {
+.sound-toggle__layer--off {
   opacity: 0;
-  transform: scale(0.35);
+  transform: scale(0.88) rotate(-10deg);
 }
 
-.sound-toggle[aria-pressed="true"] .sound-toggle__wave--outer {
-  transition-delay: 0ms;
+.sound-toggle.is-muted .sound-toggle__layer--on {
+  opacity: 0;
+  transform: scale(0.88) rotate(10deg);
 }
 
-.sound-toggle[aria-pressed="true"] .sound-toggle__wave--inner {
-  transition-delay: 40ms;
+.sound-toggle.is-muted .sound-toggle__layer--off {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
 }
 
-.sound-toggle[aria-pressed="true"] .sound-toggle__mute-arm {
-  stroke-dashoffset: 0;
-}
+@media (prefers-reduced-motion: reduce) {
+  .sound-toggle,
+  .sound-toggle__layer {
+    transition: none;
+  }
 
-.sound-toggle[aria-pressed="true"] .sound-toggle__mute-arm--a {
-  transition-delay: 80ms;
-}
-
-.sound-toggle[aria-pressed="true"] .sound-toggle__mute-arm--b {
-  transition-delay: 120ms;
+  .sound-toggle__layer--off,
+  .sound-toggle.is-muted .sound-toggle__layer--on {
+    transform: none;
+  }
 }
 
 /* Hero */
@@ -262,15 +277,6 @@ img {
   .marquee__track {
     animation-duration: 120s;
   }
-
-  .sound-toggle:active {
-    transform: none;
-  }
-
-  .sound-toggle__wave,
-  .sound-toggle__mute-arm {
-    transition: none;
-  }
 }
 
 .marquee:hover .marquee__track {
@@ -354,50 +360,102 @@ img {
   justify-content: center;
 }
 
-/* Full-screen mobile menu overlay */
+/* Full-screen mobile menu overlay: concentric-ring reveal */
 .menu-overlay {
   position: fixed;
   inset: 0;
   z-index: 100;
-  background: #4dccf9;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 26px var(--gutter) var(--gutter);
+  overflow: hidden;
+  /* No own background — the rings are what paint color. Anywhere they
+     don't fully cover (mid-animation, especially the last sliver while
+     closing) should show the real page underneath, not a flat placeholder
+     that would flash instead of it. */
+  background: transparent;
 }
 
 .menu-overlay[hidden] {
   display: none;
 }
 
-.menu-overlay .logo {
-  position: static;
-  transform: none;
-  margin: 0 auto;
+.ring-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
 }
 
+.ring {
+  position: absolute;
+  left: 50%;
+  border-radius: 50%;
+  transform: translateX(-50%) scale(0);
+  transform-origin: center;
+  background: var(--ring-color, transparent);
+}
+
+.ring--1 { top: -8px;  width: 1609px; height: 1609px; }
+.ring--2 { top: 120px; width: 1284px; height: 1284px; }
+.ring--3 { top: 226px; width: 1073px; height: 1073px; }
+.ring--4 { top: 337px; width: 851px;  height: 851px; }
+.ring--5 { top: 446px; width: 633px;  height: 633px;  background: var(--bg); }
+
 .menu-overlay__nav {
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 24px;
+  position: absolute;
+  inset: 0;
+  z-index: 5;
 }
 
 .menu-overlay__link {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) translateY(15px);
+  opacity: 0;
   font-family: var(--font-body);
   font-size: 48px;
   line-height: 1;
   text-transform: uppercase;
   color: var(--fg);
   text-decoration: none;
+  white-space: nowrap;
 }
 
-.actions--full .action-btn {
-  flex: 1 1 0;
-  padding-left: 4px;
-  padding-right: 4px;
+.menu-overlay__link--about { top: 149px; }
+.menu-overlay__link--work  { top: 259px; }
+.menu-overlay__link--talks { top: 369px; }
+
+.menu-overlay__contact {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+}
+
+.menu-overlay__contact-link {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) translateY(15px);
+  opacity: 0;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--font-body);
+  font-size: 24px;
+  text-transform: uppercase;
+  color: var(--fg);
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.menu-overlay__contact-link--email    { top: 547px; }
+.menu-overlay__contact-link--linkedin { top: 608px; }
+.menu-overlay__contact-link--twitter  { top: 669px; }
+
+.menu-overlay__close {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  opacity: 0;
 }
 
 /* Mobile layout */
@@ -414,11 +472,6 @@ img {
   .nav,
   .sound-toggle {
     display: none;
-  }
-
-  .logo {
-    position: static;
-    transform: none;
   }
 
   .hero {
