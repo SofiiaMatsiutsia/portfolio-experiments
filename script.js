@@ -88,8 +88,8 @@ const ANIM_SPECS = [
     closeDelay: 0,
     closeDuration: GROUP2_CLOSE_DURATION,
     easing: EASE,
-    from: { opacity: 0, transform: "translateX(-50%) translateY(15px)" },
-    to: { opacity: 1, transform: "translateX(-50%) translateY(0)" },
+    from: { opacity: 0, transform: "translateY(15px)" },
+    to: { opacity: 1, transform: "translateY(0)" },
   })),
   {
     el: menuCloseBtn,
