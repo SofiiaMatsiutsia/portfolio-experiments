@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Voyage Monitor dashboard — Sofiia Matsiutsia</title>
-<link rel="stylesheet" href="styles.css?v=23" />
+<link rel="stylesheet" href="styles.css?v=28" />
 </head>
 <body class="case">
 
@@ -42,25 +42,104 @@
         <img src="assets/icons/back-chevron.svg" alt="" width="38" height="26" />
       </a>
 
-      <nav class="case__toc" aria-label="Page contents">
-        <p class="case__toc-title">content</p>
-        <ul class="case__toc-list">
-          <li><a href="#role">My role</a></li>
-          <li><a href="#improvements">Improvements</a></li>
-          <li><a href="#problem">Problem</a></li>
-          <li><a href="#solution">Solution</a></li>
-          <li>
-            <a href="#process">The process</a>
-            <ol class="case__toc-sub">
-              <li><a href="#mapping">Mapping roles and user flows</a></li>
-              <li><a href="#data-model">Data model</a></li>
-              <li><a href="#investigation">Investigation flow</a></li>
-              <li><a href="#explorations">Design explorations</a></li>
-              <li><a href="#final">Final design</a></li>
-            </ol>
-          </li>
-          <li><a href="#impact">Market impact</a></li>
-        </ul>
+      <nav class="case__toc is-visible" aria-label="Page contents" data-toc>
+        <p class="case__toc-title" data-toc-title>content</p>
+
+        <div class="case__toc-rail" data-toc-rail>
+          <span class="case__toc-dot" data-toc-dot aria-hidden="true"></span>
+          <ul class="case__toc-list">
+            <li class="case__toc-item" data-toc-item data-color="#dca8e8">
+              <button type="button" data-toc-id="role">
+                <span class="case__toc-spacer" aria-hidden="true"></span>
+                <span class="case__toc-label">My role</span>
+              </button>
+            </li>
+            <li class="case__toc-item" data-toc-item data-color="#94c890">
+              <button type="button" data-toc-id="improvements">
+                <span class="case__toc-spacer" aria-hidden="true"></span>
+                <span class="case__toc-label">Improvements</span>
+              </button>
+            </li>
+            <li class="case__toc-item" data-toc-item data-color="#e8ac88">
+              <button type="button" data-toc-id="problem">
+                <span class="case__toc-spacer" aria-hidden="true"></span>
+                <span class="case__toc-label">Problem</span>
+              </button>
+            </li>
+            <li class="case__toc-item" data-toc-item data-color="#70c8f4">
+              <button type="button" data-toc-id="solution">
+                <span class="case__toc-spacer" aria-hidden="true"></span>
+                <span class="case__toc-label">Solution</span>
+              </button>
+            </li>
+            <li class="case__toc-item" data-toc-item data-color="#dca8e8">
+              <button type="button" data-toc-id="process">
+                <span class="case__toc-spacer" aria-hidden="true"></span>
+                <span class="case__toc-label">The process</span>
+              </button>
+            </li>
+            <li class="case__toc-item" data-toc-item data-color="#94c890">
+              <button type="button" data-toc-id="impact">
+                <span class="case__toc-spacer" aria-hidden="true"></span>
+                <span class="case__toc-label">Market impact</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <div class="case__toc-mobile" data-toc-mobile>
+          <button
+            type="button"
+            class="case__toc-trigger"
+            data-toc-trigger
+            aria-haspopup="menu"
+            aria-expanded="false"
+            aria-controls="case-toc-menu"
+          >
+            <span class="case__toc-trigger-label" data-toc-trigger-label>My role</span>
+            <svg class="case__toc-chevron" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+              <path d="M1 1.5 6 6.5 11 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <ul id="case-toc-menu" class="case__toc-menu" role="menu" hidden data-toc-menu>
+            <li role="none">
+              <button type="button" role="menuitem" data-toc-id="role" data-color="#dca8e8">
+                <span class="case__toc-menu-dot" aria-hidden="true"></span>
+                <span class="case__toc-menu-label">My role</span>
+              </button>
+            </li>
+            <li role="none">
+              <button type="button" role="menuitem" data-toc-id="improvements" data-color="#94c890">
+                <span class="case__toc-menu-dot" aria-hidden="true"></span>
+                <span class="case__toc-menu-label">Improvements</span>
+              </button>
+            </li>
+            <li role="none">
+              <button type="button" role="menuitem" data-toc-id="problem" data-color="#e8ac88">
+                <span class="case__toc-menu-dot" aria-hidden="true"></span>
+                <span class="case__toc-menu-label">Problem</span>
+              </button>
+            </li>
+            <li role="none">
+              <button type="button" role="menuitem" data-toc-id="solution" data-color="#70c8f4">
+                <span class="case__toc-menu-dot" aria-hidden="true"></span>
+                <span class="case__toc-menu-label">Solution</span>
+              </button>
+            </li>
+            <li role="none">
+              <button type="button" role="menuitem" data-toc-id="process" data-color="#dca8e8">
+                <span class="case__toc-menu-dot" aria-hidden="true"></span>
+                <span class="case__toc-menu-label">The process</span>
+              </button>
+            </li>
+            <li role="none">
+              <button type="button" role="menuitem" data-toc-id="impact" data-color="#94c890">
+                <span class="case__toc-menu-dot" aria-hidden="true"></span>
+                <span class="case__toc-menu-label">Market impact</span>
+              </button>
+            </li>
+          </ul>
+        </div>
       </nav>
       </div>
     </aside>
@@ -291,6 +370,6 @@
   </button>
 </div>
 
-<script src="script.js?v=20"></script>
+<script src="script.js?v=27"></script>
 </body>
 </html>
