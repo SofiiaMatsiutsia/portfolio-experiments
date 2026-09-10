@@ -29,3 +29,10 @@ function closeMenu() {
 
 menuOpenBtn.addEventListener("click", openMenu);
 menuCloseBtn.addEventListener("click", closeMenu);
+
+const soundToggle = document.querySelector(".sound-toggle");
+soundToggle.addEventListener("click", () => {
+  const muted = soundToggle.getAttribute("aria-pressed") === "true";
+  soundToggle.setAttribute("aria-pressed", String(!muted));
+  soundToggle.setAttribute("aria-label", muted ? "Mute" : "Unmute");
+});
