@@ -57,6 +57,25 @@ body {
   font-family: var(--font-body);
 }
 
+.squish-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  border-radius: 50%;
+  background: #4DCCF9;
+  pointer-events: none;
+  will-change: transform;
+  opacity: 0;
+}
+
+.squish-cursor.is-visible {
+  opacity: 1;
+}
+
 img {
   display: block;
   max-width: 100%;
@@ -1271,4 +1290,9 @@ a.card {
   .case__meta {
     grid-template-columns: 1fr;
   }
+}
+
+html.has-squish-cursor,
+html.has-squish-cursor * {
+  cursor: none;
 }

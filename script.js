@@ -532,3 +532,106 @@ if (menuOpenBtn && menuCloseBtn && menuOverlay) {
     if (e.key === "Escape") closeMenu();
   });
 }
+
+function initSquishCursor() {
+  const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const EASE = 0.38;
+  const POWER = 1.1;
+
+  let el = null;
+  let rafId = 0;
+  let mx = 0;
+  let my = 0;
+  let x = 0;
+  let y = 0;
+  let sx = 1;
+  let sy = 1;
+  let rot = 0;
+  let seeded = false;
+
+  const canUseCursor = () => finePointer.matches && !reducedMotion.matches;
+
+  const loop = () => {
+    if (!canUseCursor()) {
+      teardown();
+      return;
+    }
+
+    const dx = mx - x;
+    const dy = my - y;
+    x += dx * EASE;
+    y += dy * EASE;
+
+    const speed = Math.min(Math.hypot(dx, dy) / 44, POWER);
+    if (speed > 0.02) rot = (Math.atan2(dy, dx) * 180) / Math.PI;
+
+    sx += (1 + speed - sx) * 0.18;
+    sy += (1 - speed * 0.78 - sy) * 0.18;
+
+    el.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${rot}deg) scale(${sx}, ${sy})`;
+    rafId = requestAnimationFrame(loop);
+  };
+
+  const onMove = (event) => {
+    sync();
+    if (!el) return;
+    mx = event.clientX;
+    my = event.clientY;
+    if (!seeded) {
+      x = mx;
+      y = my;
+      seeded = true;
+      el.classList.add("is-visible");
+    }
+  };
+
+  const onLeave = () => {
+    if (el) el.classList.remove("is-visible");
+  };
+
+  const onEnter = (event) => {
+    if (!el) return;
+    mx = event.clientX;
+    my = event.clientY;
+    x = mx;
+    y = my;
+    sx = 1;
+    sy = 1;
+    el.classList.add("is-visible");
+  };
+
+  const teardown = () => {
+    if (!el) return;
+    cancelAnimationFrame(rafId);
+    rafId = 0;
+    el.remove();
+    el = null;
+    seeded = false;
+    document.documentElement.classList.remove("has-squish-cursor");
+  };
+
+  const setup = () => {
+    if (el) return;
+    el = document.createElement("div");
+    el.className = "squish-cursor";
+    el.setAttribute("aria-hidden", "true");
+    document.body.appendChild(el);
+    document.documentElement.classList.add("has-squish-cursor");
+    rafId = requestAnimationFrame(loop);
+  };
+
+  const sync = () => {
+    if (canUseCursor()) setup();
+    else teardown();
+  };
+
+  window.addEventListener("pointermove", onMove, { passive: true });
+  document.documentElement.addEventListener("pointerleave", onLeave);
+  document.documentElement.addEventListener("pointerenter", onEnter);
+  finePointer.addEventListener("change", sync);
+  reducedMotion.addEventListener("change", sync);
+  sync();
+}
+
+initSquishCursor();
