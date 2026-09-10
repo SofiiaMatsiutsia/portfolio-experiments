@@ -21,6 +21,87 @@ document.querySelectorAll(".card__media").forEach((media) => {
   });
 });
 
+const reducedMotionMedia = window.matchMedia("(prefers-reduced-motion: reduce)");
+const hoverMedia = window.matchMedia("(hover: hover)");
+document.querySelectorAll(".case__hero").forEach((hero) => {
+  const video = hero.querySelector(".case__hero-media");
+  const still = hero.querySelector(".case__hero-still");
+  if (!video) return;
+
+  const syncHeroMotion = () => {
+    if (reducedMotionMedia.matches) {
+      video.pause();
+    } else {
+      video.play().catch(() => {});
+    }
+  };
+  syncHeroMotion();
+  reducedMotionMedia.addEventListener("change", syncHeroMotion);
+
+  const setZoomOrigin = (event) => {
+    const rect = hero.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width) * 100;
+    const y = ((event.clientY - rect.top) / rect.height) * 100;
+    still.style.setProperty("--zoom-x", `${x}%`);
+    still.style.setProperty("--zoom-y", `${y}%`);
+  };
+
+  let zoomFrame = 0;
+  let latestMove = null;
+  const onMove = (event) => {
+    if (!hoverMedia.matches || reducedMotionMedia.matches || !still) return;
+    latestMove = event;
+    if (zoomFrame) return;
+    zoomFrame = requestAnimationFrame(() => {
+      zoomFrame = 0;
+      if (latestMove) setZoomOrigin(latestMove);
+    });
+  };
+
+  hero.addEventListener("mouseenter", (event) => {
+    video.pause();
+    if (still) setZoomOrigin(event);
+  });
+  hero.addEventListener("mousemove", onMove);
+  hero.addEventListener("mouseleave", () => {
+    if (zoomFrame) {
+      cancelAnimationFrame(zoomFrame);
+      zoomFrame = 0;
+    }
+    if (still) {
+      still.style.setProperty("--zoom-x", "50%");
+      still.style.setProperty("--zoom-y", "50%");
+    }
+    if (!reducedMotionMedia.matches) video.play().catch(() => {});
+  });
+});
+
+const tocLinks = Array.from(document.querySelectorAll(".case__toc a[href^='#']"));
+if (tocLinks.length) {
+  const tocTargets = tocLinks
+    .map((link) => {
+      const id = decodeURIComponent(link.hash.slice(1));
+      const el = document.getElementById(id);
+      return el ? { link, el } : null;
+    })
+    .filter(Boolean);
+
+  const setActiveToc = () => {
+    const mark = window.scrollY + 140;
+    let current = tocTargets[0];
+    for (const item of tocTargets) {
+      const top = item.el.getBoundingClientRect().top + window.scrollY;
+      if (top <= mark) current = item;
+    }
+    tocLinks.forEach((link) => {
+      link.classList.toggle("is-active", link === current.link);
+    });
+  };
+
+  setActiveToc();
+  window.addEventListener("scroll", setActiveToc, { passive: true });
+}
+
 const menuOverlay = document.getElementById("menu-overlay");
 const menuOpenBtn = document.getElementById("menu-open");
 const menuCloseBtn = document.getElementById("menu-close");
@@ -121,10 +202,15 @@ function playRingAnimations(isOpen) {
   return Promise.all(animations.map((a) => a.finished.catch(() => {})));
 }
 
+function lockPageScroll(lock) {
+  document.documentElement.style.overflow = lock ? "hidden" : "";
+  document.body.style.overflow = lock ? "hidden" : "";
+}
+
 function openMenu() {
   menuOverlay.hidden = false;
   menuOpenBtn.setAttribute("aria-expanded", "true");
-  document.body.style.overflow = "hidden";
+  lockPageScroll(true);
   playRingAnimations(true);
 }
 
@@ -133,12 +219,14 @@ function closeMenu() {
   menuOpenBtn.setAttribute("aria-expanded", "false");
   playRingAnimations(false).then(() => {
     menuOverlay.hidden = true;
-    document.body.style.overflow = "";
+    lockPageScroll(false);
   });
 }
 
-menuOpenBtn.addEventListener("click", openMenu);
-menuCloseBtn.addEventListener("click", closeMenu);
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") closeMenu();
-});
+if (menuOpenBtn && menuCloseBtn && menuOverlay) {
+  menuOpenBtn.addEventListener("click", openMenu);
+  menuCloseBtn.addEventListener("click", closeMenu);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeMenu();
+  });
+}
