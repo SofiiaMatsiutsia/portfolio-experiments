@@ -4,7 +4,20 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Work — Sofiia Matsiutsia</title>
-<link rel="stylesheet" href="styles.css?v=43" />
+<link rel="stylesheet" href="styles.css?v=45" />
+<script>
+  try { history.scrollRestoration = "manual"; } catch (e) {}
+  (function () {
+    try {
+      var saved = JSON.parse(sessionStorage.getItem("portfolio:work-nav") || "null");
+      if (!saved || !saved.restore || typeof saved.y !== "number") return;
+      var y = saved.y;
+      var restore = function () { window.scrollTo(0, y); };
+      restore();
+      document.addEventListener("DOMContentLoaded", restore);
+    } catch (e) {}
+  })();
+</script>
 </head>
 <body class="work">
 
@@ -274,6 +287,6 @@
   </button>
 </div>
 
-<script src="script.js?v=33"></script>
+<script src="script.js?v=35"></script>
 </body>
 </html>

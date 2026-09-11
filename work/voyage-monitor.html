@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Voyage Monitor dashboard — Sofiia Matsiutsia</title>
-<link rel="stylesheet" href="../styles.css?v=42" />
+<link rel="stylesheet" href="../styles.css?v=45" />
 </head>
 <body class="case">
 
@@ -49,21 +49,21 @@
           <span class="case__toc-dot" data-toc-dot aria-hidden="true"></span>
           <ul class="case__toc-list">
             <li class="case__toc-item" data-toc-item data-color="#dca8e8">
+              <button type="button" data-toc-id="problem">
+                <span class="case__toc-spacer" aria-hidden="true"></span>
+                <span class="case__toc-label">Problem</span>
+              </button>
+            </li>
+            <li class="case__toc-item" data-toc-item data-color="#94c890">
               <button type="button" data-toc-id="role">
                 <span class="case__toc-spacer" aria-hidden="true"></span>
                 <span class="case__toc-label">My role</span>
               </button>
             </li>
-            <li class="case__toc-item" data-toc-item data-color="#94c890">
+            <li class="case__toc-item" data-toc-item data-color="#e8ac88">
               <button type="button" data-toc-id="improvements">
                 <span class="case__toc-spacer" aria-hidden="true"></span>
                 <span class="case__toc-label">Improvements</span>
-              </button>
-            </li>
-            <li class="case__toc-item" data-toc-item data-color="#e8ac88">
-              <button type="button" data-toc-id="problem">
-                <span class="case__toc-spacer" aria-hidden="true"></span>
-                <span class="case__toc-label">Problem</span>
               </button>
             </li>
             <li class="case__toc-item" data-toc-item data-color="#70c8f4">
@@ -96,28 +96,28 @@
             aria-expanded="false"
             aria-controls="case-toc-menu"
           >
-            <span class="case__toc-trigger-label" data-toc-trigger-label>My role</span>
+            <span class="case__toc-trigger-label" data-toc-trigger-label>Problem</span>
             <svg class="case__toc-chevron" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
               <path d="M1 1.5 6 6.5 11 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </button>
           <ul id="case-toc-menu" class="case__toc-menu" role="menu" hidden data-toc-menu>
             <li role="none">
-              <button type="button" role="menuitem" data-toc-id="role" data-color="#dca8e8">
+              <button type="button" role="menuitem" data-toc-id="problem" data-color="#dca8e8">
+                <span class="case__toc-menu-dot" aria-hidden="true"></span>
+                <span class="case__toc-menu-label">Problem</span>
+              </button>
+            </li>
+            <li role="none">
+              <button type="button" role="menuitem" data-toc-id="role" data-color="#94c890">
                 <span class="case__toc-menu-dot" aria-hidden="true"></span>
                 <span class="case__toc-menu-label">My role</span>
               </button>
             </li>
             <li role="none">
-              <button type="button" role="menuitem" data-toc-id="improvements" data-color="#94c890">
+              <button type="button" role="menuitem" data-toc-id="improvements" data-color="#e8ac88">
                 <span class="case__toc-menu-dot" aria-hidden="true"></span>
                 <span class="case__toc-menu-label">Improvements</span>
-              </button>
-            </li>
-            <li role="none">
-              <button type="button" role="menuitem" data-toc-id="problem" data-color="#e8ac88">
-                <span class="case__toc-menu-dot" aria-hidden="true"></span>
-                <span class="case__toc-menu-label">Problem</span>
               </button>
             </li>
             <li role="none">
@@ -190,7 +190,10 @@
             </div>
           </dl>
 
-          <p class="case__intro" id="problem">Fleet’s operational managers at maritime companies live in app-switching. They’ll have one browser tab open to check fuel consumption, another for performance metrics, a third for compliance data. Half the data was calculated manually in spreadsheets.</p>
+          <section class="case__lede" id="problem">
+            <h2 class="case-section__title">Problem</h2>
+            <p class="case__intro">Fleet’s operational managers at maritime companies live in app-switching. They’ll have one browser tab open to check fuel consumption, another for performance metrics, a third for compliance data. Half the data was calculated manually in spreadsheets.</p>
+          </section>
         </div>
       </div>
 
@@ -370,6 +373,6 @@
   </button>
 </div>
 
-<script src="../script.js?v=32"></script>
+<script src="../script.js?v=35"></script>
 </body>
 </html>
