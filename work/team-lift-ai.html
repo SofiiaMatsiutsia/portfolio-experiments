@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TeamLift AI — Sofiia Matsiutsia</title>
+<link rel="stylesheet" href="../styles.css?v=42" />
+</head>
+<body class="case">
+
+  <header class="header">
+    <nav class="nav" aria-label="Primary">
+      <a href="../index.html#about" class="nav__link nav__link--muted">About,</a>
+      <a href="../work.html" class="nav__link" aria-current="page">Work,</a>
+      <a href="../index.html#talks" class="nav__link nav__link--muted">Talks.</a>
+    </nav>
+
+    <a href="../index.html" class="logo" aria-label="Sofiia Matsiutsia — home">
+      <img src="../assets/images/logo.gif" alt="Sofiia Matsiutsia" class="logo__mark" />
+    </a>
+
+    <button type="button" class="sound-toggle" aria-label="Mute sound" aria-pressed="false">
+      <span class="sound-toggle__swap">
+        <span class="sound-toggle__layer sound-toggle__layer--on">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="sound-toggle__icon" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" />
+          </svg>
+        </span>
+        <span class="sound-toggle__layer sound-toggle__layer--off">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="sound-toggle__icon" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 9.75 19.5 12m0 0 2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6 4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" />
+          </svg>
+        </span>
+      </span>
+    </button>
+  </header>
+
+  <div class="case__layout">
+    <aside class="case__rail">
+      <div class="case__rail-inner">
+      <a href="../work.html" class="case__back" aria-label="Back to work">
+        <img src="../assets/icons/back-chevron.svg" alt="" width="38" height="26" />
+      </a>
+
+      <nav class="case__toc is-visible" aria-label="Page contents" data-toc>
+        <p class="case__toc-title" data-toc-title>content</p>
+
+        <div class="case__toc-rail" data-toc-rail>
+          <span class="case__toc-dot" data-toc-dot aria-hidden="true"></span>
+          <ul class="case__toc-list">
+            <li class="case__toc-item" data-toc-item data-color="#dca8e8">
+              <button type="button" data-toc-id="role">
+                <span class="case__toc-spacer" aria-hidden="true"></span>
+                <span class="case__toc-label">My role</span>
+              </button>
+            </li>
+            <li class="case__toc-item" data-toc-item data-color="#94c890">
+              <button type="button" data-toc-id="dashboard">
+                <span class="case__toc-spacer" aria-hidden="true"></span>
+                <span class="case__toc-label">Dashboard</span>
+              </button>
+            </li>
+            <li class="case__toc-item" data-toc-item data-color="#e8ac88">
+              <button type="button" data-toc-id="employee">
+                <span class="case__toc-spacer" aria-hidden="true"></span>
+                <span class="case__toc-label">Employee view</span>
+              </button>
+            </li>
+            <li class="case__toc-item" data-toc-item data-color="#70c8f4">
+              <button type="button" data-toc-id="manager">
+                <span class="case__toc-spacer" aria-hidden="true"></span>
+                <span class="case__toc-label">Manager view</span>
+              </button>
+            </li>
+            <li class="case__toc-item" data-toc-item data-color="#dca8e8">
+              <button type="button" data-toc-id="system">
+                <span class="case__toc-spacer" aria-hidden="true"></span>
+                <span class="case__toc-label">Design system</span>
+              </button>
+            </li>
+            <li class="case__toc-item" data-toc-item data-color="#94c890">
+              <button type="button" data-toc-id="pitch">
+                <span class="case__toc-spacer" aria-hidden="true"></span>
+                <span class="case__toc-label">Pitching deck</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <div class="case__toc-mobile" data-toc-mobile>
+          <button
+            type="button"
+            class="case__toc-trigger"
+            data-toc-trigger
+            aria-haspopup="menu"
+            aria-expanded="false"
+            aria-controls="case-toc-menu"
+          >
+            <span class="case__toc-trigger-label" data-toc-trigger-label>My role</span>
+            <svg class="case__toc-chevron" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+              <path d="M1 1.5 6 6.5 11 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <ul id="case-toc-menu" class="case__toc-menu" role="menu" hidden data-toc-menu>
+            <li role="none">
+              <button type="button" role="menuitem" data-toc-id="role" data-color="#dca8e8">
+                <span class="case__toc-menu-dot" aria-hidden="true"></span>
+                <span class="case__toc-menu-label">My role</span>
+              </button>
+            </li>
+            <li role="none">
+              <button type="button" role="menuitem" data-toc-id="dashboard" data-color="#94c890">
+                <span class="case__toc-menu-dot" aria-hidden="true"></span>
+                <span class="case__toc-menu-label">Dashboard</span>
+              </button>
+            </li>
+            <li role="none">
+              <button type="button" role="menuitem" data-toc-id="employee" data-color="#e8ac88">
+                <span class="case__toc-menu-dot" aria-hidden="true"></span>
+                <span class="case__toc-menu-label">Employee view</span>
+              </button>
+            </li>
+            <li role="none">
+              <button type="button" role="menuitem" data-toc-id="manager" data-color="#70c8f4">
+                <span class="case__toc-menu-dot" aria-hidden="true"></span>
+                <span class="case__toc-menu-label">Manager view</span>
+              </button>
+            </li>
+            <li role="none">
+              <button type="button" role="menuitem" data-toc-id="system" data-color="#dca8e8">
+                <span class="case__toc-menu-dot" aria-hidden="true"></span>
+                <span class="case__toc-menu-label">Design system</span>
+              </button>
+            </li>
+            <li role="none">
+              <button type="button" role="menuitem" data-toc-id="pitch" data-color="#94c890">
+                <span class="case__toc-menu-dot" aria-hidden="true"></span>
+                <span class="case__toc-menu-label">Pitching deck</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      </div>
+    </aside>
+
+    <main class="case__main">
+      <div class="case__hero-block">
+                <figure class="case__hero case__hero--static">
+          <img class="case__hero-media" src="../assets/images/team-lift.png" alt="TeamLift skills intelligence platform screenshot" />
+        </figure>
+
+        <div class="case__heading">
+                    <h1 class="case__title">AI-powered skills intelligence platform</h1>
+          <dl class="case__meta">
+            <div class="case__meta-item">
+              <dt>timeline</dt>
+              <dd>2022–2024</dd>
+            </div>
+            <div class="case__meta-item">
+              <dt>Company</dt>
+              <dd>TeamLift</dd>
+            </div>
+            <div class="case__meta-item">
+              <dt>Role</dt>
+              <dd>Solo product designer</dd>
+            </div>
+            <div class="case__meta-item">
+              <dt>site</dt>
+              <dd>teamlift.co</dd>
+            </div>
+          </dl>
+          <p class="case__intro">AI-powered skills intelligence platform that connects to a company’s existing data sources and builds a private knowledge graph of every employee’s actual capabilities. Managers see who can do what, which skills are missing for upcoming projects, and who can be upskilled rather than hired. Employees receive a personalized skills profile, a learning roadmap, and visibility into career growth.</p>
+        </div>
+      </div>
+
+      <div class="case__body">
+                <section class="case-section" id="role">
+          <h2 class="case-section__title">My role</h2>
+          <ul class="case-section__list">
+            <li>Solo product designer</li>
+            <li>UX research, persona development</li>
+            <li>Information architecture</li>
+            <li>Design across both user types</li>
+            <li>Design system</li>
+            <li>Pitch deck contributions</li>
+          </ul>
+        </section>
+
+        <section class="case-section" id="dashboard">
+          <h2 class="case-section__title">Dashboard</h2>
+                    <figure class="case-figure">
+            <img src="../assets/images/team-lift/dashboard.png" alt="TeamLift dashboard overview" />
+          </figure>
+        </section>
+
+        <section class="case-section" id="employee">
+          <h2 class="case-section__title">Employee view</h2>
+          <div class="case-section__copy">
+            <p>The AI surfaces skills it has inferred from the employee's data. They can either accept them into their validated wallet or permanently deny them. Validated skills sit alongside, building a living profile that the employee owns and controls.</p>
+            <p>For each identified skill gap, the platform surfaces the relevant tools to adopt and curated learning resources with an instructor, lesson count, and duration.</p>
+          </div>
+                    <figure class="case-figure">
+            <img src="../assets/images/team-lift/employee-wallet.png" alt="Employee skills wallet with inferred and validated skills" />
+          </figure>
+                    <figure class="case-figure">
+            <img src="../assets/images/team-lift/employee-profile.png" alt="Employee skills profile" />
+          </figure>
+                    <figure class="case-figure">
+            <img src="../assets/images/team-lift/learning.png" alt="Learning resources surfaced for identified skill gaps" />
+          </figure>
+        </section>
+
+        <section class="case-section" id="manager">
+          <h2 class="case-section__title">Manager view</h2>
+          <div class="case-section__copy">
+            <p>The manager could upload a project and get a ranked list of best-fit candidates by skill count, along with a full breakdown of required skills, showing who has each one, how many people cover it, and which skills are missing entirely across the team.</p>
+          </div>
+                    <figure class="case-figure">
+            <img src="../assets/images/team-lift/manager-list.png" alt="Manager view ranking candidates against project skills" />
+          </figure>
+                    <figure class="case-figure">
+            <img src="../assets/images/team-lift/manager-breakdown.png" alt="Required-skills breakdown showing coverage and gaps across the team" />
+          </figure>
+        </section>
+
+        <section class="case-section" id="system">
+          <h2 class="case-section__title">Design system</h2>
+          <div class="case-section__copy">
+            <p>A dark-mode component library built from scratch. Based on Material-UI.</p>
+          </div>
+                    <figure class="case-figure">
+            <img src="../assets/images/team-lift/design-system.png" alt="TeamLift dark-mode design system components" />
+          </figure>
+        </section>
+
+        <section class="case-section" id="pitch">
+          <h2 class="case-section__title">Pitching deck infographics</h2>
+          <div class="case-section__copy">
+            <p>I created sales and product presentation decks for TeamLift, working directly with the founder. The decks explained how TeamLift turns fragmented enterprise data into a structured skills graph, used for capabilities assessment and resource forecasting.</p>
+          </div>
+                    <figure class="case-figure">
+            <img src="../assets/images/team-lift/pitch-1.png" alt="TeamLift pitch deck infographic" />
+          </figure>
+                    <figure class="case-figure">
+            <img src="../assets/images/team-lift/pitch-2.png" alt="TeamLift skills-graph presentation slide" />
+          </figure>
+                    <figure class="case-figure">
+            <img src="../assets/images/team-lift/pitch-3.png" alt="TeamLift resource-forecasting presentation slide" />
+          </figure>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <button type="button" class="menu-bar" id="menu-open" aria-haspopup="true" aria-controls="menu-overlay" aria-expanded="false">
+    Menu
+  </button>
+
+<div class="menu-overlay" id="menu-overlay" hidden>
+  <div class="ring-stage" aria-hidden="true">
+    <div class="ring ring--1"></div>
+    <div class="ring ring--2"></div>
+    <div class="ring ring--3"></div>
+    <div class="ring ring--4"></div>
+    <div class="ring ring--5"></div>
+  </div>
+
+  <nav class="menu-overlay__nav" aria-label="Primary">
+    <a href="../index.html#about" class="menu-overlay__link menu-overlay__link--about">About</a>
+    <a href="../work.html" class="menu-overlay__link menu-overlay__link--work">Work</a>
+    <a href="../index.html#talks" class="menu-overlay__link menu-overlay__link--talks">talks</a>
+  </nav>
+
+  <div class="menu-overlay__contact">
+    <button type="button" class="menu-overlay__contact-link menu-overlay__contact-link--email">Copy email</button>
+    <a href="#" class="menu-overlay__contact-link menu-overlay__contact-link--linkedin">LinkedIn</a>
+    <a href="#" class="menu-overlay__contact-link menu-overlay__contact-link--twitter">Twitter</a>
+  </div>
+
+  <button type="button" class="menu-bar menu-overlay__close" id="menu-close" aria-controls="menu-overlay">
+    Close
+  </button>
+</div>
+
+<script src="../script.js?v=32"></script>
+</body>
+</html>

@@ -1135,6 +1135,15 @@ body.work .logo {
   .case__hero:hover .case__hero-still {
     transform: scale(2);
   }
+
+  .case__hero--static:hover .case__hero-media {
+    opacity: 1;
+  }
+
+  .case__hero--static:hover {
+    border-radius: 8px;
+    box-shadow: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1286,8 +1295,13 @@ body.work .logo {
 }
 
 .case-figure img {
+  display: block;
   width: 100%;
   height: auto;
+}
+
+.case__body:empty {
+  display: none;
 }
 
 a.card {
@@ -1481,9 +1495,11 @@ a.card {
   position: relative;
 }
 
-.work-item__media img {
+.work-item__media img,
+.work-item__media video {
   width: 100%;
   height: auto;
+  display: block;
   object-fit: cover;
   transition: opacity 180ms ease;
 }

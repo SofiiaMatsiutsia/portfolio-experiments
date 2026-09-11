@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI-assisted filtering for search — Sofiia Matsiutsia</title>
+<link rel="stylesheet" href="../styles.css?v=42" />
+</head>
+<body class="case">
+
+  <header class="header">
+    <nav class="nav" aria-label="Primary">
+      <a href="../index.html#about" class="nav__link nav__link--muted">About,</a>
+      <a href="../work.html" class="nav__link" aria-current="page">Work,</a>
+      <a href="../index.html#talks" class="nav__link nav__link--muted">Talks.</a>
+    </nav>
+
+    <a href="../index.html" class="logo" aria-label="Sofiia Matsiutsia — home">
+      <img src="../assets/images/logo.gif" alt="Sofiia Matsiutsia" class="logo__mark" />
+    </a>
+
+    <button type="button" class="sound-toggle" aria-label="Mute sound" aria-pressed="false">
+      <span class="sound-toggle__swap">
+        <span class="sound-toggle__layer sound-toggle__layer--on">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="sound-toggle__icon" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" />
+          </svg>
+        </span>
+        <span class="sound-toggle__layer sound-toggle__layer--off">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="sound-toggle__icon" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 9.75 19.5 12m0 0 2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6 4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" />
+          </svg>
+        </span>
+      </span>
+    </button>
+  </header>
+
+  <div class="case__layout">
+    <aside class="case__rail">
+      <div class="case__rail-inner">
+      <a href="../work.html" class="case__back" aria-label="Back to work">
+        <img src="../assets/icons/back-chevron.svg" alt="" width="38" height="26" />
+      </a>
+
+      </div>
+    </aside>
+
+    <main class="case__main">
+      <div class="case__hero-block">
+                <figure class="case__hero case__hero--static">
+          <video
+            class="case__hero-media"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+            poster="../assets/images/ai-assisted-filtering.jpg"
+            aria-label="AI-assisted filtering prototype controlling card properties"
+          >
+            <source src="../assets/videos/malleable-real-estate.mp4" type="video/mp4" />
+          </video>
+        </figure>
+
+        <div class="case__heading">
+                    <h1 class="case__title">AI-assisted filtering for search</h1>
+          <dl class="case__meta">
+            <div class="case__meta-item">
+              <dt>type</dt>
+              <dd>Vibe project</dd>
+            </div>
+            <div class="case__meta-item">
+              <dt>tags</dt>
+              <dd>Research, Interface design</dd>
+            </div>
+            <div class="case__meta-item">
+              <dt>concept</dt>
+              <dd>Malleable Interfaces</dd>
+            </div>
+          </dl>
+          <p class="case__intro">Designed AI-assisted filtering to let user control card properties, inspired by the concept of the “Malleable Interfaces”. Non-conversational search alternative, reduced cognitive load vs. natural language prompts.</p>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <button type="button" class="menu-bar" id="menu-open" aria-haspopup="true" aria-controls="menu-overlay" aria-expanded="false">
+    Menu
+  </button>
+
+<div class="menu-overlay" id="menu-overlay" hidden>
+  <div class="ring-stage" aria-hidden="true">
+    <div class="ring ring--1"></div>
+    <div class="ring ring--2"></div>
+    <div class="ring ring--3"></div>
+    <div class="ring ring--4"></div>
+    <div class="ring ring--5"></div>
+  </div>
+
+  <nav class="menu-overlay__nav" aria-label="Primary">
+    <a href="../index.html#about" class="menu-overlay__link menu-overlay__link--about">About</a>
+    <a href="../work.html" class="menu-overlay__link menu-overlay__link--work">Work</a>
+    <a href="../index.html#talks" class="menu-overlay__link menu-overlay__link--talks">talks</a>
+  </nav>
+
+  <div class="menu-overlay__contact">
+    <button type="button" class="menu-overlay__contact-link menu-overlay__contact-link--email">Copy email</button>
+    <a href="#" class="menu-overlay__contact-link menu-overlay__contact-link--linkedin">LinkedIn</a>
+    <a href="#" class="menu-overlay__contact-link menu-overlay__contact-link--twitter">Twitter</a>
+  </div>
+
+  <button type="button" class="menu-bar menu-overlay__close" id="menu-close" aria-controls="menu-overlay">
+    Close
+  </button>
+</div>
+
+<script src="../script.js?v=32"></script>
+</body>
+</html>
