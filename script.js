@@ -635,3 +635,73 @@ function initSquishCursor() {
 }
 
 initSquishCursor();
+
+function slugWorkFilter(label) {
+  return label
+    .replace(/^#/, "")
+    .trim()
+    .toLowerCase()
+    .replace(/→/g, "-")
+    .replace(/_/g, "-")
+    .replace(/\s+/g, "-");
+}
+
+function initWorkFilters() {
+  const root = document.querySelector(".work-filters");
+  if (!root) return;
+
+  const pills = Array.from(root.querySelectorAll(".work-filter"));
+  const items = Array.from(document.querySelectorAll(".work-item"));
+  const status = document.querySelector("[data-filter-status]");
+  if (!pills.length || !items.length) return;
+
+  const categoriesOf = (item) =>
+    Array.from(item.querySelectorAll(".work-tag")).map((tag) => slugWorkFilter(tag.textContent));
+
+  const applyFilter = (value) => {
+    pills.forEach((pill) => {
+      const on = pill.getAttribute("data-filter") === value;
+      pill.classList.toggle("is-active", on);
+      pill.setAttribute("aria-pressed", String(on));
+    });
+
+    let visible = 0;
+    items.forEach((item) => {
+      const show = value === "all" || categoriesOf(item).includes(value);
+      item.hidden = !show;
+      if (show) visible += 1;
+    });
+
+    const active = pills.find((pill) => pill.getAttribute("data-filter") === value);
+    const label = active?.querySelector(".work-filter__label")?.textContent.trim() || "All";
+    if (status) {
+      const noun = visible === 1 ? "project" : "projects";
+      status.textContent =
+        value === "all" ? `Showing all ${visible} ${noun}` : `Showing ${visible} ${noun} in ${label}`;
+    }
+  };
+
+  root.addEventListener("click", (event) => {
+    const pill = event.target.closest(".work-filter");
+    if (!pill || !root.contains(pill)) return;
+    applyFilter(pill.getAttribute("data-filter"));
+  });
+
+  root.addEventListener("keydown", (event) => {
+    if (event.key !== "ArrowRight" && event.key !== "ArrowLeft" && event.key !== "Home" && event.key !== "End") {
+      return;
+    }
+    const current = event.target.closest(".work-filter");
+    if (!current) return;
+    event.preventDefault();
+    const index = pills.indexOf(current);
+    let next = index;
+    if (event.key === "ArrowRight") next = (index + 1) % pills.length;
+    if (event.key === "ArrowLeft") next = (index - 1 + pills.length) % pills.length;
+    if (event.key === "Home") next = 0;
+    if (event.key === "End") next = pills.length - 1;
+    pills[next].focus();
+  });
+}
+
+initWorkFilters();

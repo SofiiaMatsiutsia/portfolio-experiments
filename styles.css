@@ -1439,22 +1439,43 @@ a.card {
 }
 
 .work-filter {
+  appearance: none;
   display: flex;
   align-items: flex-start;
   justify-content: center;
   gap: 8px;
+  margin: 0;
   padding: 6px 12px;
+  border: 0;
   border-radius: 2px;
   background: #fff;
+  font: inherit;
   font-family: var(--font-body);
   line-height: 1.3;
   color: var(--fg);
-  pointer-events: none;
+  cursor: pointer;
+  touch-action: manipulation;
   user-select: none;
 }
 
 .work-filter.is-active {
   background: #86cd8b;
+  background-image: none;
+  color: var(--fg);
+  animation: none;
+}
+
+.work-filter:focus {
+  outline: none;
+}
+
+.work-filter:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 3px;
+}
+
+.work-filter.is-active:focus-visible {
+  outline-color: var(--fg);
 }
 
 .work-filter__label {
@@ -1463,7 +1484,43 @@ a.card {
 
 .work-filter__count {
   font-size: 10px;
+  font-variant-numeric: tabular-nums;
   opacity: 0.4;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .work-filter:not(.is-active):hover {
+    background-color: transparent;
+    background-image: var(--gradient-horizontal);
+    background-repeat: repeat-x;
+    background-attachment: fixed;
+    background-position: 0 0;
+    background-size: auto 100%;
+    color: var(--color-bg);
+    animation: link-bg-anim 8s linear infinite;
+  }
+
+  .work-filter:not(.is-active):hover .work-filter__count {
+    opacity: 0.75;
+  }
+}
+
+.work-filter:not(.is-active):focus-visible {
+  background-color: transparent;
+  background-image: var(--gradient-horizontal);
+  background-repeat: repeat-x;
+  background-attachment: fixed;
+  background-position: 0 0;
+  background-size: auto 100%;
+  color: var(--color-bg);
+  animation: link-bg-anim 8s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .work-filter:not(.is-active):hover,
+  .work-filter:not(.is-active):focus-visible {
+    animation: none;
+  }
 }
 
 .work-columns {
@@ -1481,12 +1538,20 @@ a.card {
   gap: 32px;
 }
 
+.work-col:not(:has(.work-item:not([hidden]))) {
+  display: none;
+}
+
 .work-item {
   display: flex;
   flex-direction: column;
   gap: 20px;
   color: inherit;
   text-decoration: none;
+}
+
+.work-item[hidden] {
+  display: none;
 }
 
 .work-item__media {
