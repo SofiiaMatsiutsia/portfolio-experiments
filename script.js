@@ -884,3 +884,48 @@ function initPageTransitions() {
 
 initWorkScrollRestore();
 initPageTransitions();
+
+const CONTACT_EMAIL = "sofiia.matsiutsia@gmail.com";
+const COPY_FEEDBACK_MS = 2000;
+
+function initCopyEmailButtons() {
+  const selectors = ".action-btn--copy, .menu-overlay__contact-link--email";
+  document.querySelectorAll(selectors).forEach((button) => {
+    const label =
+      button.querySelector(".action-btn__text") ||
+      button.querySelector(".menu-overlay__contact-text");
+    if (!label) return;
+
+    const defaultText = label.textContent.trim();
+    let resetTimer = 0;
+
+    button.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(CONTACT_EMAIL);
+      } catch {
+        const area = document.createElement("textarea");
+        area.value = CONTACT_EMAIL;
+        area.setAttribute("readonly", "");
+        area.style.position = "fixed";
+        area.style.left = "-9999px";
+        document.body.appendChild(area);
+        area.select();
+        try {
+          document.execCommand("copy");
+        } finally {
+          area.remove();
+        }
+      }
+
+      window.clearTimeout(resetTimer);
+      label.textContent = "Copied!";
+      button.classList.add("is-copied");
+      resetTimer = window.setTimeout(() => {
+        label.textContent = defaultText;
+        button.classList.remove("is-copied");
+      }, COPY_FEEDBACK_MS);
+    });
+  });
+}
+
+initCopyEmailButtons();

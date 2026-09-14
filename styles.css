@@ -90,7 +90,8 @@ body {
 
 .nav__link:focus-visible,
 .menu-overlay__link:focus-visible,
-.menu-overlay__contact-link:focus-visible {
+.menu-overlay__contact-link:focus-visible,
+.action-btn:focus-visible {
   background-color: transparent;
   background-image: var(--gradient-horizontal);
   background-repeat: repeat-x;
@@ -107,7 +108,8 @@ body {
 @media (hover: hover) {
   .nav__link:hover,
   .menu-overlay__link:hover,
-  .menu-overlay__contact-link:hover {
+  .menu-overlay__contact-link:hover,
+  .action-btn:hover {
     background-color: transparent;
     background-image: var(--gradient-horizontal);
     background-repeat: repeat-x;
@@ -127,7 +129,9 @@ body {
   .menu-overlay__link:hover,
   .menu-overlay__link:focus-visible,
   .menu-overlay__contact-link:hover,
-  .menu-overlay__contact-link:focus-visible {
+  .menu-overlay__contact-link:focus-visible,
+  .action-btn:hover,
+  .action-btn:focus-visible {
     animation: none;
   }
 }
@@ -368,6 +372,34 @@ img {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  border-radius: 0.2em;
+}
+
+.action-btn--copy {
+  display: inline-grid;
+  vertical-align: top;
+}
+
+.action-btn--copy > span {
+  grid-area: 1 / 1;
+}
+
+.action-btn__width {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.menu-overlay__contact-link--email {
+  display: inline-grid;
+}
+
+.menu-overlay__contact-link--email > span {
+  grid-area: 1 / 1;
+}
+
+.menu-overlay__contact-width {
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .spacer {
@@ -612,6 +644,10 @@ img {
 
 /* Compact / tablet: mobile chrome before nav overlaps the centered logo */
 @media (max-width: 1024px) {
+  :root {
+    --mobile-logo-mark-h: 40px;
+  }
+
   .header {
     justify-content: center;
     padding: 26px var(--gutter) 0;
@@ -625,20 +661,63 @@ img {
   .menu-bar {
     display: flex;
   }
+
+  body.work .header,
+  body.case .header {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background: var(--bg);
+    padding: 26px var(--gutter) 20px;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  body.work .logo,
+  body.case .logo {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+  }
+
+  body.work .logo__mark,
+  body.case .logo__mark {
+    height: auto;
+    max-height: var(--mobile-logo-mark-h);
+    width: auto;
+  }
+
+  body.work .work-main {
+    padding-top: 0;
+    gap: 45px;
+  }
 }
 
 /* Phone type and gutters */
 @media (max-width: 640px) {
   :root {
     --gutter: 12px;
+    --mobile-logo-mark-h: 40px;
   }
 
   .hero {
-    padding: 43px var(--gutter) 0;
+    padding: calc(34px + var(--mobile-logo-mark-h) + 32px) var(--gutter) 0;
   }
 
   .hero__heading {
     font-size: 28px;
+    line-height: 1.35;
+  }
+
+  .hero__doodle {
+    width: 6.55em;
+    height: 2.15em;
+    top: -0.4em;
+  }
+
+  .hero__word {
+    height: 0.82em;
   }
 
   .hero .actions {
@@ -653,6 +732,12 @@ img {
 
   .hero {
     padding-top: clamp(24px, 5dvh, 56px);
+  }
+}
+
+@media (max-width: 640px) and (max-height: 750px) {
+  .hero {
+    padding-top: calc(34px + var(--mobile-logo-mark-h, 40px) + 32px);
   }
 }
 
@@ -1351,6 +1436,17 @@ a.card {
     gap: 16px;
   }
 
+  body.case .case__rail-inner > .case__back {
+    position: fixed;
+    top: calc(26px + (var(--mobile-logo-mark-h, 40px) - 26px) / 2);
+    left: var(--gutter);
+    z-index: 35;
+  }
+
+  body.case .case__rail {
+    top: calc(26px + var(--mobile-logo-mark-h, 40px) + 20px);
+  }
+
   .case__toc-title,
   .case__toc-rail {
     display: none;
@@ -1451,6 +1547,7 @@ a.card {
 
 .work-filter {
   appearance: none;
+  -webkit-appearance: none;
   display: flex;
   align-items: flex-start;
   justify-content: center;
