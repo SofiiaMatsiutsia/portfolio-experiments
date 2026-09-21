@@ -555,6 +555,14 @@ if (menuOpenBtn && menuCloseBtn && menuOverlay) {
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") closeMenu();
   });
+
+  menuOverlay.querySelectorAll(".menu-overlay__link, .menu-overlay__contact-link").forEach((el) => {
+    const setHot = (on) => el.classList.toggle("is-hot", on);
+    el.addEventListener("pointerdown", () => setHot(true));
+    el.addEventListener("pointerup", () => setHot(false));
+    el.addEventListener("pointercancel", () => setHot(false));
+    el.addEventListener("pointerleave", () => setHot(false));
+  });
 }
 
 function initSquishCursor() {

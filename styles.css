@@ -89,8 +89,7 @@ body {
 }
 
 .nav__link:focus-visible,
-.menu-overlay__link:focus-visible,
-.menu-overlay__contact-link:focus-visible,
+.menu-overlay__contact-link:is(:hover, :active, :focus-visible, .is-hot),
 .action-btn:focus-visible {
   background-color: transparent;
   background-image: var(--gradient-horizontal);
@@ -107,8 +106,6 @@ body {
 
 @media (hover: hover) {
   .nav__link:hover,
-  .menu-overlay__link:hover,
-  .menu-overlay__contact-link:hover,
   .action-btn:hover {
     background-color: transparent;
     background-image: var(--gradient-horizontal);
@@ -126,10 +123,8 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .nav__link:hover,
   .nav__link:focus-visible,
-  .menu-overlay__link:hover,
-  .menu-overlay__link:focus-visible,
-  .menu-overlay__contact-link:hover,
-  .menu-overlay__contact-link:focus-visible,
+  .menu-overlay__link:is(:hover, :active, :focus-visible, .is-hot) span,
+  .menu-overlay__contact-link:is(:hover, :active, :focus-visible, .is-hot),
   .action-btn:hover,
   .action-btn:focus-visible {
     animation: none;
@@ -529,6 +524,11 @@ img {
 /* Full-screen mobile menu overlay: concentric-ring reveal */
 .menu-overlay {
   --menu-fill: #4dccf9;
+  --ring-1-top: -8px;
+  --ring-2-top: 120px;
+  --ring-3-top: 226px;
+  --ring-4-top: 337px;
+  --ring-5-top: 446px;
   position: fixed;
   inset: 0;
   z-index: 100;
@@ -569,34 +569,70 @@ img {
   backface-visibility: hidden;
 }
 
-.ring--1 { top: -8px;  --ring-top: -8px;  width: 1609px; height: 1609px; }
-.ring--2 { top: 120px; --ring-top: 120px; width: 1284px; height: 1284px; }
-.ring--3 { top: 226px; --ring-top: 226px; width: 1073px; height: 1073px; }
-.ring--4 { top: 337px; --ring-top: 337px; width: 851px;  height: 851px; }
-.ring--5 { top: 446px; --ring-top: 446px; width: 633px;  height: 633px;  background: var(--bg); }
+.ring--1 { top: var(--ring-1-top); --ring-top: var(--ring-1-top); width: 1609px; height: 1609px; }
+.ring--2 { top: var(--ring-2-top); --ring-top: var(--ring-2-top); width: 1284px; height: 1284px; }
+.ring--3 { top: var(--ring-3-top); --ring-top: var(--ring-3-top); width: 1073px; height: 1073px; }
+.ring--4 { top: var(--ring-4-top); --ring-top: var(--ring-4-top); width: 851px;  height: 851px; }
+.ring--5 { top: var(--ring-5-top); --ring-top: var(--ring-5-top); width: 633px;  height: 633px;  background: var(--bg); }
 
 .menu-overlay__nav {
   position: absolute;
-  left: 0;
-  right: 0;
-  top: clamp(72px, 16vh, 149px);
+  inset: 0;
   z-index: 5;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: clamp(20px, 7vh, 62px);
+  pointer-events: none;
 }
 
 .menu-overlay__link {
+  --strip-top: 0px;
+  --strip-bottom: 0px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: var(--strip-top);
+  height: calc(var(--strip-bottom) - var(--strip-top));
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transform: scale(0.97);
   opacity: 0;
   font-family: var(--font-body);
   font-size: clamp(32px, 8vh, 48px);
   line-height: 1;
+  text-align: center;
   text-transform: uppercase;
   color: var(--fg);
   text-decoration: none;
   white-space: nowrap;
+  pointer-events: auto;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.menu-overlay__link--about {
+  --strip-top: var(--ring-2-top);
+  --strip-bottom: var(--ring-3-top);
+}
+
+.menu-overlay__link--work {
+  --strip-top: var(--ring-3-top);
+  --strip-bottom: var(--ring-4-top);
+}
+
+.menu-overlay__link--talks {
+  --strip-top: var(--ring-4-top);
+  --strip-bottom: var(--ring-5-top);
+}
+
+.menu-overlay__link:is(:hover, :active, :focus-visible, .is-hot) span {
+  background-color: transparent;
+  background-image: var(--gradient-horizontal);
+  background-repeat: repeat-x;
+  background-attachment: fixed;
+  background-position: 0 0;
+  background-size: auto 100%;
+  color: var(--color-bg);
+  animation: link-bg-anim 8s linear infinite;
+  border-radius: 0.2em;
 }
 
 .menu-overlay__contact {
@@ -624,11 +660,17 @@ img {
   text-decoration: none;
   cursor: pointer;
   white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .nav__link,
-.menu-overlay__link,
 .menu-overlay__contact-link {
+  padding-inline: 0.12em;
+  margin-inline: -0.12em;
+}
+
+.menu-overlay__link span {
   padding-inline: 0.12em;
   margin-inline: -0.12em;
 }
