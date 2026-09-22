@@ -4,15 +4,33 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Housing Anywhere — Sofiia Matsiutsia</title>
-<link rel="stylesheet" href="../styles.css?v=52" />
+<link rel="stylesheet" href="../styles.css?v=67" />
 </head>
 <body class="case">
 
   <header class="header">
     <nav class="nav" aria-label="Primary">
-      <a href="../index.html#about" class="nav__link nav__link--muted">About,</a>
-      <a href="../work.html" class="nav__link" aria-current="page">Work,</a>
-      <a href="../index.html#talks" class="nav__link nav__link--muted">Talks.</a>
+      <a href="../index.html#about" class="nav__link nav__link--about nav__link--muted" data-cursor="soon">
+        <span class="nav__label">About,</span>
+        <span class="nav__mark" aria-hidden="true">
+          <img class="nav__mark-img nav__mark-img--hover" src="../assets/icons/nav-about-hover.svg" alt="" width="89" height="29" />
+          <img class="nav__mark-img nav__mark-img--selected" src="../assets/icons/nav-about-selected.svg" alt="" width="89" height="29" />
+        </span>
+      </a>
+      <a href="../work.html" class="nav__link nav__link--work" aria-current="page">
+        <span class="nav__label">Work,</span>
+        <span class="nav__mark" aria-hidden="true">
+          <img class="nav__mark-img nav__mark-img--hover" src="../assets/icons/nav-work-hover.svg" alt="" width="82" height="29" />
+          <img class="nav__mark-img nav__mark-img--selected" src="../assets/icons/nav-work-selected.svg" alt="" width="82" height="29" />
+        </span>
+      </a>
+      <a href="../index.html#talks" class="nav__link nav__link--talks nav__link--muted" data-cursor="soon">
+        <span class="nav__label">Talks.</span>
+        <span class="nav__mark" aria-hidden="true">
+          <img class="nav__mark-img nav__mark-img--hover" src="../assets/icons/nav-talks-hover.svg" alt="" width="82" height="29" />
+          <img class="nav__mark-img nav__mark-img--selected" src="../assets/icons/nav-talks-selected.svg" alt="" width="82" height="29" />
+        </span>
+      </a>
     </nav>
 
     <a href="../index.html" class="logo" aria-label="Sofiia Matsiutsia — home">
@@ -169,9 +187,9 @@
   </div>
 
   <nav class="menu-overlay__nav" aria-label="Primary">
-    <a href="../index.html#about" class="menu-overlay__link menu-overlay__link--about"><span>About</span></a>
+    <a href="../index.html#about" class="menu-overlay__link menu-overlay__link--about" data-cursor="soon"><span>About</span></a>
     <a href="../work.html" class="menu-overlay__link menu-overlay__link--work"><span>Work</span></a>
-    <a href="../index.html#talks" class="menu-overlay__link menu-overlay__link--talks"><span>talks</span></a>
+    <a href="../index.html#talks" class="menu-overlay__link menu-overlay__link--talks" data-cursor="soon"><span>talks</span></a>
   </nav>
 
   <div class="menu-overlay__contact">
@@ -185,6 +203,6 @@
   </button>
 </div>
 
-<script src="../script.js?v=37"></script>
+<script src="../script.js?v=38"></script>
 </body>
 </html>

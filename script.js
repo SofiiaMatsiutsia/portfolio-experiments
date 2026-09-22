@@ -584,8 +584,10 @@ function initSquishCursor() {
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const EASE = 0.38;
   const POWER = 1.1;
+  const SOON_PAD = 32;
 
   let el = null;
+  let label = null;
   let rafId = 0;
   let mx = 0;
   let my = 0;
@@ -595,8 +597,18 @@ function initSquishCursor() {
   let sy = 1;
   let rot = 0;
   let seeded = false;
+  let soon = false;
 
   const canUseCursor = () => finePointer.matches && !reducedMotion.matches;
+
+  const setSoon = (next) => {
+    if (!el || next === soon) return;
+    soon = next;
+    if (soon && label) {
+      el.style.setProperty("--soon-width", `${Math.ceil(label.scrollWidth) + SOON_PAD}px`);
+    }
+    el.classList.toggle("is-coming-soon", soon);
+  };
 
   const loop = () => {
     if (!canUseCursor()) {
@@ -610,12 +622,17 @@ function initSquishCursor() {
     y += dy * EASE;
 
     const speed = Math.min(Math.hypot(dx, dy) / 44, POWER);
-    if (speed > 0.02) rot = (Math.atan2(dy, dx) * 180) / Math.PI;
+    if (soon) {
+      rot += (0 - rot) * 0.28;
+      sx += (1 - sx) * 0.28;
+      sy += (1 - sy) * 0.28;
+    } else {
+      if (speed > 0.02) rot = (Math.atan2(dy, dx) * 180) / Math.PI;
+      sx += (1 + speed - sx) * 0.18;
+      sy += (1 - speed * 0.78 - sy) * 0.18;
+    }
 
-    sx += (1 + speed - sx) * 0.18;
-    sy += (1 - speed * 0.78 - sy) * 0.18;
-
-    el.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${rot}deg) scale(${sx}, ${sy})`;
+    el.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%) rotate(${rot}deg) scale(${sx}, ${sy})`;
     rafId = requestAnimationFrame(loop);
   };
 
@@ -624,6 +641,8 @@ function initSquishCursor() {
     if (!el) return;
     mx = event.clientX;
     my = event.clientY;
+    const target = event.target;
+    setSoon(Boolean(target && target.closest && target.closest('[data-cursor="soon"]')));
     if (!seeded) {
       x = mx;
       y = my;
@@ -633,7 +652,9 @@ function initSquishCursor() {
   };
 
   const onLeave = () => {
-    if (el) el.classList.remove("is-visible");
+    if (!el) return;
+    el.classList.remove("is-visible");
+    setSoon(false);
   };
 
   const onEnter = (event) => {
@@ -644,6 +665,7 @@ function initSquishCursor() {
     y = my;
     sx = 1;
     sy = 1;
+    rot = 0;
     el.classList.add("is-visible");
   };
 
@@ -653,7 +675,9 @@ function initSquishCursor() {
     rafId = 0;
     el.remove();
     el = null;
+    label = null;
     seeded = false;
+    soon = false;
     document.documentElement.classList.remove("has-squish-cursor");
   };
 
@@ -662,6 +686,10 @@ function initSquishCursor() {
     el = document.createElement("div");
     el.className = "squish-cursor";
     el.setAttribute("aria-hidden", "true");
+    label = document.createElement("span");
+    label.className = "squish-cursor__label";
+    label.textContent = "Coming soon";
+    el.appendChild(label);
     document.body.appendChild(el);
     document.documentElement.classList.add("has-squish-cursor");
     rafId = requestAnimationFrame(loop);
