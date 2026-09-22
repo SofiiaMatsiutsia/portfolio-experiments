@@ -21,6 +21,20 @@ document.querySelectorAll(".card__media").forEach((media) => {
   });
 });
 
+const marquee = document.querySelector(".marquee");
+const marqueeTrack = document.querySelector(".marquee__track");
+if (marquee && marqueeTrack) {
+  const pauseMarquee = () => {
+    marqueeTrack.style.animationPlayState = "paused";
+  };
+  const resumeMarquee = () => {
+    marqueeTrack.style.animationPlayState = "";
+  };
+  marquee.addEventListener("pointerdown", pauseMarquee);
+  window.addEventListener("pointerup", resumeMarquee);
+  window.addEventListener("pointercancel", resumeMarquee);
+}
+
 const reducedMotionMedia = window.matchMedia("(prefers-reduced-motion: reduce)");
 const hoverMedia = window.matchMedia("(hover: hover)");
 document.querySelectorAll(".case__hero").forEach((hero) => {
