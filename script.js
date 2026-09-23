@@ -21,19 +21,136 @@ document.querySelectorAll(".card__media").forEach((media) => {
   });
 });
 
-const marquee = document.querySelector(".marquee");
-const marqueeTrack = document.querySelector(".marquee__track");
-if (marquee && marqueeTrack) {
-  const pauseMarquee = () => {
-    marqueeTrack.style.animationPlayState = "paused";
+function initShowcase() {
+  const viewport = document.querySelector(".showcase");
+  const track = viewport?.querySelector(".showcase__track");
+  const group = track?.querySelector(".showcase__group");
+  if (!viewport || !track || !group) return;
+
+  const mobileLayout = window.matchMedia("(max-width: 1024px)");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const duplicate = group.cloneNode(true);
+  duplicate.setAttribute("aria-hidden", "true");
+  duplicate.querySelectorAll("a, button, [tabindex]").forEach((element) => {
+    element.tabIndex = -1;
+  });
+  if ("inert" in duplicate) duplicate.inert = true;
+  track.appendChild(duplicate);
+
+  let offset = 0;
+  let loopSize = 1;
+  let previousTime = performance.now();
+  let pauseUntil = 0;
+  let dragging = false;
+  let pointerId = null;
+  let previousPointerPosition = 0;
+  let resizeFrame = 0;
+
+  const isHorizontal = () => mobileLayout.matches;
+  const pointerPosition = (event) => (isHorizontal() ? event.clientX : event.clientY);
+  const normalizeOffset = () => {
+    offset = ((offset % loopSize) + loopSize) % loopSize;
   };
-  const resumeMarquee = () => {
-    marqueeTrack.style.animationPlayState = "";
+  const render = () => {
+    const x = isHorizontal() ? -offset : 0;
+    const y = isHorizontal() ? 0 : -offset;
+    track.style.transform = `translate3d(${x}px, ${y}px, 0)`;
   };
-  marquee.addEventListener("pointerdown", pauseMarquee);
-  window.addEventListener("pointerup", resumeMarquee);
-  window.addEventListener("pointercancel", resumeMarquee);
+  const measure = () => {
+    const oldSize = loopSize;
+    const progress = oldSize > 1 ? offset / oldSize : 0;
+    loopSize = isHorizontal() ? group.getBoundingClientRect().width : group.getBoundingClientRect().height;
+    loopSize = Math.max(1, loopSize);
+    offset = progress * loopSize;
+    normalizeOffset();
+    render();
+  };
+  const nudge = (distance) => {
+    offset += distance;
+    normalizeOffset();
+    pauseUntil = performance.now() + 650;
+    render();
+  };
+  const animate = (time) => {
+    const elapsed = Math.min(50, time - previousTime);
+    previousTime = time;
+    if (!dragging && time >= pauseUntil && !reducedMotion.matches && !document.hidden) {
+      offset += (isHorizontal() ? 24 : 28) * (elapsed / 1000);
+      normalizeOffset();
+      render();
+    }
+    requestAnimationFrame(animate);
+  };
+
+  viewport.addEventListener(
+    "wheel",
+    (event) => {
+      event.preventDefault();
+      const distance = isHorizontal()
+        ? Math.abs(event.deltaX) > Math.abs(event.deltaY)
+          ? event.deltaX
+          : event.deltaY
+        : Math.abs(event.deltaY) > Math.abs(event.deltaX)
+          ? event.deltaY
+          : event.deltaX;
+      nudge(distance);
+    },
+    { passive: false },
+  );
+
+  viewport.addEventListener("pointerdown", (event) => {
+    if (event.button !== 0) return;
+    dragging = true;
+    pointerId = event.pointerId;
+    previousPointerPosition = pointerPosition(event);
+    pauseUntil = Infinity;
+    viewport.classList.add("is-dragging");
+    viewport.setPointerCapture(event.pointerId);
+  });
+
+  viewport.addEventListener("pointermove", (event) => {
+    if (!dragging || event.pointerId !== pointerId) return;
+    const currentPosition = pointerPosition(event);
+    offset -= currentPosition - previousPointerPosition;
+    previousPointerPosition = currentPosition;
+    normalizeOffset();
+    render();
+  });
+
+  const endDrag = (event) => {
+    if (!dragging || event.pointerId !== pointerId) return;
+    dragging = false;
+    pointerId = null;
+    pauseUntil = performance.now() + 650;
+    viewport.classList.remove("is-dragging");
+  };
+  viewport.addEventListener("pointerup", endDrag);
+  viewport.addEventListener("pointercancel", endDrag);
+
+  viewport.addEventListener("keydown", (event) => {
+    const forwardKey = isHorizontal() ? "ArrowRight" : "ArrowDown";
+    const backwardKey = isHorizontal() ? "ArrowLeft" : "ArrowUp";
+    if (event.key !== forwardKey && event.key !== backwardKey) return;
+    event.preventDefault();
+    nudge(event.key === forwardKey ? 80 : -80);
+  });
+
+  const queueMeasure = () => {
+    if (resizeFrame) cancelAnimationFrame(resizeFrame);
+    resizeFrame = requestAnimationFrame(() => {
+      resizeFrame = 0;
+      measure();
+    });
+  };
+  window.addEventListener("resize", queueMeasure);
+  mobileLayout.addEventListener("change", measure);
+  document.fonts?.ready.then(measure);
+
+  measure();
+  requestAnimationFrame(animate);
 }
+
+initShowcase();
 
 const reducedMotionMedia = window.matchMedia("(prefers-reduced-motion: reduce)");
 const hoverMedia = window.matchMedia("(hover: hover)");

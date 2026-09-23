@@ -4,46 +4,44 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Sofiia Matsiutsia — Designs for products & services</title>
-<link rel="stylesheet" href="styles.css?v=67" />
+<link rel="stylesheet" href="styles.css?v=71" />
 </head>
-<body>
-<div class="page">
+<body class="home">
+<div class="page home-page" id="top">
 
   <header class="header">
+    <a href="#top" class="logo" aria-label="Sofiia Matsiutsia — home">
+      <img src="assets/images/sm-logo.svg" alt="Sofiia Matsiutsia" class="logo__mark" />
+    </a>
+
     <nav class="nav" aria-label="Primary">
       <a class="nav__link nav__link--about" data-cursor="soon">
-        <span class="nav__label">About,</span>
+        <span class="nav__label">About</span>
         <span class="nav__mark" aria-hidden="true">
-          <img class="nav__mark-img nav__mark-img--hover" src="assets/icons/nav-about-hover.svg" alt="" width="89" height="29" />
-          <img class="nav__mark-img nav__mark-img--selected" src="assets/icons/nav-about-selected.svg" alt="" width="89" height="29" />
+          <img class="nav__mark-img nav__mark-img--hover" src="assets/icons/about-hover.svg" alt="" width="70" height="28" />
+          <img class="nav__mark-img nav__mark-img--selected" src="assets/icons/about-hover.svg" alt="" width="70" height="28" />
         </span>
       </a>
       <a href="work.html" class="nav__link nav__link--work">
-        <span class="nav__label">Work,</span>
+        <span class="nav__label">Work</span>
         <span class="nav__mark" aria-hidden="true">
-          <img class="nav__mark-img nav__mark-img--hover" src="assets/icons/nav-work-hover.svg" alt="" width="82" height="29" />
-          <img class="nav__mark-img nav__mark-img--selected" src="assets/icons/nav-work-selected.svg" alt="" width="82" height="29" />
+          <img class="nav__mark-img nav__mark-img--hover" src="assets/icons/work-hover.svg" alt="" width="63" height="28" />
+          <img class="nav__mark-img nav__mark-img--selected" src="assets/icons/work-hover.svg" alt="" width="63" height="28" />
         </span>
       </a>
       <a class="nav__link nav__link--talks" data-cursor="soon">
-        <span class="nav__label">Talks.</span>
+        <span class="nav__label">Talks</span>
         <span class="nav__mark" aria-hidden="true">
-          <img class="nav__mark-img nav__mark-img--hover" src="assets/icons/nav-talks-hover.svg" alt="" width="82" height="29" />
-          <img class="nav__mark-img nav__mark-img--selected" src="assets/icons/nav-talks-selected.svg" alt="" width="82" height="29" />
+          <img class="nav__mark-img nav__mark-img--hover" src="assets/icons/talks-hover.svg" alt="" width="63" height="28" />
+          <img class="nav__mark-img nav__mark-img--selected" src="assets/icons/talks-hover.svg" alt="" width="63" height="28" />
         </span>
       </a>
     </nav>
 
-    <a href="#top" class="logo" aria-label="Sofiia Matsiutsia — home">
-      <img src="assets/images/logo.gif" alt="Sofiia Matsiutsia" class="logo__mark" />
-    </a>
-
     <button type="button" class="sound-toggle" aria-label="Mute sound" aria-pressed="false">
       <span class="sound-toggle__swap">
         <span class="sound-toggle__layer sound-toggle__layer--on">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="sound-toggle__icon" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" />
-          </svg>
+          <img src="assets/icons/audio-on.svg" alt="" class="sound-toggle__icon" aria-hidden="true" />
         </span>
         <span class="sound-toggle__layer sound-toggle__layer--off">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="sound-toggle__icon" aria-hidden="true">
@@ -54,92 +52,50 @@
     </button>
   </header>
 
-  <section class="hero">
-    <h1 class="hero__heading">
-      <span class="hero__doodle-target">
-        <img src="assets/icons/doodle-circle.svg" alt="" class="hero__doodle" />
-        i do design for
-      </span>
-      <img src="assets/images/word-products.svg" alt="products" class="hero__word" />,
-      <img src="assets/images/word-services.svg" alt="services" class="hero__word" />,
-      and run
-      <img src="assets/images/word-ai-community.svg" alt="AI community" class="hero__word" />.
-    </h1>
-
-    <p class="hero__heading">
-      but also research, tinker, and design engineering.<br />
-      based in london.
-    </p>
+  <main class="home-main">
+    <section class="hero" aria-labelledby="home-intro">
+      <h1 class="hero__heading" id="home-intro">
+        London-based <span class="hero__accent">product designer</span> specializing in human-AI interaction and complex workflows.
+      </h1>
+      <p class="hero__heading">Tech <span class="hero__accent">community</span> founder.</p>
+    </section>
 
     <div class="actions">
       <button type="button" class="action-btn action-btn--copy">
         <span class="action-btn__width" aria-hidden="true">Copy email</span>
         <span class="action-btn__text">Copy email</span>
       </button>
-      <a href="https://www.linkedin.com/in/smatsiutsia/" class="action-btn" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-      <a href="https://x.com/SMatsiutsia" class="action-btn" target="_blank" rel="noopener noreferrer">Twitter</a>
+      <a href="https://www.linkedin.com/in/smatsiutsia/" class="action-btn" target="_blank" rel="noopener noreferrer">
+        <span>LinkedIn</span>
+        <img src="assets/icons/new-window-arrow-1.svg" alt="" class="action-btn__arrow" aria-hidden="true" />
+      </a>
+      <a href="https://x.com/SMatsiutsia" class="action-btn" target="_blank" rel="noopener noreferrer">
+        <span>Twitter</span>
+        <img src="assets/icons/new-window-arrow-2.svg" alt="" class="action-btn__arrow" aria-hidden="true" />
+      </a>
     </div>
-  </section>
 
-  <div class="spacer" aria-hidden="true"></div>
-
-  <section class="marquee" aria-label="Selected projects">
-    <div class="marquee__track">
-
-      <div class="marquee__row">
-        <a href="work/internal-panel.html" class="card" aria-label="Housing Anywhere admin panel">
-          <div class="card__media">
-            <img src="assets/images/marquee/ha-1.png" alt="" />
+    <section class="showcase" aria-label="Selected work. Drag, scroll, or use arrow keys to browse." tabindex="0">
+      <div class="showcase__track">
+        <div class="showcase__group">
+          <div class="showcase__row showcase__row--single">
+            <div class="showcase__item showcase__item--landscape" aria-hidden="true"></div>
           </div>
-        </a>
-
-        <a href="work/housing-anywhere.html" class="card" aria-label="Housing Anywhere rebranding">
-          <div class="card__media">
-            <img src="assets/images/marquee/ha-scroll.gif" alt="" />
+          <div class="showcase__row showcase__row--double">
+            <div class="showcase__item showcase__item--portrait" aria-hidden="true"></div>
+            <div class="showcase__item showcase__item--portrait" aria-hidden="true"></div>
           </div>
-        </a>
-
-        <a href="work/housing-anywhere.html" class="card" aria-label="Housing Anywhere rebranding">
-          <div class="card__media">
-            <img src="assets/images/marquee/ha-mobile.gif" alt="" />
+          <div class="showcase__row showcase__row--single showcase__row--narrow">
+            <div class="showcase__item showcase__item--landscape" aria-hidden="true"></div>
           </div>
-        </a>
-
-        <a href="work/voyage-monitor.html" class="card" aria-label="Voyage Monitor">
-          <div class="card__media">
-            <img src="assets/images/marquee/voyage.gif" alt="" />
+          <div class="showcase__row showcase__row--double">
+            <div class="showcase__item showcase__item--square" aria-hidden="true"></div>
+            <div class="showcase__item showcase__item--landscape" aria-hidden="true"></div>
           </div>
-        </a>
+        </div>
       </div>
-
-      <div class="marquee__row" aria-hidden="true">
-        <a href="work/internal-panel.html" class="card" tabindex="-1" aria-hidden="true">
-          <div class="card__media">
-            <img src="assets/images/marquee/ha-1.png" alt="" />
-          </div>
-        </a>
-
-        <a href="work/housing-anywhere.html" class="card" tabindex="-1" aria-hidden="true">
-          <div class="card__media">
-            <img src="assets/images/marquee/ha-scroll.gif" alt="" />
-          </div>
-        </a>
-
-        <a href="work/housing-anywhere.html" class="card" tabindex="-1" aria-hidden="true">
-          <div class="card__media">
-            <img src="assets/images/marquee/ha-mobile.gif" alt="" />
-          </div>
-        </a>
-
-        <a href="work/voyage-monitor.html" class="card" tabindex="-1" aria-hidden="true">
-          <div class="card__media">
-            <img src="assets/images/marquee/voyage.gif" alt="" />
-          </div>
-        </a>
-      </div>
-
-    </div>
-  </section>
+    </section>
+  </main>
 
   <button type="button" class="menu-bar" id="menu-open" aria-haspopup="true" aria-controls="menu-overlay" aria-expanded="false">
     Menu
@@ -176,6 +132,6 @@
   </button>
 </div>
 
-<script src="script.js?v=39"></script>
+<script src="script.js?v=40"></script>
 </body>
 </html>
