@@ -1924,13 +1924,15 @@ a.work-item:focus-visible {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  a.work-item:hover .work-item__media img {
+  a.work-item:hover .work-item__media img,
+  a.work-item:hover .work-item__media video {
     opacity: 0.92;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .work-item__media img {
+  .work-item__media img,
+  .work-item__media video {
     transition: none;
   }
 }
