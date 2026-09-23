@@ -130,7 +130,9 @@ body {
 }
 
 .squish-cursor {
-  --soon-width: 148px;
+  --cursor-size: 16px;
+  --soon-width: var(--cursor-size);
+  --soon-duration: 240ms;
   --cursor-ease: cubic-bezier(0.23, 1, 0.32, 1);
   position: fixed;
   top: 0;
@@ -138,27 +140,20 @@ body {
   z-index: 9999;
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 16px;
-  height: 16px;
+  justify-content: flex-start;
+  width: var(--cursor-size);
+  height: var(--cursor-size);
   padding: 0;
   overflow: hidden;
   border-radius: 999px;
   background: #4DCCF9;
   color: #000;
-  font-family: var(--font-body);
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  line-height: 1;
-  text-transform: uppercase;
   pointer-events: none;
+  container-type: inline-size;
+  transform-origin: calc(var(--cursor-size) / 2) calc(var(--cursor-size) / 2);
   will-change: transform;
   opacity: 0;
-  transition:
-    width 200ms var(--cursor-ease),
-    height 200ms var(--cursor-ease),
-    padding 200ms var(--cursor-ease);
+  transition: width var(--soon-duration) var(--cursor-ease);
 }
 
 .squish-cursor.is-visible {
@@ -167,23 +162,27 @@ body {
 
 .squish-cursor.is-coming-soon {
   width: var(--soon-width);
-  height: 32px;
-  padding: 0 16px;
 }
 
 .squish-cursor__label {
   flex: 0 0 auto;
+  padding-left: 6px;
+  padding-right: 7px;
+  color: #000;
+  font-family: "Folio Bk BT", var(--font-body);
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 100%;
+  text-transform: uppercase;
+  text-wrap-style: balance;
   white-space: nowrap;
-  opacity: 0;
-  transform: scale(0.96);
-  transition:
-    opacity 180ms var(--cursor-ease),
-    transform 180ms var(--cursor-ease);
 }
 
-.squish-cursor.is-coming-soon .squish-cursor__label {
-  opacity: 1;
-  transform: scale(1);
+@container (width <= 16px) {
+  .squish-cursor__label {
+    opacity: 0;
+  }
 }
 
 img {

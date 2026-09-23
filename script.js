@@ -584,7 +584,6 @@ function initSquishCursor() {
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const EASE = 0.38;
   const POWER = 1.1;
-  const SOON_PAD = 32;
 
   let el = null;
   let label = null;
@@ -598,6 +597,8 @@ function initSquishCursor() {
   let rot = 0;
   let seeded = false;
   let soon = false;
+  let holdUntil = 0;
+  let cursorSize = 16;
 
   const canUseCursor = () => finePointer.matches && !reducedMotion.matches;
 
@@ -605,7 +606,10 @@ function initSquishCursor() {
     if (!el || next === soon) return;
     soon = next;
     if (soon && label) {
-      el.style.setProperty("--soon-width", `${Math.ceil(label.scrollWidth) + SOON_PAD}px`);
+      el.style.setProperty("--soon-width", `${Math.ceil(label.scrollWidth)}px`);
+      holdUntil = 0;
+    } else {
+      holdUntil = performance.now() + 260;
     }
     el.classList.toggle("is-coming-soon", soon);
   };
@@ -622,17 +626,19 @@ function initSquishCursor() {
     y += dy * EASE;
 
     const speed = Math.min(Math.hypot(dx, dy) / 44, POWER);
-    if (soon) {
-      rot += (0 - rot) * 0.28;
-      sx += (1 - sx) * 0.28;
-      sy += (1 - sy) * 0.28;
+    const holdShape = soon || performance.now() < holdUntil;
+    if (holdShape) {
+      rot = 0;
+      sx = 1;
+      sy = 1;
     } else {
       if (speed > 0.02) rot = (Math.atan2(dy, dx) * 180) / Math.PI;
       sx += (1 + speed - sx) * 0.18;
       sy += (1 - speed * 0.78 - sy) * 0.18;
     }
 
-    el.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%) rotate(${rot}deg) scale(${sx}, ${sy})`;
+    const half = cursorSize / 2;
+    el.style.transform = `translate3d(${x - half}px, ${y - half}px, 0) rotate(${rot}deg) scale(${sx}, ${sy})`;
     rafId = requestAnimationFrame(loop);
   };
 
@@ -678,6 +684,7 @@ function initSquishCursor() {
     label = null;
     seeded = false;
     soon = false;
+    holdUntil = 0;
     document.documentElement.classList.remove("has-squish-cursor");
   };
 
@@ -691,6 +698,7 @@ function initSquishCursor() {
     label.textContent = "Coming soon";
     el.appendChild(label);
     document.body.appendChild(el);
+    cursorSize = el.offsetHeight || cursorSize;
     document.documentElement.classList.add("has-squish-cursor");
     rafId = requestAnimationFrame(loop);
   };
