@@ -660,13 +660,21 @@ html.figma-hover a.card.figma-hover-target .card__media {
   inset: 0;
   z-index: 100;
   overflow: hidden;
-  /* Closed / closing: page shows through uncovered slivers.
-     Open: fill with the lead ring so the first frame is not a hole. */
+  /* The lead ring is the entrance. A fill here would paint the whole
+     screen on the first frame — the same color as that ring — so the
+     scale never reads and the menu cuts in. */
   background: transparent;
 }
 
-.menu-overlay.is-open {
+/* After the rings have landed, fill any gap the circle doesn't cover. */
+.menu-overlay.is-open:not(.is-animating) {
   background: var(--menu-fill);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-overlay.is-open {
+    background: var(--menu-fill);
+  }
 }
 
 .menu-overlay[hidden] {
@@ -675,8 +683,9 @@ html.figma-hover a.card.figma-hover-target .card__media {
 
 .menu-overlay.is-animating .ring,
 .menu-overlay.is-animating .menu-overlay__link,
-.menu-overlay.is-animating .menu-overlay__contact-link {
-  will-change: transform, opacity;
+.menu-overlay.is-animating .menu-overlay__contact-link,
+.menu-overlay.is-animating .menu-overlay__close {
+  will-change: transform, scale, opacity;
 }
 
 .ring-stage {
@@ -720,7 +729,7 @@ html.figma-hover a.card.figma-hover-target .card__media {
   display: flex;
   align-items: center;
   justify-content: center;
-  transform: scale(0.97);
+  scale: 0.92;
   opacity: 0;
   font-family: var(--font-body);
   font-size: clamp(32px, 8vh, 48px);
@@ -775,7 +784,7 @@ html.figma-hover a.card.figma-hover-target .card__media {
 }
 
 .menu-overlay__contact-link {
-  transform: scale(0.97);
+  scale: 0.92;
   opacity: 0;
   background: none;
   border: none;
@@ -809,6 +818,7 @@ html.figma-hover a.card.figma-hover-target .card__media {
   bottom: 0;
   z-index: 10;
   opacity: 0;
+  scale: 0.92;
 }
 
 /* Compact / tablet: mobile chrome before nav overlaps the centered logo */

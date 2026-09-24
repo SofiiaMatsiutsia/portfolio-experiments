@@ -21,6 +21,34 @@ document.querySelectorAll(".card__media").forEach((media) => {
   });
 });
 
+function createEase(x1, y1, x2, y2) {
+  const cx = 3 * x1;
+  const bx = 3 * (x2 - x1) - cx;
+  const ax = 1 - cx - bx;
+  const cy = 3 * y1;
+  const by = 3 * (y2 - y1) - cy;
+  const ay = 1 - cy - by;
+  const sampleX = (t) => ((ax * t + bx) * t + cx) * t;
+  const sampleY = (t) => ((ay * t + by) * t + cy) * t;
+  const sampleDX = (t) => (3 * ax * t + 2 * bx) * t + cx;
+  return (x) => {
+    if (x <= 0) return 0;
+    if (x >= 1) return 1;
+    let t = x;
+    for (let i = 0; i < 8; i += 1) {
+      const slope = sampleDX(t);
+      if (Math.abs(slope) < 1e-6) break;
+      const next = t - (sampleX(t) - x) / slope;
+      if (Math.abs(next - t) < 1e-5) {
+        t = next;
+        break;
+      }
+      t = next;
+    }
+    return Math.min(1, Math.max(0, sampleY(Math.min(1, Math.max(0, t)))));
+  };
+}
+
 function initShowcase() {
   const viewport = document.querySelector(".showcase");
   const track = viewport?.querySelector(".showcase__track");
@@ -37,6 +65,14 @@ function initShowcase() {
   if ("inert" in duplicate) duplicate.inert = true;
   track.appendChild(duplicate);
 
+  const CRUISE_X = 48;
+  const CRUISE_Y = 56;
+  const GLIDE_TAU = 320;
+  const VELOCITY_WINDOW = 100;
+  const MAX_RELEASE_SPEED = 1800;
+  const NOTCH_MS = 280;
+  const easeSnap = createEase(0.16, 1, 0.3, 1);
+
   let offset = 0;
   let loopSize = 1;
   let previousTime = performance.now();
@@ -45,37 +81,110 @@ function initShowcase() {
   let pointerId = null;
   let previousPointerPosition = 0;
   let resizeFrame = 0;
+  let velocity = 0;
+  let glide = false;
+  let coasting = false;
+  let wheelLatch = false;
+  let notch = null;
+  let samples = [];
 
   const isHorizontal = () => mobileLayout.matches;
+  const cruiseSpeed = () => (isHorizontal() ? CRUISE_X : CRUISE_Y);
   const pointerPosition = (event) => (isHorizontal() ? event.clientX : event.clientY);
+  const wrap = (value) => ((value % loopSize) + loopSize) % loopSize;
   const normalizeOffset = () => {
-    offset = ((offset % loopSize) + loopSize) % loopSize;
+    offset = wrap(offset);
   };
   const render = () => {
-    const x = isHorizontal() ? -offset : 0;
-    const y = isHorizontal() ? 0 : -offset;
+    const wrapped = wrap(offset);
+    const x = isHorizontal() ? -wrapped : 0;
+    const y = isHorizontal() ? 0 : -wrapped;
     track.style.transform = `translate3d(${x}px, ${y}px, 0)`;
   };
   const measure = () => {
     const oldSize = loopSize;
-    const progress = oldSize > 1 ? offset / oldSize : 0;
+    const progress = oldSize > 1 ? wrap(offset) / oldSize : 0;
     loopSize = isHorizontal() ? group.getBoundingClientRect().width : group.getBoundingClientRect().height;
     loopSize = Math.max(1, loopSize);
     offset = progress * loopSize;
-    normalizeOffset();
+    notch = null;
     render();
   };
+  const pushDelta = (delta) => {
+    const t = performance.now();
+    samples.push({ t, delta });
+    const cutoff = t - VELOCITY_WINDOW;
+    while (samples.length && samples[0].t < cutoff) samples.shift();
+  };
+  const releaseVelocity = () => {
+    const now = performance.now();
+    const recent = samples.filter((sample) => now - sample.t <= VELOCITY_WINDOW);
+    if (!recent.length) return 0;
+    const sum = recent.reduce((total, sample) => total + sample.delta, 0);
+    const span = recent[recent.length - 1].t - recent[0].t;
+    const dt = Math.max(span, 16) / 1000;
+    return Math.min(MAX_RELEASE_SPEED, Math.max(-MAX_RELEASE_SPEED, sum / dt));
+  };
+  const stopGesture = () => {
+    notch = null;
+    glide = false;
+    coasting = false;
+    wheelLatch = false;
+    pauseUntil = 0;
+    samples = [];
+  };
   const nudge = (distance) => {
+    stopGesture();
+    velocity = 0;
     offset += distance;
     normalizeOffset();
     pauseUntil = performance.now() + 650;
     render();
   };
+  const glideStep = (elapsed) => {
+    const cruise = cruiseSpeed();
+    const blend = 1 - Math.exp(-elapsed / GLIDE_TAU);
+    velocity += (cruise - velocity) * blend;
+    offset += velocity * (elapsed / 1000);
+    if (Math.abs(velocity - cruise) < 0.5) {
+      glide = false;
+      velocity = cruise;
+    }
+  };
   const animate = (time) => {
     const elapsed = Math.min(50, time - previousTime);
     previousTime = time;
-    if (!dragging && time >= pauseUntil && !reducedMotion.matches && !document.hidden) {
-      offset += (isHorizontal() ? 48 : 56) * (elapsed / 1000);
+    const frozen = document.hidden;
+    if (dragging || frozen) {
+      /* Pointer tracking writes the transform itself. */
+    } else if (notch) {
+      const progress = Math.min(1, (time - notch.start) / notch.duration);
+      offset = notch.from + (notch.to - notch.from) * easeSnap(progress);
+      render();
+      if (progress >= 1) {
+        offset = notch.to;
+        normalizeOffset();
+        notch = null;
+        velocity = 0;
+        glide = !reducedMotion.matches;
+        render();
+      }
+    } else if (time < pauseUntil) {
+      /* Arrow keys keep an instant jump, then the drift resumes. */
+    } else if (wheelLatch) {
+      wheelLatch = false;
+      coasting = true;
+    } else if (coasting) {
+      coasting = false;
+      glide = !reducedMotion.matches;
+      if (glide) glideStep(elapsed);
+      render();
+    } else if (glide && !reducedMotion.matches) {
+      glideStep(elapsed);
+      normalizeOffset();
+      render();
+    } else if (!reducedMotion.matches) {
+      offset += cruiseSpeed() * (elapsed / 1000);
       normalizeOffset();
       render();
     }
@@ -86,14 +195,40 @@ function initShowcase() {
     "wheel",
     (event) => {
       event.preventDefault();
-      const distance = isHorizontal()
+      if (dragging) return;
+      let distance = isHorizontal()
         ? Math.abs(event.deltaX) > Math.abs(event.deltaY)
           ? event.deltaX
           : event.deltaY
         : Math.abs(event.deltaY) > Math.abs(event.deltaX)
           ? event.deltaY
           : event.deltaX;
-      nudge(distance);
+      if (event.deltaMode === 1) distance *= 100;
+      else if (event.deltaMode === 2) {
+        distance *= isHorizontal() ? viewport.clientWidth : viewport.clientHeight;
+      }
+      pauseUntil = 0;
+      const isNotch = !reducedMotion.matches && event.deltaMode !== 0;
+      if (!isNotch) {
+        notch = null;
+        glide = false;
+        coasting = false;
+        offset += distance;
+        normalizeOffset();
+        render();
+        if (reducedMotion.matches) return;
+        pushDelta(distance);
+        velocity = releaseVelocity();
+        wheelLatch = true;
+        return;
+      }
+      const from = offset;
+      const target = (notch ? notch.to : offset) + distance;
+      notch = { start: performance.now(), from, to: target, duration: NOTCH_MS };
+      glide = false;
+      coasting = false;
+      wheelLatch = false;
+      samples = [];
     },
     { passive: false },
   );
@@ -103,26 +238,40 @@ function initShowcase() {
     dragging = true;
     pointerId = event.pointerId;
     previousPointerPosition = pointerPosition(event);
-    pauseUntil = Infinity;
+    stopGesture();
+    velocity = 0;
     viewport.classList.add("is-dragging");
-    viewport.setPointerCapture(event.pointerId);
+    try {
+      viewport.setPointerCapture(event.pointerId);
+    } catch {
+      /* Capture needs a live pointer; tracking still follows the events. */
+    }
   });
 
   viewport.addEventListener("pointermove", (event) => {
     if (!dragging || event.pointerId !== pointerId) return;
     const currentPosition = pointerPosition(event);
-    offset -= currentPosition - previousPointerPosition;
+    const delta = previousPointerPosition - currentPosition;
     previousPointerPosition = currentPosition;
+    offset += delta;
     normalizeOffset();
     render();
+    pushDelta(delta);
   });
 
   const endDrag = (event) => {
     if (!dragging || event.pointerId !== pointerId) return;
     dragging = false;
     pointerId = null;
-    pauseUntil = performance.now() + 650;
     viewport.classList.remove("is-dragging");
+    if (reducedMotion.matches) {
+      samples = [];
+      return;
+    }
+    velocity = releaseVelocity();
+    samples = [];
+    glide = true;
+    coasting = false;
   };
   viewport.addEventListener("pointerup", endDrag);
   viewport.addEventListener("pointercancel", endDrag);
@@ -524,16 +673,13 @@ const EASE = "cubic-bezier(0.16, 1, 0.3, 1)";
 const RING_TRANSFORM_OPEN = "translate3d(-50%, 0, 0) scale(1)";
 const RING_TRANSFORM_CLOSED = "translate3d(-50%, 0, 0) scale(0.32)";
 
-const RING1_OPEN_MS = 280;
-const RING_OPEN_MS = 250;
+const OPEN_MS = 250;
+const CLOSE_MS = 200;
 const RING_FOLLOW_DELAY = 40;
-const LABEL_OPEN_MS = 180;
-const LABEL_OPEN_START = 50;
-const LABEL_STAGGER = 32;
-const LABEL_CLOSE_MS = 100;
-const GROUP_CLOSE_MS = 180;
-const RING1_CLOSE_MS = 200;
-const RING1_CLOSE_DELAY = 30;
+// Words wait until the bands have landed, then settle with them.
+const LABEL_OPEN_DELAY = 120;
+const LABEL_OPEN_MS = 160;
+const LABEL_SCALE_FROM = "0.92";
 
 const navLabelSelectors = [
   ".menu-overlay__link--about",
@@ -545,53 +691,54 @@ const contactLabelSelectors = [
   ".menu-overlay__contact-link--linkedin",
   ".menu-overlay__contact-link--twitter",
 ];
-const lastNavOpenDelay = LABEL_OPEN_START + (navLabelSelectors.length - 1) * LABEL_STAGGER;
+const labelFrom = { opacity: 0, scale: LABEL_SCALE_FROM };
+const labelTo = { opacity: 1, scale: "1" };
 
 const ANIM_SPECS = [
   {
     el: ringEls[0],
     openDelay: 0,
-    openDuration: RING1_OPEN_MS,
-    closeDelay: RING1_CLOSE_DELAY,
-    closeDuration: RING1_CLOSE_MS,
+    openDuration: OPEN_MS,
+    closeDelay: 0,
+    closeDuration: CLOSE_MS,
     from: { transform: RING_TRANSFORM_CLOSED },
     to: { transform: RING_TRANSFORM_OPEN },
   },
   ...ringEls.slice(1).map((el) => ({
     el,
     openDelay: RING_FOLLOW_DELAY,
-    openDuration: RING_OPEN_MS,
+    openDuration: OPEN_MS,
     closeDelay: 0,
-    closeDuration: GROUP_CLOSE_MS,
+    closeDuration: CLOSE_MS,
     from: { transform: RING_TRANSFORM_CLOSED },
     to: { transform: RING_TRANSFORM_OPEN },
   })),
-  ...navLabelSelectors.map((selector, i) => ({
+  ...navLabelSelectors.map((selector) => ({
     el: document.querySelector(selector),
-    openDelay: LABEL_OPEN_START + i * LABEL_STAGGER,
+    openDelay: LABEL_OPEN_DELAY,
     openDuration: LABEL_OPEN_MS,
     closeDelay: 0,
-    closeDuration: LABEL_CLOSE_MS,
-    from: { opacity: 0, transform: "scale(0.97)" },
-    to: { opacity: 1, transform: "scale(1)" },
+    closeDuration: CLOSE_MS,
+    from: labelFrom,
+    to: labelTo,
   })),
   ...contactLabelSelectors.map((selector) => ({
     el: document.querySelector(selector),
-    openDelay: lastNavOpenDelay,
+    openDelay: LABEL_OPEN_DELAY,
     openDuration: LABEL_OPEN_MS,
     closeDelay: 0,
-    closeDuration: LABEL_CLOSE_MS,
-    from: { opacity: 0, transform: "scale(0.97)" },
-    to: { opacity: 1, transform: "scale(1)" },
+    closeDuration: CLOSE_MS,
+    from: labelFrom,
+    to: labelTo,
   })),
   {
     el: menuCloseBtn,
-    openDelay: lastNavOpenDelay,
+    openDelay: LABEL_OPEN_DELAY,
     openDuration: LABEL_OPEN_MS,
     closeDelay: 0,
-    closeDuration: LABEL_CLOSE_MS,
-    from: { opacity: 0 },
-    to: { opacity: 1 },
+    closeDuration: CLOSE_MS,
+    from: labelFrom,
+    to: labelTo,
   },
 ].filter((spec) => spec.el);
 
@@ -626,6 +773,7 @@ function clearInlineAnimStyles() {
   ANIM_SPECS.forEach((spec) => {
     spec.el.style.transform = "";
     spec.el.style.opacity = "";
+    spec.el.style.scale = "";
   });
 }
 
