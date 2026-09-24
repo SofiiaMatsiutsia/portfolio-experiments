@@ -2244,6 +2244,18 @@ body.home {
   aspect-ratio: 1;
 }
 
+.home .showcase__item--four-three {
+  aspect-ratio: 4 / 3;
+}
+
+.home .showcase__item--ha {
+  aspect-ratio: 6912 / 4468;
+}
+
+.home .showcase__item--mft {
+  aspect-ratio: 1798 / 1346;
+}
+
 .home .showcase__item > img,
 .home .showcase__item > video {
   display: block;
@@ -2374,6 +2386,21 @@ body.home {
   .home .showcase__item--square {
     width: auto;
     aspect-ratio: 1;
+  }
+
+  .home .showcase__item--four-three {
+    width: auto;
+    aspect-ratio: 4 / 3;
+  }
+
+  .home .showcase__item--ha {
+    width: auto;
+    aspect-ratio: 6912 / 4468;
+  }
+
+  .home .showcase__item--mft {
+    width: auto;
+    aspect-ratio: 1798 / 1346;
   }
 
   .home .home-page > .menu-bar {
@@ -2519,5 +2546,85 @@ body.home {
   body.work .sound-toggle__layer--on > svg,
   body.case .sound-toggle__layer--on > svg {
     display: none;
+  }
+}
+
+@media (max-width: 1024px) {
+  body.work .header,
+  body.case .header {
+    top: 0;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    min-height: 60px;
+    padding: 16px 16px 14px;
+  }
+
+  body.work .header__back,
+  body.case .header__back {
+    display: none;
+  }
+
+  body.work .logo,
+  body.case .logo {
+    position: relative;
+    top: auto;
+    left: auto;
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
+    transform: none;
+    z-index: 1;
+  }
+
+  body.work .logo__mark,
+  body.case .logo__mark {
+    content: url("assets/images/sm-logo.svg");
+    width: 230px;
+    height: auto;
+    max-height: none;
+  }
+
+  body.work .sound-toggle,
+  body.case .sound-toggle {
+    display: grid;
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+    width: 28px;
+    height: 28px;
+  }
+
+  body.work .sound-toggle__swap,
+  body.work .sound-toggle__icon,
+  body.case .sound-toggle__swap,
+  body.case .sound-toggle__icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  body.work .sound-toggle__layer--on,
+  body.case .sound-toggle__layer--on {
+    background: url("assets/icons/audio-on.svg") center / contain no-repeat;
+  }
+
+  body.work .sound-toggle__layer--on > svg,
+  body.case .sound-toggle__layer--on > svg {
+    display: none;
+  }
+
+  body.case .case__rail {
+    top: 60px;
+  }
+
+  body.case .case__rail-inner > .case__back {
+    display: none;
+  }
+}
+
+@media (max-width: 360px) {
+  body.work .logo__mark,
+  body.case .logo__mark {
+    width: 205px;
   }
 }

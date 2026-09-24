@@ -75,7 +75,7 @@ function initShowcase() {
     const elapsed = Math.min(50, time - previousTime);
     previousTime = time;
     if (!dragging && time >= pauseUntil && !reducedMotion.matches && !document.hidden) {
-      offset += (isHorizontal() ? 24 : 28) * (elapsed / 1000);
+      offset += (isHorizontal() ? 48 : 56) * (elapsed / 1000);
       normalizeOffset();
       render();
     }
