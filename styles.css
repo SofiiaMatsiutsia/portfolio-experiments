@@ -1877,6 +1877,13 @@ a.card {
   width: 100%;
   overflow: hidden;
   position: relative;
+  transform: scale(1);
+  transform-origin: center;
+  transition: transform 150ms var(--card-hover-ease);
+}
+
+a.work-item:active .work-item__media {
+  transform: scale(0.98);
 }
 
 .work-item__media img,
@@ -1953,6 +1960,12 @@ a.work-item:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .work-item__media,
+  a.work-item:active .work-item__media {
+    transform: none;
+    transition: none;
+  }
+
   .work-item__media img,
   .work-item__media video {
     transition: none;
