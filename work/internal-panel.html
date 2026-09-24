@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Unified internal panel — Sofiia Matsiutsia</title>
-<link rel="stylesheet" href="../styles.css?v=75" />
+<link rel="stylesheet" href="../styles.css?v=82" />
 </head>
 <body class="case">
 
@@ -152,8 +152,8 @@
 
     <main class="case__main">
       <div class="case__hero-block">
-                <figure class="case__hero case__hero--static">
-          <img class="case__hero-media" src="../assets/images/internal-panel.png" alt="Housing Anywhere internal panel screenshot" />
+                <figure class="case__hero case__hero--static case__hero--frame">
+          <img class="case__hero-media" src="../assets/images/internal-panel.jpg" width="2400" height="1551" alt="Bookings list in the Housing Anywhere internal panel" />
         </figure>
 
         <div class="case__heading">
@@ -200,7 +200,7 @@
             <li>30+ hours saved per week across teams</li>
           </ul>
                     <figure class="case-figure">
-            <img src="../assets/images/internal-panel/improvements.png" alt="Operational efficiency, manual work, and hours-saved metrics" />
+            <img src="../assets/images/internal-panel/improvements.jpg" width="2400" height="1551" alt="Settlement detail with landlord, booking, and tenant data in one view" />
           </figure>
         </section>
 
@@ -224,8 +224,22 @@
               <p>Previously, the page was an unstructured mess. Data was hard to find or missing. We ran a moderated card sorting exercise with internal teams. This helped us understand priorities from the perspective of Sales, Support, Finance, Customer Support, etc.</p>
               <p>The new layout introduces role-based tabs and clear UI patterns (tables, metrics, cards…). It lets Product Owner and Developers add new data without Designer’s intervention.</p>
             </div>
-                      <figure class="case-figure">
-            <img src="../assets/images/internal-panel/user-page.png" alt="Reorganized user page with role-based tabs and clearer data patterns" />
+                      <figure class="case-gallery" data-case-gallery>
+            <div class="case-gallery__viewport">
+              <div class="case-gallery__track">
+                <div class="case-gallery__slide">
+                  <img src="../assets/images/internal-panel/user-tenant.jpg" width="2400" height="1551" alt="Tenant user page with bookings and scheduled payments" draggable="false" />
+                </div>
+                <div class="case-gallery__slide">
+                  <img src="../assets/images/internal-panel/user-landlord.jpg" width="2400" height="1551" alt="Landlord user page with HubSpot notes and mail" draggable="false" />
+                </div>
+              </div>
+            </div>
+            <div class="case-gallery__nav" role="group" aria-label="User page">
+              <button type="button" aria-pressed="true">Tenant</button>
+              <button type="button" aria-pressed="false">Landlord</button>
+            </div>
+            <p class="visually-hidden" data-gallery-status aria-live="polite"></p>
           </figure>
           </article>
 
@@ -237,12 +251,6 @@
             </div>
                       <figure class="case-figure">
             <img src="../assets/images/internal-panel/bcr-before.png" alt="Manual booking-change process scattered across five tools" />
-          </figure>
-                      <figure class="case-figure">
-            <img src="../assets/images/internal-panel/bcr-tool.png" alt="Booking Change Request tool consolidating cancellation and refund workflows" />
-          </figure>
-                      <figure class="case-figure">
-            <img src="../assets/images/internal-panel/bcr-flow.png" alt="Booking change request flow in the internal panel" />
           </figure>
           </article>
         </section>
@@ -308,9 +316,12 @@
   </nav>
 
   <div class="menu-overlay__contact">
-    <button type="button" class="menu-overlay__contact-link menu-overlay__contact-link--email">Copy email</button>
-    <a href="#" class="menu-overlay__contact-link menu-overlay__contact-link--linkedin">LinkedIn</a>
-    <a href="#" class="menu-overlay__contact-link menu-overlay__contact-link--twitter">Twitter</a>
+    <button type="button" class="menu-overlay__contact-link menu-overlay__contact-link--email">
+      <span class="menu-overlay__contact-width" aria-hidden="true">Copy email</span>
+      <span class="menu-overlay__contact-text">Copy email</span>
+    </button>
+    <a href="https://www.linkedin.com/in/smatsiutsia/" class="menu-overlay__contact-link menu-overlay__contact-link--linkedin" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    <a href="https://x.com/SMatsiutsia" class="menu-overlay__contact-link menu-overlay__contact-link--twitter" target="_blank" rel="noopener noreferrer">Twitter</a>
   </div>
 
   <button type="button" class="menu-bar menu-overlay__close" id="menu-close" aria-controls="menu-overlay">
@@ -318,6 +329,6 @@
   </button>
 </div>
 
-<script src="../script.js?v=40"></script>
+<script src="../script.js?v=41"></script>
 </body>
 </html>

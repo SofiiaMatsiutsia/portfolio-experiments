@@ -1043,9 +1043,11 @@ function initWorkFilters() {
   if (!root) return;
 
   const pills = Array.from(root.querySelectorAll(".work-filter"));
-  const items = Array.from(document.querySelectorAll(".work-item"));
+  const items = Array.from(document.querySelectorAll(".work-item:not([data-held])"));
   const status = document.querySelector("[data-filter-status]");
   if (!pills.length || !items.length) return;
+
+  const visiblePills = () => pills.filter((pill) => !pill.hidden);
 
   const categoriesOf = (item) =>
     Array.from(item.querySelectorAll(".work-tag")).map((tag) => slugWorkFilter(tag.textContent));
@@ -1075,7 +1077,8 @@ function initWorkFilters() {
 
   const saved = readWorkNav();
   if (saved?.restore && saved.filter && saved.filter !== "all") {
-    applyFilter(saved.filter);
+    const savedPill = pills.find((pill) => pill.getAttribute("data-filter") === saved.filter);
+    if (savedPill && !savedPill.hidden) applyFilter(saved.filter);
   }
 
   root.addEventListener("click", (event) => {
@@ -1091,14 +1094,16 @@ function initWorkFilters() {
     }
     const current = event.target.closest(".work-filter");
     if (!current) return;
+    const available = visiblePills();
+    const index = available.indexOf(current);
+    if (index === -1) return;
     event.preventDefault();
-    const index = pills.indexOf(current);
     let next = index;
-    if (event.key === "ArrowRight") next = (index + 1) % pills.length;
-    if (event.key === "ArrowLeft") next = (index - 1 + pills.length) % pills.length;
+    if (event.key === "ArrowRight") next = (index + 1) % available.length;
+    if (event.key === "ArrowLeft") next = (index - 1 + available.length) % available.length;
     if (event.key === "Home") next = 0;
-    if (event.key === "End") next = pills.length - 1;
-    pills[next].focus();
+    if (event.key === "End") next = available.length - 1;
+    available[next].focus();
   });
 }
 
@@ -1252,3 +1257,150 @@ function initCopyEmailButtons() {
 }
 
 initCopyEmailButtons();
+
+function initCaseGalleries() {
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  document.querySelectorAll("[data-case-gallery]").forEach((root) => {
+    const viewport = root.querySelector(".case-gallery__viewport");
+    const track = root.querySelector(".case-gallery__track");
+    const slides = Array.from(root.querySelectorAll(".case-gallery__slide"));
+    const buttons = Array.from(root.querySelectorAll(".case-gallery__nav button"));
+    const status = root.querySelector("[data-gallery-status]");
+    if (!viewport || !track || slides.length < 2 || !buttons.length) return;
+
+    let index = 0;
+    let pointerId = null;
+    let startX = 0;
+    let startY = 0;
+    let origin = 0;
+    let lastX = 0;
+    let lastT = 0;
+    let velocity = 0;
+    let axis = null;
+
+    const width = () => viewport.clientWidth;
+
+    const readX = () => {
+      const transform = getComputedStyle(track).transform;
+      if (!transform || transform === "none") return 0;
+      return new DOMMatrix(transform).m41;
+    };
+
+    const apply = (x, animate) => {
+      const motion = animate && !reducedMotion.matches;
+      if (motion) {
+        track.style.transition = "none";
+        void track.offsetWidth;
+        track.style.transition = "transform 220ms var(--ease-snap)";
+      } else {
+        track.style.transition = "none";
+      }
+      track.style.transform = `translate3d(${x}px, 0, 0)`;
+    };
+
+    const sync = (announce) => {
+      slides.forEach((slide, i) => {
+        slide.setAttribute("aria-hidden", String(i !== index));
+      });
+      buttons.forEach((button, i) => {
+        button.setAttribute("aria-pressed", String(i === index));
+      });
+      if (announce && status) status.textContent = buttons[index].textContent.trim();
+    };
+
+    const commit = (next, animate) => {
+      const clamped = Math.max(0, Math.min(slides.length - 1, next));
+      const changed = clamped !== index;
+      index = clamped;
+      apply(-index * width(), animate);
+      sync(changed);
+    };
+
+    sync(false);
+
+    buttons.forEach((button, i) => {
+      button.addEventListener("click", () => commit(i, true));
+    });
+
+    root.addEventListener("keydown", (event) => {
+      if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+      const button = event.target.closest("button");
+      if (!button || !root.contains(button)) return;
+      event.preventDefault();
+      commit(event.key === "ArrowRight" ? index + 1 : index - 1, true);
+      buttons[index]?.focus();
+    });
+
+    viewport.addEventListener("pointerdown", (event) => {
+      if (event.button !== 0 || pointerId !== null) return;
+      pointerId = event.pointerId;
+      startX = event.clientX;
+      startY = event.clientY;
+      origin = readX();
+      lastX = event.clientX;
+      lastT = event.timeStamp;
+      velocity = 0;
+      axis = null;
+      track.style.transition = "none";
+      track.style.transform = `translate3d(${origin}px, 0, 0)`;
+    });
+
+    viewport.addEventListener(
+      "pointermove",
+      (event) => {
+        if (event.pointerId !== pointerId) return;
+        const dx = event.clientX - startX;
+        const dy = event.clientY - startY;
+        if (!axis) {
+          if (Math.hypot(dx, dy) < 8) return;
+          axis = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
+          if (axis === "y") return;
+          viewport.setPointerCapture(event.pointerId);
+          viewport.classList.add("is-dragging");
+        }
+        if (axis !== "x") return;
+        event.preventDefault();
+        const dt = event.timeStamp - lastT;
+        if (dt > 0) velocity = (event.clientX - lastX) / dt;
+        lastX = event.clientX;
+        lastT = event.timeStamp;
+        let x = origin + dx;
+        const min = -(slides.length - 1) * width();
+        if (x > 0) x *= 0.2;
+        if (x < min) x = min + (x - min) * 0.2;
+        track.style.transform = `translate3d(${x}px, 0, 0)`;
+      },
+      { passive: false },
+    );
+
+    const finishDrag = (event) => {
+      if (event.pointerId !== pointerId) return;
+      const wasHorizontal = axis === "x";
+      pointerId = null;
+      axis = null;
+      viewport.classList.remove("is-dragging");
+      if (!wasHorizontal) return;
+      const x = readX();
+      const w = width();
+      const traveled = x - -index * w;
+      let next = index;
+      if (velocity < -0.45 || traveled < -w * 0.4) next = index + 1;
+      else if (velocity > 0.45 || traveled > w * 0.4) next = index - 1;
+      commit(next, true);
+    };
+
+    document.addEventListener("pointerup", finishDrag);
+    document.addEventListener("pointercancel", finishDrag);
+
+    const refit = () => apply(-index * width(), false);
+    if (typeof ResizeObserver === "function") {
+      const observer = new ResizeObserver(refit);
+      observer.observe(viewport);
+    } else {
+      window.addEventListener("resize", refit);
+    }
+  });
+}
+
+initCaseGalleries();
