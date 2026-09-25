@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Vibe Coding Collective — Sofiia Matsiutsia</title>
-<link rel="stylesheet" href="../styles.css?v=84" />
+<link rel="stylesheet" href="../styles.css?v=86" />
 </head>
 <body class="case">
 
@@ -46,16 +46,17 @@
 
     <button type="button" class="sound-toggle" aria-label="Mute sound" aria-pressed="false">
       <span class="sound-toggle__swap">
-        <span class="sound-toggle__layer sound-toggle__layer--on">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="sound-toggle__icon" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" />
-          </svg>
-        </span>
-        <span class="sound-toggle__layer sound-toggle__layer--off">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="sound-toggle__icon" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 9.75 19.5 12m0 0 2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6 4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" />
-          </svg>
-        </span>
+        <svg class="sound-toggle__icon" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <g transform="scale(1.142857)">
+            <path class="sound-toggle__cone" d="M14.3771 4.15294C14.3771 4.15294 13.1661 4.21675 12.1387 5.33723C11.8929 5.60526 11.7793 5.76476 11.4168 6.21479C11.0544 6.66482 10.453 7.40623 10.0491 7.87896C9.476 8.54983 8.85206 9.07918 8.20174 9.63619C7.77163 10.0046 7.13753 10.0613 6.59962 10.1502C5.31076 10.3634 4.85099 10.6995 4.58763 10.8518C4.25778 11.0427 4.04327 11.399 3.5882 12.0752C3.26864 12.5501 3.24281 13.0283 3.22918 14.1917C3.22324 14.6991 3.05709 14.9785 3.18952 15.4532C3.40457 16.2242 3.74339 16.2448 4.62897 16.9121C5.04832 17.2281 5.38666 17.3082 5.65721 17.411C6.21292 17.6222 7.08198 17.8992 7.93266 18.1408C8.69608 18.3576 8.88943 18.6705 9.47024 19.3296C9.98666 19.9157 10.9588 21.0075 11.5354 21.6311C12.4965 22.6706 13.0774 22.8794 13.5839 23.0372C13.8176 23.1099 14.013 23.1127 14.2001 23.0573C14.7731 22.8878 14.8778 22.4486 15.1227 21.807C15.2114 21.5749 15.2331 21.2649 15.2563 20.3811C15.2795 19.4973 15.2765 18.0406 15.2703 17.2509C15.2635 16.3825 15.2544 16.0048 15.2735 15.5197C15.2809 15.3314 15.2936 15.2612 15.3992 13.7347C15.5048 12.2083 15.7056 9.2279 15.7986 7.59334C15.9027 5.76499 15.8097 5.35227 15.7298 4.99779L15.7294 4.996C15.6373 4.58711 15.4656 4.44472 15.1456 4.27447C14.8774 4.13177 14.676 4.10026 14.3771 4.15422" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <g class="sound-toggle__waves">
+              <path d="M19.4307 10.0904C19.4395 10.0992 19.8716 10.6518 20.5687 11.5567C20.9509 12.0528 21.0971 12.3382 21.2432 12.717C21.735 13.9916 21.663 14.8089 21.5478 15.4904C21.432 15.9003 20.7846 17.0402 20.1498 17.9844C20.043 18.1201 19.942 18.2406 19.7833 18.4456M21.7015 6.10969C21.8807 6.18462 22.3444 6.41534 23.2258 7.13046C23.7148 7.52727 24.2155 8.27763 24.6941 9.08695C25.0227 9.64268 25.1787 10.4409 25.3401 11.5498C25.428 12.1536 25.417 12.8544 25.3868 13.4499C25.3325 14.5218 25.0665 15.4036 24.8489 16.0401C24.7445 16.3456 24.6069 16.6622 24.2822 17.3973C24.0503 17.8769 23.6818 18.5728 23.3604 19.142C23.039 19.7111 22.7759 20.1324 22.4774 20.6337" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+          </g>
+          <g class="sound-toggle__slash">
+            <path d="M27.9993 13.3343C27.222 14.2608 24.9398 17.3586 23.3092 19.3367M22.9395 13.1211C23.1307 13.3136 23.5079 13.6987 24.7534 14.6951C25.9988 15.6914 28.1011 17.2873 30.3134 18.9779" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+        </svg>
       </span>
     </button>
   </header>
@@ -146,6 +147,7 @@
   </button>
 </div>
 
-<script src="../script.js?v=46"></script>
+<script src="../script.js?v=47"></script>
+<script type="module" src="../sound.js?v=1"></script>
 </body>
 </html>

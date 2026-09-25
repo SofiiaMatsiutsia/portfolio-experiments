@@ -809,6 +809,7 @@ function lockPageScroll(lock) {
 
 function openMenu() {
   const token = ++menuAnimToken;
+  window.cuelume?.play("bloom");
   menuOverlay.hidden = false;
   menuOverlay.classList.add("is-open", "is-animating");
   menuOpenBtn.setAttribute("aria-expanded", "true");
@@ -822,6 +823,7 @@ function openMenu() {
 function closeMenu() {
   if (menuOverlay.hidden) return;
   const token = ++menuAnimToken;
+  window.cuelume?.play("droplet");
   menuOpenBtn.setAttribute("aria-expanded", "false");
   menuOverlay.classList.add("is-animating");
   menuOverlay.classList.remove("is-open");
@@ -1096,6 +1098,8 @@ function initWorkFilters() {
   root.addEventListener("click", (event) => {
     const pill = event.target.closest(".work-filter");
     if (!pill || !root.contains(pill)) return;
+    // Re-clicking the active pill changes nothing, so it stays silent.
+    if (!pill.classList.contains("is-active")) window.cuelume?.play("toggle");
     applyFilter(pill.getAttribute("data-filter"));
     writeWorkNav({ filter: pill.getAttribute("data-filter"), y: window.scrollY });
   });
@@ -1240,6 +1244,7 @@ function initCopyEmailButtons() {
     let resetTimer = 0;
 
     button.addEventListener("click", async () => {
+      let copied = true;
       try {
         await navigator.clipboard.writeText(CONTACT_EMAIL);
       } catch {
@@ -1251,11 +1256,18 @@ function initCopyEmailButtons() {
         document.body.appendChild(area);
         area.select();
         try {
-          document.execCommand("copy");
+          copied = document.execCommand("copy");
         } finally {
           area.remove();
         }
       }
+
+      if (!copied) {
+        window.cuelume?.play("error");
+        return;
+      }
+
+      window.cuelume?.play("success");
 
       window.clearTimeout(resetTimer);
       label.textContent = "Copied!";

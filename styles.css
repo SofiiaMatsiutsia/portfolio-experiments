@@ -362,6 +362,8 @@ img {
 
 .sound-toggle {
   --sound-ease: cubic-bezier(0.23, 1, 0.32, 1);
+  --sound-arrive: cubic-bezier(0.19, 1, 0.22, 1);
+  --sound-leave: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   display: grid;
   place-items: center;
   width: 32px;
@@ -385,18 +387,6 @@ img {
   height: 24px;
 }
 
-.sound-toggle__layer {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  pointer-events: none;
-  transform-origin: 42% 50%;
-  transition:
-    opacity 180ms var(--sound-ease),
-    transform 220ms var(--sound-ease);
-}
-
 .sound-toggle__icon {
   display: block;
   width: 24px;
@@ -404,35 +394,60 @@ img {
   overflow: visible;
 }
 
-.sound-toggle__layer--on {
+/* The cone stays put. Only the waves and the slash move, so the mark
+   reads as one speaker changing state rather than two icons swapping. */
+.sound-toggle__waves,
+.sound-toggle__slash {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.sound-toggle__waves {
   opacity: 1;
   transform: scale(1);
+  transition:
+    opacity 120ms var(--sound-leave),
+    transform 120ms var(--sound-leave);
 }
 
-.sound-toggle__layer--off {
+.sound-toggle.is-muted .sound-toggle__waves {
   opacity: 0;
-  transform: scale(0.88) rotate(-10deg);
+  transform: scale(0.92);
 }
 
-.sound-toggle.is-muted .sound-toggle__layer--on {
+.sound-toggle__slash {
   opacity: 0;
-  transform: scale(0.88) rotate(10deg);
+  transform: scale(0.92);
+  transition:
+    opacity 120ms var(--sound-leave),
+    transform 120ms var(--sound-leave);
 }
 
-.sound-toggle.is-muted .sound-toggle__layer--off {
+.sound-toggle.is-muted .sound-toggle__slash {
   opacity: 1;
-  transform: scale(1) rotate(0deg);
+  transform: scale(1);
+  transition:
+    opacity 180ms var(--sound-arrive),
+    transform 180ms var(--sound-arrive);
+}
+
+/* Restoring a muted preference on load must not replay the swap. */
+.sound-toggle.is-instant .sound-toggle__waves,
+.sound-toggle.is-instant .sound-toggle__slash {
+  transition: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .sound-toggle,
-  .sound-toggle__layer {
+  .sound-toggle {
     transition: none;
   }
 
-  .sound-toggle__layer--off,
-  .sound-toggle.is-muted .sound-toggle__layer--on {
+  .sound-toggle__waves,
+  .sound-toggle__slash,
+  .sound-toggle.is-muted .sound-toggle__waves,
+  .sound-toggle.is-muted .sound-toggle__slash {
     transform: none;
+    transition: opacity 160ms linear;
   }
 }
 
@@ -2737,16 +2752,6 @@ body.home {
     width: 32px;
     height: 32px;
   }
-
-  body.work .sound-toggle__layer--on,
-  body.case .sound-toggle__layer--on {
-    background: url("assets/icons/audio-on.svg") center / contain no-repeat;
-  }
-
-  body.work .sound-toggle__layer--on > svg,
-  body.case .sound-toggle__layer--on > svg {
-    display: none;
-  }
 }
 
 @media (max-width: 1024px) {
@@ -2801,16 +2806,6 @@ body.home {
   body.case .sound-toggle__icon {
     width: 28px;
     height: 28px;
-  }
-
-  body.work .sound-toggle__layer--on,
-  body.case .sound-toggle__layer--on {
-    background: url("assets/icons/audio-on.svg") center / contain no-repeat;
-  }
-
-  body.work .sound-toggle__layer--on > svg,
-  body.case .sound-toggle__layer--on > svg {
-    display: none;
   }
 
   body.case .case__rail {
