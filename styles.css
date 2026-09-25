@@ -235,6 +235,10 @@ img {
   --nav-mark-w: 63px;
 }
 
+.nav__link--writings {
+  --nav-mark-w: 99px;
+}
+
 .nav__label {
   position: relative;
   z-index: 0;
@@ -283,6 +287,10 @@ img {
 
   .nav__link--talks .nav__mark-img {
     content: url("assets/icons/talks-hover.svg");
+  }
+
+  .nav__link--writings .nav__mark-img {
+    content: url("assets/icons/writings-hover.svg");
   }
 
   .nav__label {
@@ -2280,6 +2288,10 @@ body.home {
 .home .nav__link--work,
 .home .nav__link--talks {
   --nav-mark-w: 63px;
+}
+
+.home .nav__link--writings {
+  --nav-mark-w: 99px;
 }
 
 .home .nav__mark {
