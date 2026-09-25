@@ -289,8 +289,8 @@ img {
     transition: opacity 140ms cubic-bezier(0.23, 1, 0.32, 1);
   }
 
-  .nav__link:is(:hover, :focus-visible) .nav__label,
-  .nav__link[aria-current="page"] .nav__label {
+  .nav__link:has(.nav__mark):is(:hover, :focus-visible) .nav__label,
+  .nav__link:has(.nav__mark)[aria-current="page"] .nav__label {
     opacity: 0;
   }
 
@@ -505,19 +505,6 @@ img {
   pointer-events: none;
 }
 
-.menu-overlay__contact-link--email {
-  display: inline-grid;
-}
-
-.menu-overlay__contact-link--email > span {
-  grid-area: 1 / 1;
-}
-
-.menu-overlay__contact-width {
-  visibility: hidden;
-  pointer-events: none;
-}
-
 .spacer {
   flex: 1 1 auto;
   min-height: 0;
@@ -648,14 +635,19 @@ html.figma-hover a.card.figma-hover-target .card__media {
   background: #f3f3f3;
 }
 
-/* Full-screen mobile menu overlay: concentric-ring reveal */
+/* Full-screen mobile menu overlay: concentric-ring reveal.
+   Every ring shares one center and every length is a multiple of --u
+   (px in an 863px-tall frame, scaled to the viewport height), so labels
+   and links stay inside their bands at any screen height. */
 .menu-overlay {
-  --menu-fill: #4dccf9;
-  --ring-1-top: -8px;
-  --ring-2-top: 120px;
-  --ring-3-top: 226px;
-  --ring-4-top: 337px;
-  --ring-5-top: 446px;
+  --menu-fill: var(--bg);
+  --u: clamp(0.6px, calc(100dvh / 863), 1.25px);
+  --cy: calc(762 * var(--u));
+  --r-about: calc(576 * var(--u));
+  --r-works: calc(502 * var(--u));
+  --r-writings: calc(425 * var(--u));
+  --r-talks: calc(343 * var(--u));
+  --r-core: calc(277.5 * var(--u));
   position: fixed;
   inset: 0;
   z-index: 100;
@@ -682,10 +674,30 @@ html.figma-hover a.card.figma-hover-target .card__media {
 }
 
 .menu-overlay.is-animating .ring,
+.menu-overlay.is-animating .menu-overlay__logo,
 .menu-overlay.is-animating .menu-overlay__link,
 .menu-overlay.is-animating .menu-overlay__contact-link,
 .menu-overlay.is-animating .menu-overlay__close {
   will-change: transform, scale, opacity;
+}
+
+.menu-overlay__logo {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  z-index: 10;
+  display: block;
+  width: max-content;
+  translate: -50% 0;
+  scale: 0.92;
+  opacity: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.menu-overlay__logo img {
+  display: block;
+  width: 230px;
+  height: auto;
 }
 
 .ring-stage {
@@ -695,21 +707,26 @@ html.figma-hover a.card.figma-hover-target .card__media {
 }
 
 .ring {
-  --ring-top: 0px;
+  --d: 0px;
   position: absolute;
   left: 50%;
+  top: calc(var(--cy) - var(--d) / 2);
+  width: var(--d);
+  height: var(--d);
   border-radius: 50%;
   transform: translate3d(-50%, 0, 0) scale(0.32);
-  transform-origin: 50% calc(100dvh - var(--ring-top));
-  background: var(--ring-color, transparent);
+  /* Every ring grows out of the bottom center of the screen. */
+  transform-origin: 50% calc(100dvh - var(--cy) + var(--d) / 2);
   backface-visibility: hidden;
 }
 
-.ring--1 { top: var(--ring-1-top); --ring-top: var(--ring-1-top); width: 1609px; height: 1609px; }
-.ring--2 { top: var(--ring-2-top); --ring-top: var(--ring-2-top); width: 1284px; height: 1284px; }
-.ring--3 { top: var(--ring-3-top); --ring-top: var(--ring-3-top); width: 1073px; height: 1073px; }
-.ring--4 { top: var(--ring-4-top); --ring-top: var(--ring-4-top); width: 851px;  height: 851px; }
-.ring--5 { top: var(--ring-5-top); --ring-top: var(--ring-5-top); width: 633px;  height: 633px;  background: var(--bg); }
+/* Reaches every corner, so nothing on the page shows once it lands. */
+.ring--cover { --d: calc(2 * (50vw + var(--cy))); background: var(--bg); }
+.ring--about { --d: calc(2 * var(--r-about)); background: #e8a7ed; }
+.ring--works { --d: calc(2 * var(--r-works)); background: #4dccf9; }
+.ring--writings { --d: calc(2 * var(--r-writings)); background: #f6aa81; }
+.ring--talks { --d: calc(2 * var(--r-talks)); background: #86cd8b; }
+.ring--core { --d: calc(2 * var(--r-core)); background: var(--bg); }
 
 .menu-overlay__nav {
   position: absolute;
@@ -718,21 +735,24 @@ html.figma-hover a.card.figma-hover-target .card__media {
   pointer-events: none;
 }
 
+/* Each strip spans its band at the center line: from its ring's outer
+   radius down to the next ring's outer radius. */
 .menu-overlay__link {
-  --strip-top: 0px;
-  --strip-bottom: 0px;
+  --r-outer: 0px;
+  --r-inner: 0px;
   position: absolute;
   left: 0;
   right: 0;
-  top: var(--strip-top);
-  height: calc(var(--strip-bottom) - var(--strip-top));
+  top: calc(var(--cy) - var(--r-outer));
+  height: calc(var(--r-outer) - var(--r-inner));
   display: flex;
   align-items: center;
   justify-content: center;
   scale: 0.92;
   opacity: 0;
   font-family: var(--font-body);
-  font-size: clamp(32px, 8vh, 48px);
+  font-size: 20px;
+  letter-spacing: 0.2px;
   line-height: 1;
   text-align: center;
   text-transform: uppercase;
@@ -745,18 +765,23 @@ html.figma-hover a.card.figma-hover-target .card__media {
 }
 
 .menu-overlay__link--about {
-  --strip-top: var(--ring-2-top);
-  --strip-bottom: var(--ring-3-top);
+  --r-outer: var(--r-about);
+  --r-inner: var(--r-works);
 }
 
 .menu-overlay__link--work {
-  --strip-top: var(--ring-3-top);
-  --strip-bottom: var(--ring-4-top);
+  --r-outer: var(--r-works);
+  --r-inner: var(--r-writings);
+}
+
+.menu-overlay__link--writings {
+  --r-outer: var(--r-writings);
+  --r-inner: var(--r-talks);
 }
 
 .menu-overlay__link--talks {
-  --strip-top: var(--ring-4-top);
-  --strip-bottom: var(--ring-5-top);
+  --r-outer: var(--r-talks);
+  --r-inner: var(--r-core);
 }
 
 .menu-overlay__link:is(:hover, :active, :focus-visible, .is-hot) span {
@@ -775,22 +800,34 @@ html.figma-hover a.card.figma-hover-target .card__media {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: clamp(56px, 12vh, 88px);
+  top: calc(var(--cy) - 133 * var(--u));
   z-index: 5;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(10px, 3.2vh, 28px);
+  gap: calc(32 * var(--u));
+}
+
+.menu-overlay__contact-row {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
 }
 
 .menu-overlay__contact-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   scale: 0.92;
   opacity: 0;
   background: none;
   border: none;
-  padding: 0;
+  padding: 6px 10px;
   font-family: var(--font-body);
-  font-size: 24px;
+  font-size: 16px;
+  letter-spacing: 0.16px;
+  line-height: normal;
   text-transform: uppercase;
   color: var(--fg);
   text-decoration: none;
@@ -800,8 +837,30 @@ html.figma-hover a.card.figma-hover-target .card__media {
   touch-action: manipulation;
 }
 
-.nav__link,
-.menu-overlay__contact-link {
+.menu-overlay__contact-link--email {
+  display: inline-grid;
+}
+
+.menu-overlay__contact-link--email > span {
+  grid-area: 1 / 1;
+}
+
+.menu-overlay__contact-width {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.menu-overlay__contact-arrow {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+}
+
+.menu-overlay__contact-link:is(:hover, :active, :focus-visible, .is-hot) .menu-overlay__contact-arrow {
+  filter: brightness(0) invert(1);
+}
+
+.nav__link {
   padding-inline: 0.12em;
   margin-inline: -0.12em;
 }
@@ -813,10 +872,17 @@ html.figma-hover a.card.figma-hover-target .card__media {
 
 .menu-overlay__close {
   position: absolute;
-  left: 0;
-  right: 0;
+  right: auto;
   bottom: 0;
+  left: 50%;
   z-index: 10;
+  width: auto;
+  min-height: 0;
+  padding: 8px 12px;
+  translate: -50% 0;
+  font-size: 16px;
+  letter-spacing: 0.16px;
+  line-height: normal;
   opacity: 0;
   scale: 0.92;
 }
@@ -1797,9 +1863,7 @@ a.card {
 
 @media (max-width: 1024px) {
   body.case .menu-bar:not(.menu-overlay__close),
-  body.work .menu-bar:not(.menu-overlay__close),
-  body.case .menu-overlay__close,
-  body.work .menu-overlay__close {
+  body.work .menu-bar:not(.menu-overlay__close) {
     right: auto;
     bottom: 0;
     left: 50%;
@@ -2543,17 +2607,6 @@ body.home {
     bottom: 0;
     left: 50%;
     display: flex;
-    width: auto;
-    min-height: 32px;
-    padding: 6px 10px;
-    transform: translateX(-50%);
-    font-size: 16px;
-    letter-spacing: 0.16px;
-  }
-
-  .home .menu-overlay__close {
-    right: auto;
-    left: 50%;
     width: auto;
     min-height: 32px;
     padding: 6px 10px;

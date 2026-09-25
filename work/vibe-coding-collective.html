@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Vibe Coding Collective — Sofiia Matsiutsia</title>
-<link rel="stylesheet" href="../styles.css?v=82" />
+<link rel="stylesheet" href="../styles.css?v=83" />
 </head>
 <body class="case">
 
@@ -23,6 +23,9 @@
           <img class="nav__mark-img nav__mark-img--hover" src="../assets/icons/nav-work-hover.svg" alt="" width="82" height="29" />
           <img class="nav__mark-img nav__mark-img--selected" src="../assets/icons/nav-work-selected.svg" alt="" width="82" height="29" />
         </span>
+      </a>
+      <a class="nav__link nav__link--writings nav__link--muted" data-cursor="soon">
+        <span class="nav__label">Writings</span>
       </a>
       <a class="nav__link nav__link--talks nav__link--muted" data-cursor="soon">
         <span class="nav__label">Talks</span>
@@ -97,18 +100,24 @@
   </button>
 
 <div class="menu-overlay" id="menu-overlay" hidden>
+  <a href="../index.html" class="menu-overlay__logo" aria-label="Sofiia Matsiutsia — home">
+    <img src="../assets/images/sm-logo.svg" alt="Sofiia Matsiutsia" width="230" height="29" />
+  </a>
+
   <div class="ring-stage" aria-hidden="true">
-    <div class="ring ring--1"></div>
-    <div class="ring ring--2"></div>
-    <div class="ring ring--3"></div>
-    <div class="ring ring--4"></div>
-    <div class="ring ring--5"></div>
+    <div class="ring ring--cover"></div>
+    <div class="ring ring--about"></div>
+    <div class="ring ring--works"></div>
+    <div class="ring ring--writings"></div>
+    <div class="ring ring--talks"></div>
+    <div class="ring ring--core"></div>
   </div>
 
   <nav class="menu-overlay__nav" aria-label="Primary">
     <a class="menu-overlay__link menu-overlay__link--about" data-cursor="soon"><span>About</span></a>
-    <a href="../work.html" class="menu-overlay__link menu-overlay__link--work"><span>Work</span></a>
-    <a class="menu-overlay__link menu-overlay__link--talks" data-cursor="soon"><span>talks</span></a>
+    <a href="../work.html" class="menu-overlay__link menu-overlay__link--work"><span>Works</span></a>
+    <a class="menu-overlay__link menu-overlay__link--writings" data-cursor="soon"><span>Writings</span></a>
+    <a class="menu-overlay__link menu-overlay__link--talks" data-cursor="soon"><span>Talks</span></a>
   </nav>
 
   <div class="menu-overlay__contact">
@@ -116,8 +125,16 @@
       <span class="menu-overlay__contact-width" aria-hidden="true">Copy email</span>
       <span class="menu-overlay__contact-text">Copy email</span>
     </button>
-    <a href="https://www.linkedin.com/in/smatsiutsia/" class="menu-overlay__contact-link menu-overlay__contact-link--linkedin" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-    <a href="https://x.com/SMatsiutsia" class="menu-overlay__contact-link menu-overlay__contact-link--twitter" target="_blank" rel="noopener noreferrer">Twitter</a>
+    <div class="menu-overlay__contact-row">
+      <a href="https://www.linkedin.com/in/smatsiutsia/" class="menu-overlay__contact-link menu-overlay__contact-link--linkedin" target="_blank" rel="noopener noreferrer">
+        <span>LinkedIn</span>
+        <img src="../assets/icons/new-window-arrow-1.svg" alt="" class="menu-overlay__contact-arrow" aria-hidden="true" />
+      </a>
+      <a href="https://x.com/SMatsiutsia" class="menu-overlay__contact-link menu-overlay__contact-link--twitter" target="_blank" rel="noopener noreferrer">
+        <span>Twitter</span>
+        <img src="../assets/icons/new-window-arrow-2.svg" alt="" class="menu-overlay__contact-arrow" aria-hidden="true" />
+      </a>
+    </div>
   </div>
 
   <button type="button" class="menu-bar menu-overlay__close" id="menu-close" aria-controls="menu-overlay">
@@ -125,6 +142,6 @@
   </button>
 </div>
 
-<script src="../script.js?v=40"></script>
+<script src="../script.js?v=46"></script>
 </body>
 </html>

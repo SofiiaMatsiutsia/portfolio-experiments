@@ -663,11 +663,9 @@ initCaseToc();
 const menuOverlay = document.getElementById("menu-overlay");
 const menuOpenBtn = document.getElementById("menu-open");
 const menuCloseBtn = document.getElementById("menu-close");
+const menuLogo = document.querySelector(".menu-overlay__logo");
 
 const ringEls = Array.from(document.querySelectorAll(".ring"));
-ringEls.slice(0, 4).forEach((ring, i) => {
-  ring.style.setProperty("--ring-color", CARD_HOVER_COLORS[i]);
-});
 
 const EASE = "cubic-bezier(0.16, 1, 0.3, 1)";
 const RING_TRANSFORM_OPEN = "translate3d(-50%, 0, 0) scale(1)";
@@ -682,8 +680,10 @@ const LABEL_OPEN_MS = 160;
 const LABEL_SCALE_FROM = "0.92";
 
 const navLabelSelectors = [
+  ".menu-overlay__logo",
   ".menu-overlay__link--about",
   ".menu-overlay__link--work",
+  ".menu-overlay__link--writings",
   ".menu-overlay__link--talks",
 ];
 const contactLabelSelectors = [
@@ -831,6 +831,11 @@ function closeMenu() {
 if (menuOpenBtn && menuCloseBtn && menuOverlay) {
   menuOpenBtn.addEventListener("click", openMenu);
   menuCloseBtn.addEventListener("click", closeMenu);
+  menuLogo?.addEventListener("click", (e) => {
+    if (!menuLogo.getAttribute("href")?.startsWith("#")) return;
+    e.preventDefault();
+    closeMenu();
+  });
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") closeMenu();
   });
