@@ -1,5 +1,78 @@
 const CARD_HOVER_COLORS = ["#4DCCF9", "#E8A7ED", "#86CD8B", "#F6AA81"];
 
+function initMediaLoading() {
+  const frames = document.querySelectorAll(
+    ".showcase__item, .work-item__media, .case__hero, .case-figure, .case-gallery__slide",
+  );
+
+  frames.forEach((frame) => {
+    const media = frame.querySelector(":scope > img, :scope > video");
+    if (!media) return;
+
+    frame.classList.add("media-slot");
+    let settled = false;
+
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      const wasPending = frame.classList.contains("is-pending");
+      frame.classList.remove("is-pending");
+      frame.classList.add("is-ready");
+      if (!wasPending) {
+        frame.classList.add("is-settled");
+        return;
+      }
+      window.setTimeout(() => frame.classList.add("is-settled"), 280);
+    };
+
+    const hold = () => {
+      if (settled) return;
+      frame.classList.add("is-pending");
+    };
+
+    if (media.tagName === "VIDEO") {
+      const poster = media.getAttribute("poster");
+      if (media.readyState >= 2) {
+        finish();
+        return;
+      }
+      hold();
+      if (poster) {
+        const probe = new Image();
+        probe.addEventListener("load", finish, { once: true });
+        probe.addEventListener(
+          "error",
+          () => {
+            if (settled) return;
+            media.addEventListener("loadeddata", finish, { once: true });
+            media.addEventListener("error", finish, { once: true });
+            if (media.readyState >= 2) finish();
+          },
+          { once: true },
+        );
+        probe.src = poster;
+        if (probe.complete && probe.naturalWidth > 0) finish();
+        return;
+      }
+      media.addEventListener("loadeddata", finish, { once: true });
+      media.addEventListener("error", finish, { once: true });
+      if (media.readyState >= 2) finish();
+      return;
+    }
+
+    if (media.complete && media.naturalWidth > 0) {
+      finish();
+      return;
+    }
+    hold();
+    media.addEventListener("load", finish, { once: true });
+    media.addEventListener("error", finish, { once: true });
+    if (media.complete) finish();
+  });
+}
+
+initMediaLoading();
+
 document.addEventListener("click", (event) => {
   const soundToggle = event.target.closest(".sound-toggle");
   if (!soundToggle) return;

@@ -49,6 +49,7 @@
   --card-media-h: 35dvh;
   --card-media-h-hover: 45dvh;
   --card-hover-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 * {
@@ -1455,7 +1456,9 @@ body.work {
   inset: 0;
   z-index: 0;
   object-fit: cover;
-  transition: opacity var(--hero-dur) var(--hero-ease);
+  transition:
+    opacity var(--hero-dur) var(--hero-ease),
+    transform var(--hero-dur) var(--hero-ease);
 }
 
 .case__hero-hover {
@@ -1517,10 +1520,13 @@ body.work {
 
 @media (prefers-reduced-motion: reduce) {
   .case__hero,
-  .case__hero-media,
   .case__hero-hover,
   .case__hero-still {
     transition: none;
+  }
+
+  .case__hero-media {
+    transition: opacity 180ms ease;
   }
 
   .case__hero:hover .case__hero-still {
@@ -2051,6 +2057,7 @@ a.card {
   width: 100%;
   overflow: hidden;
   position: relative;
+  background: #e6e6e6;
   transform: scale(1);
   transform-origin: center;
   transition: transform 150ms var(--card-hover-ease);
@@ -2066,7 +2073,6 @@ a.work-item:active .work-item__media {
   height: auto;
   display: block;
   object-fit: cover;
-  transition: opacity 180ms ease;
 }
 
 .work-item__body {
@@ -2142,7 +2148,7 @@ a.work-item:focus-visible {
 
   .work-item__media img,
   .work-item__media video {
-    transition: none;
+    transform: none;
   }
 }
 
@@ -2812,5 +2818,87 @@ body.home {
   body.work .logo__mark,
   body.case .logo__mark {
     width: 205px;
+  }
+}
+
+/* Media arrives into a frame that is already there. The sweep is the wait;
+   the settle is opacity plus a near-full scale, so nothing pops out of empty. */
+.media-slot {
+  position: relative;
+  overflow: hidden;
+}
+
+.media-slot:not(.case__hero) > :is(img, video) {
+  transition:
+    opacity 220ms var(--ease-out-expo),
+    transform 260ms var(--ease-out-expo);
+}
+
+.media-slot.is-pending > :is(img, video) {
+  opacity: 0;
+  transform: scale(0.98);
+  transition: none;
+}
+
+.media-slot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.72) 46%,
+    transparent 78%
+  );
+  transform: translate3d(-100%, 0, 0);
+}
+
+.media-slot.is-pending::after,
+.media-slot.is-ready::after {
+  animation: media-shimmer 1.4s linear infinite;
+}
+
+.media-slot.is-pending::after {
+  opacity: 1;
+}
+
+.media-slot.is-ready::after {
+  animation-play-state: paused;
+  opacity: 0;
+  transition: opacity 220ms var(--ease-out-expo);
+}
+
+.media-slot.is-settled::after {
+  content: none;
+  animation: none;
+}
+
+@keyframes media-shimmer {
+  from { transform: translate3d(-100%, 0, 0); }
+  to { transform: translate3d(100%, 0, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .media-slot > :is(img, video) {
+    transform: none;
+    transition: opacity 180ms ease;
+  }
+
+  .media-slot.is-pending > :is(img, video) {
+    transform: none;
+    transition: none;
+  }
+
+  .media-slot.is-pending::after,
+  .media-slot.is-ready::after {
+    animation: none;
+    transform: none;
+  }
+
+  .media-slot.is-pending::after {
+    background: rgba(255, 255, 255, 0.38);
   }
 }
