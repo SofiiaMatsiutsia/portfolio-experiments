@@ -2821,32 +2821,56 @@ body.home {
   }
 }
 
-/* Media arrives into a frame that is already there. The sweep is the wait;
-   the settle is opacity plus a near-full scale, so nothing pops out of empty. */
+/* Media arrives into a frame that is already there. A plate covers it
+   while it loads, then fades. Work and case images also settle from a
+   near-full scale. Showcase tiles skip that scale: their row is already moving. */
 .media-slot {
   position: relative;
   overflow: hidden;
 }
 
-.media-slot:not(.case__hero) > :is(img, video) {
+.media-slot:not(.case__hero):not(.showcase__item) > img {
   transition:
-    opacity 220ms var(--ease-out-expo),
+    opacity 180ms ease,
     transform 260ms var(--ease-out-expo);
 }
 
-.media-slot.is-pending > :is(img, video) {
-  opacity: 0;
+.work-item__media > video {
+  transition: opacity 180ms ease;
+}
+
+.media-slot.is-pending:not(.showcase__item) > img {
   transform: scale(0.98);
   transition: none;
 }
 
+/* The plate covers the frame. Media stays painted underneath so mobile
+   browsers still fetch and play video; opacity: 0 would stall it. */
+.media-slot::before,
 .media-slot::after {
   content: "";
   position: absolute;
   inset: 0;
-  z-index: 2;
   pointer-events: none;
   opacity: 0;
+}
+
+.media-slot::before {
+  z-index: 1;
+  background: #e6e6e6;
+}
+
+.media-slot.is-pending::before {
+  opacity: 1;
+}
+
+.media-slot.is-ready::before {
+  opacity: 0;
+  transition: opacity 220ms var(--ease-out-expo);
+}
+
+.media-slot::after {
+  z-index: 2;
   background: linear-gradient(
     105deg,
     transparent 32%,
@@ -2877,6 +2901,7 @@ body.home {
   transition: opacity 220ms var(--ease-out-expo);
 }
 
+.media-slot.is-settled::before,
 .media-slot.is-settled::after {
   content: none;
   animation: none;
@@ -2888,14 +2913,13 @@ body.home {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .media-slot > :is(img, video) {
+  .media-slot.is-pending > img,
+  .media-slot > img {
     transform: none;
-    transition: opacity 180ms ease;
   }
 
-  .media-slot.is-pending > :is(img, video) {
-    transform: none;
-    transition: none;
+  .media-slot.is-ready::before {
+    transition: opacity 180ms ease;
   }
 
   .media-slot.is-pending::after,

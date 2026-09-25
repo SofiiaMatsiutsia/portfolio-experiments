@@ -37,26 +37,31 @@ function initMediaLoading(root = document) {
         return;
       }
       hold();
+      const armPlayback = () => {
+        media.addEventListener("loadeddata", finish, { once: true });
+        media.addEventListener("canplay", finish, { once: true });
+        media.addEventListener("error", finish, { once: true });
+        const pendingLimit = window.setTimeout(finish, 8000);
+        const stopLimit = () => window.clearTimeout(pendingLimit);
+        media.addEventListener("loadeddata", stopLimit, { once: true });
+        media.addEventListener("canplay", stopLimit, { once: true });
+        media.addEventListener("error", stopLimit, { once: true });
+        const playback = media.play?.();
+        if (playback?.catch) playback.catch(() => {});
+        if (media.readyState >= 2) finish();
+      };
       if (poster) {
         const probe = new Image();
         probe.addEventListener("load", finish, { once: true });
-        probe.addEventListener(
-          "error",
-          () => {
-            if (settled) return;
-            media.addEventListener("loadeddata", finish, { once: true });
-            media.addEventListener("error", finish, { once: true });
-            if (media.readyState >= 2) finish();
-          },
-          { once: true },
-        );
+        probe.addEventListener("error", () => {
+          if (settled) return;
+          armPlayback();
+        }, { once: true });
         probe.src = poster;
         if (probe.complete && probe.naturalWidth > 0) finish();
         return;
       }
-      media.addEventListener("loadeddata", finish, { once: true });
-      media.addEventListener("error", finish, { once: true });
-      if (media.readyState >= 2) finish();
+      armPlayback();
       return;
     }
 
