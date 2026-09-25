@@ -2848,10 +2848,10 @@ body.home {
   pointer-events: none;
   opacity: 0;
   background: linear-gradient(
-    100deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.72) 46%,
-    transparent 78%
+    105deg,
+    transparent 32%,
+    rgba(255, 255, 255, 0.96) 50%,
+    transparent 68%
   );
   transform: translate3d(-100%, 0, 0);
 }
@@ -2863,6 +2863,12 @@ body.home {
 
 .media-slot.is-pending::after {
   opacity: 1;
+}
+
+.case-figure.is-pending,
+.case-gallery__slide.is-pending,
+.case__hero.is-pending {
+  background: #e6e6e6;
 }
 
 .media-slot.is-ready::after {

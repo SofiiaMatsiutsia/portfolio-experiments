@@ -1,7 +1,7 @@
 const CARD_HOVER_COLORS = ["#4DCCF9", "#E8A7ED", "#86CD8B", "#F6AA81"];
 
-function initMediaLoading() {
-  const frames = document.querySelectorAll(
+function initMediaLoading(root = document) {
+  const frames = root.querySelectorAll(
     ".showcase__item, .work-item__media, .case__hero, .case-figure, .case-gallery__slide",
   );
 
@@ -135,8 +135,12 @@ function initShowcase() {
   duplicate.querySelectorAll("a, button, [tabindex]").forEach((element) => {
     element.tabIndex = -1;
   });
+  duplicate.querySelectorAll(".showcase__item").forEach((frame) => {
+    frame.classList.remove("media-slot", "is-pending", "is-ready", "is-settled");
+  });
   if ("inert" in duplicate) duplicate.inert = true;
   track.appendChild(duplicate);
+  initMediaLoading(duplicate);
 
   const CRUISE_X = 48;
   const CRUISE_Y = 56;
