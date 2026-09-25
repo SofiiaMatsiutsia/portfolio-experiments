@@ -69,6 +69,12 @@ body {
   font-family: var(--font-body);
 }
 
+/* Selection can't paint a gradient, so the highlight uses the rose from the menu palette. */
+::selection {
+  background-color: #e8a7ed;
+  color: #171615;
+}
+
 @supports (background-image: linear-gradient(in oklch to right, red, blue)) {
   :root {
     --gradient-horizontal: repeating-linear-gradient(
@@ -236,6 +242,10 @@ img {
   --nav-mark-w: 63px;
 }
 
+.nav__link--writings {
+  --nav-mark-w: 99px;
+}
+
 .nav__label {
   position: relative;
   z-index: 0;
@@ -284,6 +294,10 @@ img {
 
   .nav__link--talks .nav__mark-img {
     content: url("assets/icons/talks-hover.svg");
+  }
+
+  .nav__link--writings .nav__mark-img {
+    content: url("assets/icons/writings-hover.svg");
   }
 
   .nav__label {
@@ -355,6 +369,8 @@ img {
 
 .sound-toggle {
   --sound-ease: cubic-bezier(0.23, 1, 0.32, 1);
+  --sound-arrive: cubic-bezier(0.19, 1, 0.22, 1);
+  --sound-leave: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   display: grid;
   place-items: center;
   width: 32px;
@@ -378,18 +394,6 @@ img {
   height: 24px;
 }
 
-.sound-toggle__layer {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  pointer-events: none;
-  transform-origin: 42% 50%;
-  transition:
-    opacity 180ms var(--sound-ease),
-    transform 220ms var(--sound-ease);
-}
-
 .sound-toggle__icon {
   display: block;
   width: 24px;
@@ -397,35 +401,60 @@ img {
   overflow: visible;
 }
 
-.sound-toggle__layer--on {
+/* The cone stays put. Only the waves and the slash move, so the mark
+   reads as one speaker changing state rather than two icons swapping. */
+.sound-toggle__waves,
+.sound-toggle__slash {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.sound-toggle__waves {
   opacity: 1;
   transform: scale(1);
+  transition:
+    opacity 120ms var(--sound-leave),
+    transform 120ms var(--sound-leave);
 }
 
-.sound-toggle__layer--off {
+.sound-toggle.is-muted .sound-toggle__waves {
   opacity: 0;
-  transform: scale(0.88) rotate(-10deg);
+  transform: scale(0.92);
 }
 
-.sound-toggle.is-muted .sound-toggle__layer--on {
+.sound-toggle__slash {
   opacity: 0;
-  transform: scale(0.88) rotate(10deg);
+  transform: scale(0.92);
+  transition:
+    opacity 120ms var(--sound-leave),
+    transform 120ms var(--sound-leave);
 }
 
-.sound-toggle.is-muted .sound-toggle__layer--off {
+.sound-toggle.is-muted .sound-toggle__slash {
   opacity: 1;
-  transform: scale(1) rotate(0deg);
+  transform: scale(1);
+  transition:
+    opacity 180ms var(--sound-arrive),
+    transform 180ms var(--sound-arrive);
+}
+
+/* Restoring a muted preference on load must not replay the swap. */
+.sound-toggle.is-instant .sound-toggle__waves,
+.sound-toggle.is-instant .sound-toggle__slash {
+  transition: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .sound-toggle,
-  .sound-toggle__layer {
+  .sound-toggle {
     transition: none;
   }
 
-  .sound-toggle__layer--off,
-  .sound-toggle.is-muted .sound-toggle__layer--on {
+  .sound-toggle__waves,
+  .sound-toggle__slash,
+  .sound-toggle.is-muted .sound-toggle__waves,
+  .sound-toggle.is-muted .sound-toggle__slash {
     transform: none;
+    transition: opacity 160ms linear;
   }
 }
 
@@ -630,6 +659,7 @@ html.figma-hover a.card.figma-hover-target .card__media {
   cursor: pointer;
   align-items: center;
   justify-content: center;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .menu-bar:active {
@@ -676,6 +706,7 @@ html.figma-hover a.card.figma-hover-target .card__media {
 
 .menu-overlay.is-animating .ring,
 .menu-overlay.is-animating .menu-overlay__logo,
+.menu-overlay.is-animating .sound-toggle,
 .menu-overlay.is-animating .menu-overlay__link,
 .menu-overlay.is-animating .menu-overlay__contact-link,
 .menu-overlay.is-animating .menu-overlay__close {
@@ -715,7 +746,8 @@ html.figma-hover a.card.figma-hover-target .card__media {
   width: var(--d);
   height: var(--d);
   border-radius: 50%;
-  transform: translate3d(-50%, 0, 0) scale(0.32);
+  translate: -50% 0;
+  scale: 0.32;
   /* Every ring grows out of the bottom center of the screen. */
   transform-origin: 50% calc(100dvh - var(--cy) + var(--d) / 2);
   backface-visibility: hidden;
@@ -900,7 +932,7 @@ html.figma-hover a.card.figma-hover-target .card__media {
   }
 
   .nav,
-  .sound-toggle {
+  .header .sound-toggle {
     display: none;
   }
 
@@ -2288,6 +2320,10 @@ body.home {
   --nav-mark-w: 63px;
 }
 
+.home .nav__link--writings {
+  --nav-mark-w: 99px;
+}
+
 .home .nav__mark {
   height: 28px;
 }
@@ -2496,19 +2532,6 @@ body.home {
 
   .home .nav {
     display: none;
-  }
-
-  .home .sound-toggle {
-    display: grid;
-    grid-column: 2;
-    width: 28px;
-    height: 28px;
-  }
-
-  .home .sound-toggle__swap,
-  .home .sound-toggle__icon {
-    width: 28px;
-    height: 28px;
   }
 
   .home .home-main {
@@ -2729,16 +2752,6 @@ body.home {
     width: 32px;
     height: 32px;
   }
-
-  body.work .sound-toggle__layer--on,
-  body.case .sound-toggle__layer--on {
-    background: url("assets/icons/audio-on.svg") center / contain no-repeat;
-  }
-
-  body.work .sound-toggle__layer--on > svg,
-  body.case .sound-toggle__layer--on > svg {
-    display: none;
-  }
 }
 
 @media (max-width: 1024px) {
@@ -2775,34 +2788,6 @@ body.home {
     width: 230px;
     height: auto;
     max-height: none;
-  }
-
-  body.work .sound-toggle,
-  body.case .sound-toggle {
-    display: grid;
-    grid-column: 2;
-    grid-row: 1;
-    justify-self: end;
-    width: 28px;
-    height: 28px;
-  }
-
-  body.work .sound-toggle__swap,
-  body.work .sound-toggle__icon,
-  body.case .sound-toggle__swap,
-  body.case .sound-toggle__icon {
-    width: 28px;
-    height: 28px;
-  }
-
-  body.work .sound-toggle__layer--on,
-  body.case .sound-toggle__layer--on {
-    background: url("assets/icons/audio-on.svg") center / contain no-repeat;
-  }
-
-  body.work .sound-toggle__layer--on > svg,
-  body.case .sound-toggle__layer--on > svg {
-    display: none;
   }
 
   body.case .case__rail {
@@ -2930,5 +2915,108 @@ body.home {
 
   .media-slot.is-pending::after {
     background: rgba(255, 255, 255, 0.38);
+  }
+}
+
+/* Mobile: one centered logo, in the same spot the open menu uses.
+   The sound control lives in the open menu, under that logo. */
+@media (max-width: 1024px) {
+  :root {
+    --mobile-logo-top: 16px;
+    --mobile-logo-w: 230px;
+    --mobile-logo-h: calc(var(--mobile-logo-w) * 34 / 266);
+    --mobile-sound-gap: 20px;
+  }
+
+  .logo,
+  .home .logo,
+  body.work .logo,
+  body.case .logo {
+    position: fixed;
+    top: var(--mobile-logo-top);
+    left: 50%;
+    right: auto;
+    grid-column: auto;
+    grid-row: auto;
+    justify-self: auto;
+    width: max-content;
+    transform: none;
+    translate: -50% 0;
+    z-index: 220;
+  }
+
+  .logo__mark,
+  .home .logo__mark,
+  body.work .logo__mark,
+  body.case .logo__mark {
+    width: var(--mobile-logo-w);
+    height: auto;
+    max-height: none;
+  }
+
+  .menu-overlay__logo {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .menu-overlay .sound-toggle {
+    position: absolute;
+    top: calc(var(--mobile-logo-top) + var(--mobile-logo-h) + var(--mobile-sound-gap));
+    left: 50%;
+    z-index: 10;
+    width: 32px;
+    height: 32px;
+    translate: -50% 0;
+    scale: 0.92;
+    opacity: 0;
+  }
+
+  .menu-overlay .sound-toggle__swap,
+  .menu-overlay .sound-toggle__icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .menu-soon {
+    position: absolute;
+    left: 50%;
+    z-index: 6;
+    top: max(
+      calc(var(--mobile-logo-top) + var(--mobile-logo-h) + var(--mobile-sound-gap) + 32px + 28px),
+      calc(var(--cy) - var(--r-about) - 14px)
+    );
+    margin: 0;
+    color: var(--fg);
+    font-family: var(--font-body);
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: 0.2px;
+    line-height: 1;
+    text-align: center;
+    text-transform: uppercase;
+    white-space: nowrap;
+    user-select: none;
+    pointer-events: none;
+    opacity: 0;
+    translate: -50% calc(-100% + 8px);
+    transition:
+      opacity 120ms cubic-bezier(0.16, 1, 0.3, 1),
+      translate 120ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .menu-soon.is-visible {
+    opacity: 1;
+    translate: -50% -100%;
+    transition:
+      opacity 150ms cubic-bezier(0.16, 1, 0.3, 1),
+      translate 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+@media (max-width: 1024px) and (prefers-reduced-motion: reduce) {
+  .menu-soon,
+  .menu-soon.is-visible {
+    translate: -50% -100%;
+    transition: opacity 150ms linear;
   }
 }

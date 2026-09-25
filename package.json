@@ -1,0 +1,8 @@
+{
+  "name": "portfolio-experiments",
+  "private": true,
+  "comment": "No build step. cuelume is installed so its ESM dist can be vendored into assets/vendor/cuelume/, which is what the pages actually load.",
+  "dependencies": {
+    "cuelume": "^0.2.2"
+  }
+}

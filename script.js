@@ -746,12 +746,46 @@ const menuOverlay = document.getElementById("menu-overlay");
 const menuOpenBtn = document.getElementById("menu-open");
 const menuCloseBtn = document.getElementById("menu-close");
 const menuLogo = document.querySelector(".menu-overlay__logo");
+const pageLogo = document.querySelector(".header .logo");
+const soundToggleEl = document.querySelector(".header .sound-toggle");
+const mobileMenuQuery = window.matchMedia("(max-width: 1024px)");
+
+function placeMobileChrome() {
+  const header = document.querySelector(".header");
+  if (!header || !menuOverlay || !pageLogo || !soundToggleEl || !menuLogo) return;
+
+  const apply = () => {
+    if (mobileMenuQuery.matches) {
+      if (pageLogo.parentElement !== document.body) document.body.appendChild(pageLogo);
+      if (soundToggleEl.parentElement !== menuOverlay) {
+        menuLogo.insertAdjacentElement("afterend", soundToggleEl);
+      }
+      return;
+    }
+
+    pageLogo.getAnimations().forEach((anim) => anim.cancel());
+    soundToggleEl.getAnimations().forEach((anim) => anim.cancel());
+    soundToggleEl.style.opacity = "";
+    soundToggleEl.style.scale = "";
+    soundToggleEl.style.transform = "";
+    if (pageLogo.parentElement !== header) header.appendChild(pageLogo);
+    if (soundToggleEl.parentElement !== header) header.appendChild(soundToggleEl);
+  };
+
+  apply();
+  mobileMenuQuery.addEventListener("change", apply);
+}
+
+placeMobileChrome();
 
 const ringEls = Array.from(document.querySelectorAll(".ring"));
 
 const EASE = "cubic-bezier(0.16, 1, 0.3, 1)";
-const RING_TRANSFORM_OPEN = "translate3d(-50%, 0, 0) scale(1)";
-const RING_TRANSFORM_CLOSED = "translate3d(-50%, 0, 0) scale(0.32)";
+// Rings leave into the menu button: the tail of this curve plays out once they are tiny.
+const CLOSE_EASE = "cubic-bezier(0.32, 0.72, 0, 1)";
+const RING_OPEN = { scale: "1" };
+const RING_CLOSED = { scale: "0.32" };
+const RING_GONE = { scale: "0" };
 
 const OPEN_MS = 250;
 const CLOSE_MS = 200;
@@ -763,6 +797,7 @@ const LABEL_SCALE_FROM = "0.92";
 
 const navLabelSelectors = [
   ".menu-overlay__logo",
+  ".sound-toggle",
   ".menu-overlay__link--about",
   ".menu-overlay__link--work",
   ".menu-overlay__link--writings",
@@ -783,8 +818,10 @@ const ANIM_SPECS = [
     openDuration: OPEN_MS,
     closeDelay: 0,
     closeDuration: CLOSE_MS,
-    from: { transform: RING_TRANSFORM_CLOSED },
-    to: { transform: RING_TRANSFORM_OPEN },
+    closeEasing: CLOSE_EASE,
+    from: RING_CLOSED,
+    to: RING_OPEN,
+    exit: RING_GONE,
   },
   ...ringEls.slice(1).map((el) => ({
     el,
@@ -792,8 +829,10 @@ const ANIM_SPECS = [
     openDuration: OPEN_MS,
     closeDelay: 0,
     closeDuration: CLOSE_MS,
-    from: { transform: RING_TRANSFORM_CLOSED },
-    to: { transform: RING_TRANSFORM_OPEN },
+    closeEasing: CLOSE_EASE,
+    from: RING_CLOSED,
+    to: RING_OPEN,
+    exit: RING_GONE,
   })),
   ...navLabelSelectors.map((selector) => ({
     el: document.querySelector(selector),
@@ -864,11 +903,11 @@ function playRingAnimations(isOpen) {
   const animations = ANIM_SPECS.map((spec) => {
     const keys = Object.keys(spec.to);
     const current = snapshotStyle(spec.el, keys);
-    const target = isOpen ? spec.to : spec.from;
+    const target = isOpen ? spec.to : spec.exit || spec.from;
     const anim = spec.el.animate([current, target], {
       duration: timing(isOpen ? spec.openDuration : spec.closeDuration),
       delay: timing(isOpen ? spec.openDelay : spec.closeDelay),
-      easing: EASE,
+      easing: isOpen ? EASE : spec.closeEasing || EASE,
       fill: "both",
     });
     return anim;
@@ -884,6 +923,7 @@ function lockPageScroll(lock) {
 
 function openMenu() {
   const token = ++menuAnimToken;
+  window.cuelume?.play("bloom");
   menuOverlay.hidden = false;
   menuOverlay.classList.add("is-open", "is-animating");
   menuOpenBtn.setAttribute("aria-expanded", "true");
@@ -896,7 +936,9 @@ function openMenu() {
 
 function closeMenu() {
   if (menuOverlay.hidden) return;
+  hideMenuSoon();
   const token = ++menuAnimToken;
+  window.cuelume?.play("droplet");
   menuOpenBtn.setAttribute("aria-expanded", "false");
   menuOverlay.classList.add("is-animating");
   menuOverlay.classList.remove("is-open");
@@ -918,6 +960,11 @@ if (menuOpenBtn && menuCloseBtn && menuOverlay) {
     e.preventDefault();
     closeMenu();
   });
+  pageLogo?.addEventListener("click", (event) => {
+    if (menuOverlay.hidden) return;
+    if ((pageLogo.getAttribute("href") || "").startsWith("#")) event.preventDefault();
+    closeMenu();
+  });
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") closeMenu();
   });
@@ -930,6 +977,55 @@ if (menuOpenBtn && menuCloseBtn && menuOverlay) {
     el.addEventListener("pointerleave", () => setHot(false));
   });
 }
+
+let hideMenuSoon = () => {};
+
+function initMenuSoon() {
+  if (!menuOverlay) return;
+  const note = document.createElement("p");
+  note.className = "menu-soon";
+  note.setAttribute("role", "status");
+  note.setAttribute("aria-live", "polite");
+  note.setAttribute("aria-hidden", "true");
+  menuOverlay.appendChild(note);
+
+  let timer = 0;
+
+  const hide = () => {
+    window.clearTimeout(timer);
+    timer = 0;
+    note.classList.remove("is-visible");
+    note.setAttribute("aria-hidden", "true");
+  };
+
+  const show = () => {
+    if (!mobileMenuQuery.matches) return;
+    window.clearTimeout(timer);
+    note.textContent = "Coming soon!";
+    note.setAttribute("aria-hidden", "false");
+    note.classList.add("is-visible");
+    timer = window.setTimeout(hide, 2000);
+  };
+
+  hideMenuSoon = hide;
+
+  document.addEventListener("click", (event) => {
+    if (!menuOverlay || menuOverlay.hidden) return;
+    const soon = event.target.closest?.(".menu-overlay [data-cursor='soon']");
+    if (soon && mobileMenuQuery.matches) {
+      event.preventDefault();
+      show();
+      return;
+    }
+    if (note.classList.contains("is-visible")) hide();
+  });
+
+  mobileMenuQuery.addEventListener("change", () => {
+    if (!mobileMenuQuery.matches) hide();
+  });
+}
+
+initMenuSoon();
 
 function initSquishCursor() {
   const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
@@ -1171,6 +1267,8 @@ function initWorkFilters() {
   root.addEventListener("click", (event) => {
     const pill = event.target.closest(".work-filter");
     if (!pill || !root.contains(pill)) return;
+    // Re-clicking the active pill changes nothing, so it stays silent.
+    if (!pill.classList.contains("is-active")) window.cuelume?.play("toggle");
     applyFilter(pill.getAttribute("data-filter"));
     writeWorkNav({ filter: pill.getAttribute("data-filter"), y: window.scrollY });
   });
@@ -1315,6 +1413,7 @@ function initCopyEmailButtons() {
     let resetTimer = 0;
 
     button.addEventListener("click", async () => {
+      let copied = true;
       try {
         await navigator.clipboard.writeText(CONTACT_EMAIL);
       } catch {
@@ -1326,11 +1425,18 @@ function initCopyEmailButtons() {
         document.body.appendChild(area);
         area.select();
         try {
-          document.execCommand("copy");
+          copied = document.execCommand("copy");
         } finally {
           area.remove();
         }
       }
+
+      if (!copied) {
+        window.cuelume?.play("error");
+        return;
+      }
+
+      window.cuelume?.play("success");
 
       window.clearTimeout(resetTimer);
       label.textContent = "Copied!";
