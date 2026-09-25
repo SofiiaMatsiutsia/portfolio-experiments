@@ -668,8 +668,11 @@ const menuLogo = document.querySelector(".menu-overlay__logo");
 const ringEls = Array.from(document.querySelectorAll(".ring"));
 
 const EASE = "cubic-bezier(0.16, 1, 0.3, 1)";
-const RING_TRANSFORM_OPEN = "translate3d(-50%, 0, 0) scale(1)";
-const RING_TRANSFORM_CLOSED = "translate3d(-50%, 0, 0) scale(0.32)";
+// Rings leave into the menu button: the tail of this curve plays out once they are tiny.
+const CLOSE_EASE = "cubic-bezier(0.32, 0.72, 0, 1)";
+const RING_OPEN = { scale: "1" };
+const RING_CLOSED = { scale: "0.32" };
+const RING_GONE = { scale: "0" };
 
 const OPEN_MS = 250;
 const CLOSE_MS = 200;
@@ -701,8 +704,10 @@ const ANIM_SPECS = [
     openDuration: OPEN_MS,
     closeDelay: 0,
     closeDuration: CLOSE_MS,
-    from: { transform: RING_TRANSFORM_CLOSED },
-    to: { transform: RING_TRANSFORM_OPEN },
+    closeEasing: CLOSE_EASE,
+    from: RING_CLOSED,
+    to: RING_OPEN,
+    exit: RING_GONE,
   },
   ...ringEls.slice(1).map((el) => ({
     el,
@@ -710,8 +715,10 @@ const ANIM_SPECS = [
     openDuration: OPEN_MS,
     closeDelay: 0,
     closeDuration: CLOSE_MS,
-    from: { transform: RING_TRANSFORM_CLOSED },
-    to: { transform: RING_TRANSFORM_OPEN },
+    closeEasing: CLOSE_EASE,
+    from: RING_CLOSED,
+    to: RING_OPEN,
+    exit: RING_GONE,
   })),
   ...navLabelSelectors.map((selector) => ({
     el: document.querySelector(selector),
@@ -782,11 +789,11 @@ function playRingAnimations(isOpen) {
   const animations = ANIM_SPECS.map((spec) => {
     const keys = Object.keys(spec.to);
     const current = snapshotStyle(spec.el, keys);
-    const target = isOpen ? spec.to : spec.from;
+    const target = isOpen ? spec.to : spec.exit || spec.from;
     const anim = spec.el.animate([current, target], {
       duration: timing(isOpen ? spec.openDuration : spec.closeDuration),
       delay: timing(isOpen ? spec.openDelay : spec.closeDelay),
-      easing: EASE,
+      easing: isOpen ? EASE : spec.closeEasing || EASE,
       fill: "both",
     });
     return anim;

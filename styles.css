@@ -637,6 +637,7 @@ html.figma-hover a.card.figma-hover-target .card__media {
   cursor: pointer;
   align-items: center;
   justify-content: center;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .menu-bar:active {
@@ -722,7 +723,8 @@ html.figma-hover a.card.figma-hover-target .card__media {
   width: var(--d);
   height: var(--d);
   border-radius: 50%;
-  transform: translate3d(-50%, 0, 0) scale(0.32);
+  translate: -50% 0;
+  scale: 0.32;
   /* Every ring grows out of the bottom center of the screen. */
   transform-origin: 50% calc(100dvh - var(--cy) + var(--d) / 2);
   backface-visibility: hidden;
