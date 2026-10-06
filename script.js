@@ -153,6 +153,7 @@ function initShowcase() {
   const VELOCITY_WINDOW = 100;
   const MAX_RELEASE_SPEED = 1800;
   const NOTCH_MS = 280;
+  const CLICK_TOLERANCE = 6;
   const easeSnap = createEase(0.16, 1, 0.3, 1);
 
   let offset = 0;
@@ -162,6 +163,9 @@ function initShowcase() {
   let dragging = false;
   let pointerId = null;
   let previousPointerPosition = 0;
+  let pressedLink = null;
+  let draggedDistance = 0;
+  let suppressClick = false;
   let resizeFrame = 0;
   let velocity = 0;
   let glide = false;
@@ -173,6 +177,13 @@ function initShowcase() {
   const isHorizontal = () => mobileLayout.matches;
   const cruiseSpeed = () => (isHorizontal() ? CRUISE_X : CRUISE_Y);
   const pointerPosition = (event) => (isHorizontal() ? event.clientX : event.clientY);
+  const capturePointer = (pointer) => {
+    try {
+      viewport.setPointerCapture(pointer);
+    } catch {
+      /* Capture needs a live pointer; tracking still follows the events. */
+    }
+  };
   const wrap = (value) => ((value % loopSize) + loopSize) % loopSize;
   const normalizeOffset = () => {
     offset = wrap(offset);
@@ -320,14 +331,12 @@ function initShowcase() {
     dragging = true;
     pointerId = event.pointerId;
     previousPointerPosition = pointerPosition(event);
+    pressedLink = document.elementFromPoint(event.clientX, event.clientY)?.closest(".showcase__item[href]") || null;
+    draggedDistance = 0;
     stopGesture();
     velocity = 0;
     viewport.classList.add("is-dragging");
-    try {
-      viewport.setPointerCapture(event.pointerId);
-    } catch {
-      /* Capture needs a live pointer; tracking still follows the events. */
-    }
+    if (!pressedLink) capturePointer(event.pointerId);
   });
 
   viewport.addEventListener("pointermove", (event) => {
@@ -335,6 +344,8 @@ function initShowcase() {
     const currentPosition = pointerPosition(event);
     const delta = previousPointerPosition - currentPosition;
     previousPointerPosition = currentPosition;
+    draggedDistance += Math.abs(delta);
+    if (pressedLink && draggedDistance >= CLICK_TOLERANCE) capturePointer(event.pointerId);
     offset += delta;
     normalizeOffset();
     render();
@@ -343,9 +354,18 @@ function initShowcase() {
 
   const endDrag = (event) => {
     if (!dragging || event.pointerId !== pointerId) return;
+    const link = pressedLink;
+    const shouldFollowLink = event.type === "pointerup" && link && draggedDistance < CLICK_TOLERANCE;
     dragging = false;
     pointerId = null;
+    pressedLink = null;
     viewport.classList.remove("is-dragging");
+    if (shouldFollowLink) {
+      window.location.assign(link.href);
+      return;
+    }
+    suppressClick = draggedDistance >= CLICK_TOLERANCE;
+    if (suppressClick) requestAnimationFrame(() => { suppressClick = false; });
     if (reducedMotion.matches) {
       samples = [];
       return;
@@ -357,6 +377,16 @@ function initShowcase() {
   };
   viewport.addEventListener("pointerup", endDrag);
   viewport.addEventListener("pointercancel", endDrag);
+  viewport.addEventListener("click", (event) => {
+    const link = event.target.closest(".showcase__item[href]");
+    if (!link) return;
+    event.preventDefault();
+    if (suppressClick) {
+      event.stopPropagation();
+      return;
+    }
+    window.location.assign(link.href);
+  });
 
   viewport.addEventListener("keydown", (event) => {
     const forwardKey = isHorizontal() ? "ArrowRight" : "ArrowDown";

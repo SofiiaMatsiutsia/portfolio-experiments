@@ -2463,6 +2463,11 @@ body.home {
   background: #e6e6e6;
 }
 
+.home a.showcase__item {
+  color: inherit;
+  text-decoration: none;
+}
+
 .home .showcase__row:nth-child(2n) .showcase__item:first-child {
   background: #dedede;
 }
