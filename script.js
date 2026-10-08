@@ -1127,6 +1127,8 @@ function initSquishCursor() {
     my = event.clientY;
     const target = event.target;
     setSoon(Boolean(target && target.closest && target.closest('[data-cursor="soon"]')));
+    const interactive = target && target.closest && target.closest("a[href], button, [role=button]");
+    el.classList.toggle("is-gradient", Boolean(interactive));
     if (!seeded) {
       x = mx;
       y = my;
@@ -1430,6 +1432,53 @@ initPageTransitions();
 
 const CONTACT_EMAIL = "sofiia.matsiutsia@gmail.com";
 const COPY_FEEDBACK_MS = 2000;
+
+function initCompanyUnderlines() {
+  const svgNamespace = "http://www.w3.org/2000/svg";
+
+  document.querySelectorAll(".about-company__underline[data-underline-label]").forEach((underline, index) => {
+    const label = underline.dataset.underlineLabel || `company-${index}`;
+    let seed = (2166136261 ^ Math.floor(Math.random() * 0xffffffff)) >>> 0;
+    for (const character of label) {
+      seed = Math.imul(seed ^ character.charCodeAt(0), 16777619) >>> 0;
+    }
+
+    const nextRandom = () => {
+      seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+      return seed / 0x100000000;
+    };
+
+    const points = Array.from({ length: 7 }, (_, pointIndex) => ({
+      x: (pointIndex / 6) * 100,
+      y: 4 + (nextRandom() - 0.5) * 2.2,
+    }));
+    const segment = 100 / 6;
+    let pathData = `M ${points[0].x.toFixed(2)} ${points[0].y.toFixed(2)}`;
+    points.slice(1).forEach((point, pointIndex) => {
+      const previous = points[pointIndex];
+      pathData += ` C ${(previous.x + segment * 0.42).toFixed(2)} ${previous.y.toFixed(2)} ${(point.x - segment * 0.42).toFixed(2)} ${point.y.toFixed(2)} ${point.x.toFixed(2)} ${point.y.toFixed(2)}`;
+    });
+
+    const svg = document.createElementNS(svgNamespace, "svg");
+    svg.setAttribute("viewBox", "0 0 100 8");
+    svg.setAttribute("preserveAspectRatio", "none");
+    svg.setAttribute("focusable", "false");
+
+    const path = document.createElementNS(svgNamespace, "path");
+    path.setAttribute("d", pathData);
+    path.setAttribute("fill", "none");
+    path.setAttribute("stroke", "currentColor");
+    path.setAttribute("stroke-width", "2");
+    path.setAttribute("stroke-linecap", "round");
+    path.setAttribute("stroke-linejoin", "round");
+
+    svg.append(path);
+    underline.replaceChildren(svg);
+    underline.dataset.generated = "true";
+  });
+}
+
+initCompanyUnderlines();
 
 function initCopyEmailButtons() {
   const selectors = ".action-btn--copy, .menu-overlay__contact-link--email";
