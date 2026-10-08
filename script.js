@@ -1,5 +1,25 @@
 const CARD_HOVER_COLORS = ["#4DCCF9", "#E8A7ED", "#86CD8B", "#F6AA81"];
 
+/* Production uses Vercel clean URLs. Local file previews still need the
+   physical `.html` filenames, so restore them only for that protocol. */
+function initLocalFileLinks() {
+  if (window.location.protocol !== "file:") return;
+
+  document.querySelectorAll("a[href]").forEach((link) => {
+    const href = link.getAttribute("href");
+    if (!href || href.startsWith("#") || /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i.test(href)) return;
+
+    const match = href.match(/^([^?#]*)(.*)$/);
+    const path = match?.[1] || "";
+    const suffix = match?.[2] || "";
+    if (!path || path.endsWith("/") || /(?:^|\/)[^/]+\.[^/]+$/.test(path)) return;
+
+    link.setAttribute("href", `${path}.html${suffix}`);
+  });
+}
+
+initLocalFileLinks();
+
 function initMediaLoading(root = document) {
   const frames = root.querySelectorAll(
     ".showcase__item, .work-item__media, .case__hero, .case-figure, .case-gallery__slide",
