@@ -1,4 +1,12 @@
 @font-face {
+  font-family: "IBM Plex Mono";
+  src: url("assets/fonts/IBMPlexMono-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: "Folio Bk BT";
   src: url("assets/fonts/FolioBkBT-Book.ttf") format("truetype");
   font-weight: 400;
@@ -4022,30 +4030,196 @@ body.home {
   margin-top: 40px;
 }
 
-.talks-reviews__grid {
+.talks-reviews__board {
+  position: relative;
+  z-index: 10;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 48px 20px;
-  margin-top: 40px;
+  gap: 64px 28px;
+  margin-top: 24px;
+  padding: 32px 0;
+  isolation: isolate;
+}
+
+.talks-reviews__board.is-ready {
+  display: block;
+  padding: 0;
+}
+
+.review-note {
+  --note-angle: 3deg;
+  --tape-color: #86cd8b;
+  position: relative;
+  min-width: 0;
+  z-index: 1;
+}
+
+.is-ready .review-note {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 47%;
+}
+
+.review-note__paper {
+  position: relative;
+  padding: 28px 28px 30px;
+  transform: rotate(var(--note-angle));
+  transition: transform 220ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* A thin cut edge plus an uneven shadow keeps the sheets feeling like paper. */
+.review-note__paper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: #fff;
+  box-shadow: 0.8px 1.5px 0 #bcbcb8, 1px 3px 3px #17161508;
+}
+
+.review-note__paper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  box-shadow: 3px 17px 23px #17161520;
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+
+.review-note--orange { --tape-color: #f6aa81; --note-angle: -6deg; }
+.review-note--pink { --tape-color: #e8a7ed; --note-angle: 3deg; }
+.review-note--blue { --tape-color: #4dccf9; --note-angle: -4deg; }
+
+.review-note__tape {
+  position: absolute;
+  top: -24px;
+  left: 47%;
+  width: 29px;
+  height: 56px;
+  background: var(--tape-color);
+  opacity: 0.86;
+  mix-blend-mode: multiply;
+  clip-path: polygon(2% 0, 96% 2%, 100% 18%, 97% 51%, 100% 98%, 4% 100%, 0 77%, 3% 42%);
+  transform: rotate(-4deg);
+  transform-origin: center 75%;
+  transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
+  pointer-events: auto;
+  cursor: grab;
+}
+
+.review-note__tape--left {
+  top: -9px;
+  left: -5px;
+  width: 82px;
+  height: 19px;
+  transform: rotate(-13deg);
+}
+
+.review-note__tape--right {
+  top: 1px;
+  left: auto;
+  right: -8px;
+  width: 53px;
+  height: 18px;
+  transform: rotate(20deg);
+}
+
+.review-note--pink .review-note__tape { left: 61%; }
+.review-note--blue .review-note__tape { left: 68%; transform: rotate(12deg); }
+
+.review-note--punched .review-note__paper {
+  padding-top: 74px;
+}
+
+.review-note__holes {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  left: 24px;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.review-note__holes i {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--bg);
+  box-shadow: inset 0 1.5px 0 #bcbcb8;
+}
+
+.review-note--torn .review-note__paper::before {
+  /* Small, irregular tears across the bottom of a notebook scrap. */
+  clip-path: polygon(0 0, 100% 0, 100% 98%, 97% 99%, 93% 98%, 89% 100%, 85% 98.5%, 81% 99%, 76% 98%, 72% 100%, 68% 99%, 63% 99.5%, 59% 98%, 55% 99%, 50% 98.5%, 46% 100%, 41% 98%, 37% 99%, 32% 98.5%, 28% 100%, 23% 98%, 18% 99.5%, 14% 98.5%, 9% 100%, 5% 98%, 0 99%);
+}
+
+.review-note__pick {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  transform: rotate(var(--note-angle));
+  cursor: grab;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.review-note__pick:focus-visible {
+  outline: 2px dashed var(--fg);
+  outline-offset: 8px;
+}
+
+.review-note.is-picked .review-note__paper {
+  transform: translateY(-9px) rotate(var(--note-angle)) scale(1.025);
+}
+
+.review-note.is-picked .review-note__paper::after { opacity: 1; }
+.review-note.is-picked .review-note__tape { transform: rotate(-9deg) translateY(-3px); }
+.review-note.is-picked .review-note__tape--left { transform: rotate(-19deg) translateY(-3px); }
+.review-note.is-picked .review-note__tape--right { transform: rotate(28deg) translateY(-3px); }
+body.is-holding-review,
+.is-holding-review * { cursor: grabbing !important; }
+.is-holding-review .review-note { user-select: none; }
+
+@media (hover: hover) and (pointer: fine) {
+  .review-note:not(.is-picked):hover .review-note__paper {
+    transform: translateY(-4px) rotate(var(--note-angle));
+  }
+  .review-note:not(.is-picked):hover .review-note__paper::after { opacity: 0.35; }
+}
+
+.review-note.is-keyboard .review-note__paper,
+.review-note.is-keyboard .review-note__tape { transition: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .review-note__paper,
+  .review-note__tape { transition: none; }
+  .review-note.is-picked .review-note__paper,
+  .review-note:not(.is-picked):hover .review-note__paper { transform: rotate(var(--note-angle)); }
+  .review-note.is-picked .review-note__tape { transform: none; }
 }
 
 .talks-quote {
   margin: 0;
-  padding-top: 20px;
-  border-top: 1px solid rgba(23, 22, 21, 0.22);
 }
 
 .talks-quote p {
   margin: 0;
-  font-size: 20px;
-  line-height: 1.4;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 18px;
+  line-height: 1.38;
+  letter-spacing: -0.035em;
 }
 
 .talks-quote cite {
   display: block;
-  margin-top: 20px;
-  color: #707070;
-  font-size: 16px;
+  margin-top: 32px;
+  color: var(--fg);
+  font-size: 18px;
   font-style: normal;
   line-height: 1.4;
 }
@@ -4135,13 +4309,13 @@ body.home {
   }
 
   .talks-grid,
-  .talks-reviews__grid,
+  .talks-reviews__board,
   .talks-contact__buttons {
     grid-template-columns: 1fr;
   }
 
   .talks-grid,
-  .talks-reviews__grid {
+  .talks-reviews__board {
     margin-top: 28px;
   }
 
@@ -4167,9 +4341,15 @@ body.home {
     font-size: 18px;
   }
 
-  .talks-reviews__grid {
-    gap: 36px;
+  .talks-reviews__board {
+    gap: 48px;
   }
+
+  .is-ready .review-note { width: 88%; }
+  .review-note__paper { padding: 24px; }
+  .talks-quote cite { font-size: 16px; margin-top: 26px; }
+  .review-note--punched .review-note__paper { padding-top: 66px; }
+  .review-note__holes i { width: 20px; height: 20px; }
 
   .talks-contact__buttons {
     gap: 8px;

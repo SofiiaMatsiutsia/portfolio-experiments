@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Talks &amp; workshops — Sofiia Matsiutsia</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-<link rel="stylesheet" href="styles.css?v=119" />
+<link rel="preload" href="assets/fonts/IBMPlexMono-Regular.ttf" as="font" type="font/ttf" crossorigin />
+<link rel="stylesheet" href="styles.css?v=121" />
 </head>
 <body class="talks">
 
@@ -139,24 +140,52 @@
 
       <section class="talks-reviews" aria-labelledby="reviews-title">
         <h2 class="talks-section-title" id="reviews-title">Reviews</h2>
-        <div class="talks-reviews__grid">
-          <blockquote class="talks-quote">
-            <p>&quot;…your session was excellent… an excellent beginners guide to the skills needed to vibe code.&quot;</p>
-            <cite>Lucy Palmer, Brand, Content &amp; Marketing Consultant</cite>
-          </blockquote>
-          <blockquote class="talks-quote">
-            <p>&quot;Fantastic to meet you at the CreateWith AI event in Brighton… a really great session.&quot;</p>
-            <cite>Dr Krishan Kandya</cite>
-          </blockquote>
-          <blockquote class="talks-quote">
-            <p>&quot;Enjoyed your workshop at the Create With conference in Brighton…&quot;</p>
-            <cite>Richard Burton</cite>
-          </blockquote>
-          <blockquote class="talks-quote">
-            <p>&quot;Thank you for giving me an experience that changed my attitude toward tech… an experience I truly want to cherish.&quot;</p>
-            <cite>Workshop attendee, Discord</cite>
-          </blockquote>
+        <p class="visually-hidden" id="reviews-keyboard">Press Enter to pick up a note, use arrow keys to move it, and Enter to stick it. Escape puts it back.</p>
+        <div class="talks-reviews__board">
+          <article class="review-note review-note--green">
+            <div class="review-note__paper">
+              <span class="review-note__tape review-note__tape--left" aria-hidden="true"></span>
+              <span class="review-note__tape review-note__tape--right" aria-hidden="true"></span>
+              <blockquote class="talks-quote" id="review-osaka">
+                <p>Thank you for giving me an experience that changed my attitude toward tech… an experience I truly want to cherish.</p>
+                <cite>Workshop attendee in Osaka</cite>
+              </blockquote>
+            </div>
+            <button class="review-note__pick" type="button" aria-label="Move the Osaka review" aria-describedby="review-osaka reviews-keyboard" aria-pressed="false" hidden></button>
+          </article>
+          <article class="review-note review-note--orange review-note--punched">
+            <div class="review-note__paper">
+              <span class="review-note__holes" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+              <span class="review-note__tape" aria-hidden="true"></span>
+              <blockquote class="talks-quote" id="review-lucy">
+                <p>…your session was excellent… an excellent beginners guide to the skills needed to vibe code.</p>
+                <cite>Lucy Palmer, Brand, Content &amp; Marketing Consultant</cite>
+              </blockquote>
+            </div>
+            <button class="review-note__pick" type="button" aria-label="Move Lucy’s review" aria-describedby="review-lucy reviews-keyboard" aria-pressed="false" hidden></button>
+          </article>
+          <article class="review-note review-note--pink">
+            <div class="review-note__paper">
+              <span class="review-note__tape" aria-hidden="true"></span>
+              <blockquote class="talks-quote" id="review-krishan">
+                <p>“Fantastic to meet you at the CreateWith AI event in Brighton… a really great session.”</p>
+                <cite>Dr Krishan Kandya</cite>
+              </blockquote>
+            </div>
+            <button class="review-note__pick" type="button" aria-label="Move Krishan’s review" aria-describedby="review-krishan reviews-keyboard" aria-pressed="false" hidden></button>
+          </article>
+          <article class="review-note review-note--blue review-note--torn">
+            <div class="review-note__paper">
+              <span class="review-note__tape" aria-hidden="true"></span>
+              <blockquote class="talks-quote" id="review-richard">
+                <p>“Enjoyed your workshop at the Create With conference in Brighton…”</p>
+                <cite>Richard Burton</cite>
+              </blockquote>
+            </div>
+            <button class="review-note__pick" type="button" aria-label="Move Richard’s review" aria-describedby="review-richard reviews-keyboard" aria-pressed="false" hidden></button>
+          </article>
         </div>
+        <p class="visually-hidden" role="status" aria-live="polite" aria-atomic="true" id="reviews-status"></p>
       </section>
 
     </div>
@@ -177,6 +206,7 @@
   </div>
 
   <script src="script.js?v=58"></script>
+  <script src="review-notes.js?v=2"></script>
   <script type="module" src="sound.js?v=1"></script>
 </body>
 </html>
