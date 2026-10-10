@@ -7,15 +7,33 @@
  */
 window.PortfolioAnimationPresets = Object.freeze({
   mixedLetterO: Object.freeze({
-    frameDurationMs: 150,
+    frameDurationMs: 230,
     imageScale: 1.1,
     order: 'random',
     composition: 'mixed',
     sourceCount: 4,
     regionCount: 4,
     minimumSourcesPerComposition: 2,
-    baseLayer: 'o-pink.svg',
+    baseLayers: ['o-pink.svg', 'o_2-pink.svg', 'o_3-pink.svg', 'o_4-pink.svg'],
     accentLayerPattern: 'o_{frame}-accent-{region}.svg',
+    interaction: Object.freeze({
+      toggleOnDesktopHover: true,
+      toggleOnTouchOrKeyboard: true,
+      pauseWhenOffscreen: true,
+      pauseWhenDocumentHidden: true,
+      respectReducedMotion: true,
+    }),
+  }),
+  mixedLetterH: Object.freeze({
+    frameDurationMs: 230,
+    imageScale: 1.1,
+    order: 'random',
+    composition: 'mixed',
+    sourceCount: 4,
+    regionCount: 4,
+    minimumSourcesPerComposition: 2,
+    baseLayers: ['h_1-base.svg', 'h_2-base.svg', 'h_3-base.svg', 'h_4-base.svg'],
+    accentLayerPattern: 'h_{frame}-accent-{region}.svg',
     interaction: Object.freeze({
       toggleOnDesktopHover: true,
       toggleOnTouchOrKeyboard: true,

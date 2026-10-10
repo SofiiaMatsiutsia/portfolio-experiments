@@ -1,9 +1,10 @@
 (() => {
-  const letter = document.querySelector('.letter-o');
-  const trigger = letter?.querySelector('.letter-o__trigger');
+  const letter = document.querySelector('.animated-letter');
+  const trigger = letter?.querySelector('.animated-letter__trigger');
   if (!trigger) return;
 
   const presetName = letter.dataset.animationPreset || 'mixedLetterO';
+  const letterName = letter.dataset.letter || 'letter';
   const preset = window.PortfolioAnimationPresets?.[presetName];
   if (!preset) {
     console.warn(`Letter animation preset "${presetName}" was not found.`);
@@ -12,9 +13,9 @@
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const hover = window.matchMedia('(any-hover: hover)');
   const originalFrames = [...trigger.querySelectorAll(':scope > img')];
-  letter.style.setProperty('--letter-o-scale', preset.imageScale);
+  letter.style.setProperty('--letter-scale', preset.imageScale);
   const mix = document.createElement('span');
-  mix.className = 'letter-o__mix';
+  mix.className = 'animated-letter__mix';
   mix.hidden = true;
   mix.setAttribute('aria-hidden', 'true');
 
@@ -28,7 +29,7 @@
     return image;
   }
 
-  const pink = addLayer(preset.baseLayer);
+  const bases = preset.baseLayers.map(addLayer);
   const accents = Array.from({ length: preset.regionCount }, (_, region) =>
     Array.from({ length: preset.sourceCount }, (_, frame) => addLayer(
       preset.accentLayerPattern
@@ -53,13 +54,17 @@
     mix.hidden = !mixedReady;
 
     if (mixedReady) {
+      bases.forEach((image, index) => {
+        image.hidden = index !== frameIndex;
+      });
       accents.forEach((variants, region) => variants.forEach((image, source) => {
         image.hidden = source !== sources[region];
       }));
     }
 
-    trigger.setAttribute('aria-label', `${paused ? 'Play' : 'Pause'} O animation`);
+    trigger.setAttribute('aria-label', `${paused ? 'Play' : 'Pause'} ${letterName} animation`);
     letter.dataset.composition = mixedReady ? 'mixed' : 'original';
+    letter.dataset.frame = String(frameIndex + 1);
     letter.dataset.sources = sources.map(source => source + 1).join(',');
     letter.dataset.paused = String(paused);
   }
@@ -130,11 +135,11 @@
   };
   Promise.all([
     Promise.all(originalFrames.map(decode)),
-    Promise.all([pink, ...accents.flat()].map(decode)),
+    Promise.all([...bases, ...accents.flat()].map(decode)),
   ]).then(([loaded, layers]) => {
     frames = loaded.filter(Boolean);
     if (!frames.length) return;
-    mixedReady = preset.composition === 'mixed' && layers.every(Boolean);
+    mixedReady = preset.composition === 'mixed' && bases.length === frames.length && layers.every(Boolean);
     trigger.disabled = frames.length < 2;
     render();
     schedule();

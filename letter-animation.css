@@ -1,10 +1,16 @@
-/* Keep the existing drop cap's exclusion box stable across all four images. */
-.about-intro__mark.letter-o {
+/* Keep each drop cap's exclusion box stable across all four images. */
+.about-intro__mark.animated-letter,
+.talks-intro__mark.animated-letter {
+  position: relative;
   background: none;
-  --letter-o-scale: 1.1;
+  --letter-scale: 1.1;
 }
 
-.letter-o__trigger {
+.talks-intro__mark.animated-letter {
+  width: var(--talks-cap-size);
+}
+
+.animated-letter__trigger {
   position: absolute;
   inset: 0;
   display: block;
@@ -20,7 +26,7 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-.letter-o__trigger img {
+.animated-letter__trigger img {
   display: block;
   position: absolute;
   inset: 0;
@@ -28,17 +34,17 @@
   height: 100%;
   max-width: none;
   object-fit: contain;
-  transform: scale(var(--letter-o-scale));
+  transform: scale(var(--letter-scale));
   pointer-events: none;
   user-select: none;
 }
 
-.letter-o__trigger img[hidden],
-.letter-o__mix[hidden] { display: none; }
+.animated-letter__trigger img[hidden],
+.animated-letter__mix[hidden] { display: none; }
 
-.letter-o__mix { position: absolute; inset: 0; pointer-events: none; }
+.animated-letter__mix { position: absolute; inset: 0; pointer-events: none; }
 
-.letter-o__trigger:focus-visible {
+.animated-letter__trigger:focus-visible {
   outline: 2px solid #171615;
   outline-offset: 4px;
 }
