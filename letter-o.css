@@ -1,0 +1,49 @@
+/* Keep the existing drop cap's exclusion box stable across all four images. */
+.about-intro__mark.letter-o {
+  background: none;
+  --letter-o-scale: 1.1;
+}
+
+.letter-o__trigger {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.letter-o__trigger img {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: contain;
+  transform: scale(var(--letter-o-scale));
+  pointer-events: none;
+  user-select: none;
+}
+
+.letter-o__trigger img[hidden],
+.letter-o__mix[hidden] { display: none; }
+
+.letter-o__mix { position: absolute; inset: 0; pointer-events: none; }
+
+.letter-o__trigger:focus-visible {
+  outline: 2px solid #171615;
+  outline-offset: 4px;
+}
+
+.about-intro__rose {
+  color: #f4a4f2;
+  white-space: nowrap;
+}
