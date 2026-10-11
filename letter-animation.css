@@ -1,6 +1,7 @@
 /* Keep each drop cap's exclusion box stable across all four images. */
 .about-intro__mark.animated-letter,
-.talks-intro__mark.animated-letter {
+.talks-intro__mark.animated-letter,
+.hero__mark.animated-letter {
   position: relative;
   background: none;
   --letter-scale: 1.1;

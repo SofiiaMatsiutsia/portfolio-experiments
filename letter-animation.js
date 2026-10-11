@@ -44,25 +44,29 @@
   let sources = Array.from({ length: preset.regionCount }, (_, region) => region % preset.sourceCount);
   let paused = preset.interaction.respectReducedMotion && reducedMotion.matches;
   let visible = true;
-  let pointerType = '';
+  let hovered = false;
+  let pressedPointerId = null;
+  let keyboardPressed = false;
   let timer;
 
   function render() {
-    originalFrames.forEach(frame => {
-      frame.hidden = mixedReady || frame !== frames[frameIndex];
-    });
-    mix.hidden = !mixedReady;
-
-    if (mixedReady) {
-      bases.forEach((image, index) => {
-        image.hidden = index !== frameIndex;
+    if (frames.length) {
+      originalFrames.forEach(frame => {
+        frame.hidden = mixedReady || frame !== frames[frameIndex];
       });
-      accents.forEach((variants, region) => variants.forEach((image, source) => {
-        image.hidden = source !== sources[region];
-      }));
+      mix.hidden = !mixedReady;
+
+      if (mixedReady) {
+        bases.forEach((image, index) => {
+          image.hidden = index !== frameIndex;
+        });
+        accents.forEach((variants, region) => variants.forEach((image, source) => {
+          image.hidden = source !== sources[region];
+        }));
+      }
     }
 
-    trigger.setAttribute('aria-label', `${paused ? 'Play' : 'Pause'} ${letterName} animation`);
+    trigger.setAttribute('aria-label', `Hold to pause ${letterName} animation`);
     letter.dataset.composition = mixedReady ? 'mixed' : 'original';
     letter.dataset.frame = String(frameIndex + 1);
     letter.dataset.sources = sources.map(source => source + 1).join(',');
@@ -100,28 +104,69 @@
     }, preset.frameDurationMs);
   }
 
-  function setPaused(value) {
-    paused = value;
+  function updatePaused() {
+    paused = (preset.interaction.respectReducedMotion && reducedMotion.matches) ||
+      hovered || pressedPointerId !== null || keyboardPressed;
+    trigger.disabled = frames.length < 2 ||
+      (preset.interaction.respectReducedMotion && reducedMotion.matches);
     render();
     schedule();
   }
 
-  // Each desktop hover toggles playback; touch and keyboard activate by click.
+  // Hover and press pause only for as long as the interaction is active.
   trigger.addEventListener('pointerenter', event => {
-    if (preset.interaction.toggleOnDesktopHover && event.pointerType === 'mouse' && hover.matches) {
-      setPaused(!paused);
+    if (preset.interaction.pauseOnDesktopHover && event.pointerType === 'mouse' && hover.matches) {
+      hovered = true;
+      updatePaused();
     }
   });
-  trigger.addEventListener('pointerdown', event => { pointerType = event.pointerType; });
-  trigger.addEventListener('click', event => {
-    if (preset.interaction.toggleOnTouchOrKeyboard &&
-        (event.detail === 0 || (event.pointerType || pointerType) !== 'mouse' || !hover.matches)) {
-      setPaused(!paused);
+  trigger.addEventListener('pointerleave', event => {
+    if (event.pointerType === 'mouse' && hovered) {
+      hovered = false;
+      updatePaused();
     }
   });
-  reducedMotion.addEventListener('change', event => {
-    if (preset.interaction.respectReducedMotion) setPaused(event.matches);
+  trigger.addEventListener('pointerdown', event => {
+    if (preset.interaction.pauseOnPress && event.pointerType !== 'mouse') {
+      pressedPointerId = event.pointerId;
+      updatePaused();
+    }
   });
+  const releasePointer = event => {
+    if (event.pointerId === pressedPointerId) {
+      pressedPointerId = null;
+      updatePaused();
+    }
+  };
+  window.addEventListener('pointerup', releasePointer);
+  window.addEventListener('pointercancel', releasePointer);
+
+  const isHoldKey = event => event.key === ' ' || event.key === 'Enter';
+  trigger.addEventListener('keydown', event => {
+    if (!preset.interaction.pauseOnPress || !isHoldKey(event)) return;
+    event.preventDefault();
+    if (!keyboardPressed) {
+      keyboardPressed = true;
+      updatePaused();
+    }
+  });
+  trigger.addEventListener('keyup', event => {
+    if (!isHoldKey(event)) return;
+    event.preventDefault();
+    keyboardPressed = false;
+    updatePaused();
+  });
+  trigger.addEventListener('blur', () => {
+    keyboardPressed = false;
+    updatePaused();
+  });
+  window.addEventListener('blur', () => {
+    hovered = false;
+    pressedPointerId = null;
+    keyboardPressed = false;
+    updatePaused();
+  });
+  reducedMotion.addEventListener('change', updatePaused);
   document.addEventListener('visibilitychange', schedule);
   if (preset.interaction.pauseWhenOffscreen && 'IntersectionObserver' in window) {
     new IntersectionObserver(entries => {
@@ -140,8 +185,6 @@
     frames = loaded.filter(Boolean);
     if (!frames.length) return;
     mixedReady = preset.composition === 'mixed' && bases.length === frames.length && layers.every(Boolean);
-    trigger.disabled = frames.length < 2;
-    render();
-    schedule();
+    updatePaused();
   });
 })();

@@ -2739,6 +2739,155 @@ body.home {
   }
 }
 
+/* Lettering-led homepage introduction. */
+.home .hero {
+  top: clamp(112px, 13.5dvh, 144px);
+  gap: 22px;
+}
+
+.home .hero__heading {
+  display: flow-root;
+  font-family: var(--font-book);
+  font-size: 26px;
+  line-height: 1.4;
+  text-transform: none;
+  text-wrap: initial;
+}
+
+.home .hero__mark {
+  float: left;
+  width: 140px;
+  height: 110px;
+  margin: -10px 22px -2px -7px;
+}
+
+.home .hero__opening {
+  text-transform: uppercase;
+}
+
+.home .hero__community {
+  color: #00a5df;
+  text-decoration: none;
+  background: url("assets/icons/ai-community-underline.svg") left bottom / 100% 0.15em no-repeat;
+  padding-bottom: 0.045em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.home .hero__community:hover,
+.home .hero__community:focus-visible {
+  color: #007eab;
+}
+
+.home .hero__community:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+@media (max-width: 1024px) {
+  .home .home-main {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .home .hero {
+    position: relative;
+    top: auto;
+    left: auto;
+    flex: 0 0 auto;
+    width: auto;
+    margin: 94px var(--home-edge) 0;
+    gap: 20px;
+  }
+
+  .home .hero__heading {
+    font-size: 26px;
+  }
+
+  .home .hero__mark {
+    width: 123px;
+    height: 123px;
+    margin: -8px 7px -2px -7px;
+  }
+
+  .home .actions {
+    position: relative;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    flex: 0 0 auto;
+    width: auto;
+    margin: 32px var(--home-edge) 0;
+  }
+
+  .home .showcase {
+    position: relative;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    flex: 1 0 420px;
+    width: 100%;
+    margin-top: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .home .header {
+    grid-template-columns: 1fr;
+  }
+
+  .home .logo {
+    grid-column: 1;
+    justify-self: center;
+  }
+
+  .home .sound-toggle {
+    display: none;
+  }
+
+  .home .hero {
+    margin-top: 78px;
+    gap: 16px;
+  }
+
+  .home .hero__heading {
+    font-size: 20px;
+    line-height: 1.4;
+  }
+
+  .home .hero__mark {
+    width: 94px;
+    height: 94px;
+    margin: -7px 5px -2px -5px;
+  }
+
+  .home .actions {
+    margin-top: 30px;
+  }
+}
+
+@media (max-width: 570px) {
+  .home .hero__mark {
+    --home-cap-size: clamp(72px, calc(10.5vw + 34px), 94px);
+    width: var(--home-cap-size);
+    height: var(--home-cap-size);
+  }
+}
+
+@media (max-width: 340px) {
+  .home .hero__mark {
+    /* Keep the opening words beside the cap on the narrowest phones. */
+    --home-cap-size: clamp(54px, calc(100vw - 266px), 72px);
+    width: var(--home-cap-size);
+    height: var(--home-cap-size);
+  }
+}
+
 /* Shared desktop header across home, work, and case-study pages */
 @media (min-width: 1025px) {
   body.work .header,
