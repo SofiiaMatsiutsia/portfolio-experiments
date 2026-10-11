@@ -20,6 +20,55 @@ function initLocalFileLinks() {
 
 initLocalFileLinks();
 
+let siteLenis = null;
+
+function initSiteScroll() {
+  const homeMain = document.querySelector(".home .home-main");
+  const homeContent = homeMain?.querySelector(".home-main__content");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  if (homeMain) {
+    document.querySelectorAll('a[href="#top"]').forEach((link) => {
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        if (siteLenis) siteLenis.scrollTo(0, { force: true });
+        else homeMain.scrollTo({ top: 0, behavior: reducedMotion.matches ? "auto" : "smooth" });
+      });
+    });
+  }
+
+  if (typeof Lenis !== "function") return;
+
+  const options = {
+    autoRaf: true,
+    lerp: 0.16,
+    smoothWheel: true,
+    syncTouch: false,
+    respectReducedMotion: true,
+    stopInertiaOnNavigate: true,
+  };
+
+  if (homeMain && homeContent) {
+    const mobileLayout = window.matchMedia("(max-width: 1024px)");
+    const syncHomeScroll = () => {
+      if (siteLenis) {
+        siteLenis.destroy();
+        siteLenis = null;
+      }
+      if (!mobileLayout.matches) return;
+      siteLenis = new Lenis({ ...options, wrapper: homeMain, content: homeContent });
+      if (!document.getElementById("menu-overlay")?.hidden) siteLenis.stop();
+    };
+    syncHomeScroll();
+    mobileLayout.addEventListener("change", syncHomeScroll);
+    return;
+  }
+
+  siteLenis = new Lenis({ ...options, anchors: true });
+}
+
+initSiteScroll();
+
 function initMediaLoading(root = document) {
   const frames = root.querySelectorAll(
     ".showcase__item, .work-item__media, .case__hero, .case-figure, .case-gallery__slide",
@@ -536,7 +585,6 @@ function initCaseToc() {
   let displayedIndex = 0;
   let titlePending = null;
   let openedByPointer = false;
-  let scrollAnim = 0;
 
   const listeners = new Set();
   const store = {
@@ -554,10 +602,6 @@ function initCaseToc() {
     },
   };
 
-  function easeOutCubic(t) {
-    return 1 - Math.pow(1 - t, 3);
-  }
-
   function headerOf(el) {
     if (el.matches("h1, h2, h3, h4")) return el;
     return el.querySelector(".case-section__title, .case-step__title, h2, h3") || el;
@@ -570,33 +614,11 @@ function initCaseToc() {
   function scrollToSection(el) {
     const header = headerOf(el);
     const target = Math.max(0, window.scrollY + header.getBoundingClientRect().top - SCROLL_OFFSET);
-    if (scrollAnim) cancelAnimationFrame(scrollAnim);
-    if (reducedMotion.matches) {
-      window.scrollTo(0, target);
+    if (siteLenis) {
+      siteLenis.scrollTo(header, { offset: -SCROLL_OFFSET });
       return;
     }
-
-    const html = document.documentElement;
-    const previousBehavior = html.style.scrollBehavior;
-    html.style.scrollBehavior = "auto";
-
-    const start = window.scrollY;
-    const dist = target - start;
-    const duration = Math.min(900, Math.max(450, Math.abs(dist) * 0.55));
-    let startTime = 0;
-
-    const step = (now) => {
-      if (!startTime) startTime = now;
-      const t = Math.min(1, (now - startTime) / duration);
-      window.scrollTo(0, start + dist * easeOutCubic(t));
-      if (t < 1) {
-        scrollAnim = requestAnimationFrame(step);
-      } else {
-        scrollAnim = 0;
-        html.style.scrollBehavior = previousBehavior;
-      }
-    };
-    scrollAnim = requestAnimationFrame(step);
+    window.scrollTo({ top: target, behavior: reducedMotion.matches ? "auto" : "smooth" });
   }
 
   function selectIndex(index) {
@@ -978,6 +1000,7 @@ function openMenu() {
   menuOverlay.classList.add("is-open", "is-animating");
   menuOpenBtn.setAttribute("aria-expanded", "true");
   lockPageScroll(true);
+  siteLenis?.stop();
   playRingAnimations(true).then(() => {
     if (token !== menuAnimToken) return;
     menuOverlay.classList.remove("is-animating");
@@ -999,6 +1022,7 @@ function closeMenu() {
     menuOverlay.hidden = true;
     menuOverlay.classList.remove("is-animating");
     lockPageScroll(false);
+    siteLenis?.start();
   });
 }
 
@@ -1237,9 +1261,9 @@ function isWorkListHref(href) {
   if (!href) return false;
   try {
     const url = new URL(href, window.location.href);
-    return /(?:^|\/)work\.html$/i.test(url.pathname);
+    return url.origin === window.location.origin && /(?:^|\/)work(?:\.html)?\/?$/i.test(url.pathname);
   } catch {
-    return /(?:^|\/)work\.html(?:[?#]|$)/i.test(href);
+    return false;
   }
 }
 
@@ -1247,9 +1271,9 @@ function isProjectHref(href) {
   if (!href) return false;
   try {
     const url = new URL(href, window.location.href);
-    return /\/work\/[^/]+\.html$/i.test(url.pathname);
+    return url.origin === window.location.origin && /\/work\/[^/]+(?:\.html)?\/?$/i.test(url.pathname);
   } catch {
-    return /work\/[^/]+\.html/i.test(href);
+    return false;
   }
 }
 
@@ -1401,7 +1425,8 @@ function initWorkScrollRestore() {
   const restore = () => {
     if (!shouldRestore) return;
     withInstantScroll(() => {
-      window.scrollTo(0, targetY);
+      if (siteLenis) siteLenis.scrollTo(targetY, { immediate: true, force: true });
+      else window.scrollTo(0, targetY);
     });
   };
 

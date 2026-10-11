@@ -1,8 +1,9 @@
 {
   "name": "portfolio-experiments",
   "private": true,
-  "comment": "No build step. cuelume is installed so its ESM dist can be vendored into assets/vendor/cuelume/, which is what the pages actually load.",
+  "comment": "No build step. Pages load locally vendored cuelume and Lenis files from assets/vendor/.",
   "dependencies": {
-    "cuelume": "^0.2.2"
+    "cuelume": "^0.2.2",
+    "lenis": "1.3.26"
   }
 }

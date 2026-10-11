@@ -1130,13 +1130,6 @@ body.talks {
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  html:has(body.case):not(.is-restoring-scroll),
-  html:has(body.work):not(.is-restoring-scroll) {
-    scroll-behavior: smooth;
-  }
-}
-
 .case__layout {
   display: grid;
   grid-template-columns: var(--case-rail) minmax(0, var(--case-main));
@@ -2390,6 +2383,10 @@ body.home {
   overflow: hidden;
 }
 
+.home .home-main__content {
+  display: contents;
+}
+
 .home .hero {
   position: absolute;
   z-index: 2;
@@ -2791,6 +2788,13 @@ body.home {
     height: 100%;
     overflow-x: hidden;
     overflow-y: auto;
+  }
+
+  .home .home-main__content {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    width: 100%;
   }
 
   .home .hero {
