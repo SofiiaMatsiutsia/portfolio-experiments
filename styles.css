@@ -2745,23 +2745,46 @@ body.home {
 /* Lettering-led homepage introduction. */
 .home .hero {
   top: clamp(112px, 13.5dvh, 144px);
-  gap: 22px;
+  font-family: var(--font-book);
+  font-size: 26px;
+  line-height: 1.4;
+  gap: 0.5em;
 }
 
 .home .hero__heading {
   display: flow-root;
   font-family: var(--font-book);
-  font-size: 26px;
-  line-height: 1.4;
+  font-size: inherit;
+  line-height: inherit;
   text-transform: none;
   text-wrap: initial;
 }
 
 .home .hero__mark {
+  --cap-lines: 3;
+  /* Folio Book fallback; hero-drop-cap.js refines these after fonts load. */
+  --cap-height: 0.713em;
+  --cap-top: 0.354em;
+  --cap-leading: 1.4em;
+  --cap-art-height: calc((var(--cap-lines) - 1) * var(--cap-leading) + var(--cap-height));
   float: left;
-  width: 140px;
-  height: 110px;
-  margin: -10px 22px -2px -7px;
+  width: calc(var(--cap-art-height) * 1.055107);
+  /* The float controls wrapping; the artwork ends at the last baseline.
+     Half a pixel prevents subpixel rounding from catching a fourth line. */
+  height: calc(var(--cap-lines) * var(--cap-leading) - 0.5px);
+  margin: 0 0.5em 0 0;
+}
+
+.home .hero__heading[data-cap-lines="2"] .hero__mark {
+  --cap-lines: 2;
+}
+
+.home .hero__heading--measure {
+  position: fixed;
+  top: 0;
+  left: -10000px;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .home .hero__opening {
@@ -2810,17 +2833,6 @@ body.home {
     flex: 0 0 auto;
     width: auto;
     margin: 94px var(--home-edge) 0;
-    gap: 20px;
-  }
-
-  .home .hero__heading {
-    font-size: 26px;
-  }
-
-  .home .hero__mark {
-    width: 123px;
-    height: 123px;
-    margin: -8px 7px -2px -7px;
   }
 
   .home .actions {
@@ -2865,18 +2877,7 @@ body.home {
 
   .home .hero {
     margin-top: 78px;
-    gap: 16px;
-  }
-
-  .home .hero__heading {
     font-size: 20px;
-    line-height: 1.4;
-  }
-
-  .home .hero__mark {
-    width: 94px;
-    height: 94px;
-    margin: -7px 5px -2px -5px;
   }
 
   .home .actions {
@@ -2884,37 +2885,10 @@ body.home {
   }
 }
 
-@media (max-width: 570px) {
-  .home .hero__mark {
-    --home-cap-size: clamp(72px, calc(10.5vw + 34px), 94px);
-    width: var(--home-cap-size);
-    height: var(--home-cap-size);
-  }
-}
-
-@media (max-width: 340px) {
-  .home .hero__mark {
-    /* Keep the opening words beside the cap on the narrowest phones. */
-    --home-cap-size: clamp(54px, calc(100vw - 266px), 72px);
-    width: var(--home-cap-size);
-    height: var(--home-cap-size);
-  }
-}
-
 @media (max-width: 1024px) and (max-height: 500px) and (orientation: landscape) {
   .home .hero {
     margin-top: 62px;
-    gap: 8px;
-  }
-
-  .home .hero__heading {
     font-size: clamp(16px, 2.2vw, 20px);
-  }
-
-  .home .hero__mark {
-    width: 76px;
-    height: 76px;
-    margin: -5px 7px -2px -5px;
   }
 
   .home .actions {
