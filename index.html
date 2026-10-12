@@ -5,11 +5,105 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Sofiia Matsiutsia — Designs for products & services</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+<style>
+html[data-home-intro="pending"]::before { content: ""; position: fixed; inset: 0; z-index: 10000; background: var(--home-intro-bg, #00cffe); }
+.home-intro { display: none; }
+</style>
+<script src="homepage-intro-settings.js?v=2"></script>
+<script>
+(() => {
+  const key = "portfolio:homepage-intro:v1";
+  const root = document.documentElement;
+  let watchdog;
+  const state = window.homepageIntro = {
+    startedAt: 0, active: false, cleanups: [], id: 0,
+    armWatchdog(ms) {
+      clearTimeout(watchdog);
+      if (ms !== null) watchdog = setTimeout(state.finish, ms);
+    },
+    start(settings = window.HomepageIntroSettings?.read()) {
+      state.finish();
+      state.settings = settings;
+      state.startedAt = performance.now();
+      state.active = true;
+      state.id += 1;
+      root.style.setProperty("--home-intro-bg", settings?.background || "#00cffe");
+      root.dataset.homeIntro = "pending";
+      const rate = settings?.rate || 1;
+      const lead = (settings?.delayMs || 0) + (settings?.writeMs || 1500) + (settings?.holdMs || 0);
+      const tail = Math.max(settings?.revealMs || 650, (settings?.fadeDelayMs || 0) + (settings?.fadeMs || 0));
+      state.armWatchdog(Math.max(lead / rate, settings?.readyLimitMs ?? 6000) + tail / rate + 600);
+      state.onStart?.(settings);
+    },
+    finish() {
+      if (!state.active) return;
+      state.active = false;
+      clearTimeout(watchdog);
+      state.cleanups.splice(0).forEach((cleanup) => { try { cleanup(); } catch {} });
+      root.removeAttribute("data-home-intro");
+      document.getElementById("homepage-intro")?.remove();
+      try { sessionStorage.setItem(key, "complete"); } catch {}
+      window.dispatchEvent(new Event("homepageintrochange"));
+    },
+  };
+  window.addEventListener("pagehide", state.finish);
+  window.addEventListener("pageshow", (event) => { if (event.persisted) state.finish(); });
+  document.addEventListener("keydown", (event) => { if (event.key === "Escape") state.finish(); });
+  const settings = window.HomepageIntroSettings?.read();
+  if (settings?.replayPolicy === "off" || performance.getEntriesByType("navigation")[0]?.type === "back_forward") return;
+  try { if (settings?.replayPolicy !== "always" && sessionStorage.getItem(key)) return; } catch {}
+  state.start(settings);
+})();
+</script>
+<link rel="stylesheet" href="homepage-intro.css?v=2" />
+<script src="homepage-intro.js?v=2" defer></script>
 <link rel="stylesheet" href="styles.css?v=123" />
 <link rel="stylesheet" href="assets/vendor/lenis/lenis.css?v=1.3.26" />
 <link rel="stylesheet" href="letter-animation.css?v=4" />
 </head>
 <body class="home">
+<div class="home-intro" id="homepage-intro" aria-hidden="true">
+  <svg class="home-intro__reveal" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <defs>
+      <mask id="intro-opening" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" style="mask-type: luminance">
+        <rect class="home-intro__mask-base" fill="white" />
+        <g class="home-intro__cutout"><circle fill="black" /></g>
+      </mask>
+    </defs>
+    <rect class="home-intro__curtain" fill="#00CFFE" mask="url(#intro-opening)" />
+    <g class="home-intro__bands" fill="none">
+      <circle stroke="#E8A7ED" />
+      <circle stroke="#86CD8B" />
+      <circle stroke="#F6AA81" />
+    </g>
+  </svg>
+<svg class="home-intro__signature" width="531" height="68" viewBox="0 0 531 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path id="intro-stroke-0" pathLength="100" d="M132.304 10.9688C129.999 8.49159 123.732 3.60888 118.491 2.10229C117.524 1.82441 117.009 2.17024 116.662 2.45532C115.982 3.01337 115.228 5.45109 113.663 11.3961C112.608 15.4084 111.712 21.608 111.162 27.4804C110.613 33.3528 110.613 38.7525 110.883 43.5064C111.153 48.2604 111.693 52.205 112.098 55.3184C112.502 58.4318 112.754 60.5945 113.114 63.8029" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="intro-stroke-1" pathLength="100" d="M97.2637 14.9241C97.2637 15.172 97.8017 16.7615 99.0535 19.5754C100.64 22.126 103.259 24.7724 107.885 28.0016C110.791 29.8191 114.833 31.9996 119.772 34.5661" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="intro-stroke-2" pathLength="100" d="M133.795 34.1608C133.853 34.6877 133.912 35.2146 134.125 38.6725C134.337 42.1304 134.703 48.5033 134.908 52.3199C135.113 56.1365 135.146 57.2037 135.279 58.3032" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="intro-stroke-3" pathLength="100" d="M134.215 21.6133V21.5134" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="intro-stroke-4" pathLength="100" d="M146.974 35.5491C146.974 35.6135 146.974 35.678 147.015 35.9622C147.057 36.2463 147.14 36.7482 147.342 40.4206C147.543 44.0929 147.86 50.9205 148.186 57.955" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="intro-stroke-5" pathLength="100" d="M150.92 19.7249V19.625" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="intro-stroke-6" pathLength="100" d="M182.66 37.1442C181.702 35.6271 179.768 33.5642 175.586 30.7989C171.272 27.947 165.897 29.332 164.872 29.6646C162.529 30.4252 162.177 36.2084 162.038 46.2696C161.947 52.8497 165.662 54.8134 167.837 56.3754C169.34 57.4546 171.107 57.6156 172.258 57.4959C177.023 57 178.756 41.7728 179.339 38.1496C179.674 38.915 181.682 43.1821 184.57 48.8937C185.68 51.0247 186.067 51.5978 187.063 52.9731" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="intro-stroke-7" pathLength="100" d="M23.2452 22.6601C21.7398 22.3958 19.3913 22.2627 16.1093 22.8695C10.4883 23.9089 7.2133 28.1033 5.43028 31.7675C4.54715 33.5824 5.24328 35.7418 6.30744 37.6766C9.45206 43.394 16.3272 43.3449 22.5436 44.2707C26.7264 44.8936 33.0636 45.3299 37.1041 45.7952C42.736 46.4439 45.1329 47.3557 46.5638 48.1026C47.7002 48.6958 48.2966 49.8818 48.6486 51.3373C49.3526 54.2481 47.148 57.5199 44.9796 60.2996C41.6088 62.8342 35.6114 64.1735 25.1624 65.1459C18.8681 65.5497 10.5599 65.7715 2 66" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="intro-stroke-8" pathLength="100" d="M64.0091 35.9273C63.528 36.4196 61.8153 40.0577 60.7009 44.7964C58.5908 53.7688 61.4195 57.7651 62.6924 60.2408C64.2992 63.3659 68.6904 64.5201 73.3857 64.8183C82.0724 65.3699 86.9248 61.4433 89.2115 59.4419C93.1709 55.9766 94.4847 47.2467 94.3567 43.7172C94.223 40.0303 91.6754 35.942 90.2452 34.1727C87.8253 31.179 80.9715 31.9508 78.3642 31.7634C74.2961 31.8896 70.9951 32.795 68.062 33.5733C67.3551 33.7882 66.6386 34.0794 65.7051 34.7702" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="intro-stroke-9" pathLength="100" d="M216.131 65.0729C216.131 64.9963 216.131 64.9197 214.353 56.72C212.576 48.5203 209.021 32.1997 207.189 23.5036C205.358 14.8075 205.358 14.2304 205.339 13.4317C205.32 12.633 205.283 11.6301 208.539 15.1117C211.796 18.5933 218.348 26.5896 222.705 31.56C227.062 36.5303 229.026 38.2323 230.191 38.5774C231.763 39.0429 232.276 29.5055 232.826 17.7742C233.036 13.2988 233.293 11.8336 237.423 17.7176C241.554 23.6016 249.598 36.8818 253.901 43.9379C258.204 50.9941 258.522 51.4238 258.85 51.8665" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="intro-stroke-10" pathLength="100" d="M295.004 28.539C294.389 27.1 291.973 22.9121 289.669 20.6743C288.475 19.5153 286.828 19.1953 285.133 19.341C280.784 19.7147 279.091 22.4114 277.27 24.4413C276.086 25.7607 274.798 29.4575 273.082 35.0406C269.743 45.9011 272.862 55.1865 274.49 58.9134C274.945 59.9564 281.251 52.9606 288.952 43.3427C293.344 37.859 293.503 33.2573 293.712 31.2804C293.796 30.4212 293.834 29.8545 294.363 33.1106C294.892 36.3668 295.91 43.4628 297.308 51.9168" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="intro-stroke-11" pathLength="100" d="M310.952 7.45984C310.952 7.53514 310.952 7.61043 311.722 14.7511C312.492 21.8918 314.031 36.0957 315.062 44.0862C316.093 52.0768 316.568 53.4237 317.302 53.9345C318.036 54.4453 319.014 54.0792 322.162 50.6081" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="intro-stroke-12" pathLength="100" d="M307.877 22.8191C307.877 22.7425 311.122 20.8433 316.338 17.8185C318.309 16.6534 318.906 16.2393 319.44 15.9059C319.973 15.5725 320.425 15.3323 320.89 15.0848" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="intro-stroke-13" pathLength="100" d="M352.813 17.7322C348.901 17.7322 339.071 18.5669 331.864 20.3637C330.145 20.7924 329.309 21.8458 328.758 22.8926C328.032 24.2751 329.588 26.3737 331.668 28.4051C339.874 36.4194 353.266 38.2586 353.978 39.2273C354.895 40.477 355.279 42.426 355.367 44.3688C352.156 48.7241 346.253 53.3175 344.089 54.6111C343.098 55.1608 342.323 55.4938 341.41 55.951" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="intro-stroke-14" pathLength="100" d="M374.273 17.9598L374.16 17.7288" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="intro-stroke-15" pathLength="100" d="M373.683 30.193C373.645 30.2683 373.607 30.3436 373.299 32.3807C372.991 34.4177 372.413 38.4143 372.115 42.795C371.818 47.1757 371.818 51.8194 372.05 58.0752" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="intro-stroke-16" pathLength="100" d="M388.829 31.6072C388.829 35.0075 389.75 43.0801 391.641 51.4127C392.446 54.9639 394.438 56.6547 395.496 57.362C397.432 58.6567 399.559 53.4747 401.594 46.8538C403.18 41.6903 402.943 36.0096 403.903 34.6181C409.29 48.2577 411.3 54.5671 411.853 55.6879C412.183 56.3296 412.615 57.1196 413.06 58.1617" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="intro-stroke-17" pathLength="100" d="M415.19 18.0008C415.42 18.0008 420.641 16.3579 428.78 13.7626C431.818 12.8101 432.637 12.5979 433.538 12.3038C434.439 12.0098 435.396 11.6405 437.287 11.0278" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="intro-stroke-18" pathLength="100" d="M423.15 2.66626C423.15 5.0407 423.417 13.1282 424.311 25.9366C424.727 31.8992 425.918 36.6964 427.184 41.1022C431.268 55.3141 434.346 58.7182 434.896 59.3144C436.442 58.406 439.026 55.3539 442.035 51.654C443.285 50.1811 443.975 49.5301 444.685 48.8593" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="intro-stroke-19" pathLength="100" d="M464.941 23.384C463.904 23.4321 461.379 23.8567 459.309 25.0578C458.21 25.6948 457.935 27.2103 457.92 28.6673C457.878 32.8325 466.19 37.9776 469.835 41.4787C471.96 43.52 472.303 46.3167 472.29 47.7467C471.06 50.8482 466.793 55.3987 462.398 57.3568C460.737 57.6246 458.056 57.9835 454.721 58.3534" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="intro-stroke-20" pathLength="100" d="M488.846 24.759C488.76 24.9414 488.675 25.1238 488.509 25.6952C488.344 26.2666 488.101 27.2214 487.791 32.8789C487.481 38.5365 487.111 48.8677 486.729 59.512" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="intro-stroke-21" pathLength="100" d="M489.958 10.2098L489.729 11.4687" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="intro-stroke-22" pathLength="100" d="M515.737 31.4124C515.125 30.7786 512.384 27.9198 509.539 27.1857C507.966 26.7797 505.822 29.6552 503.663 32.8499C500.377 37.7134 502.065 44.8083 503.836 49.534C505.445 53.8282 510.887 56.6146 513.287 57.1474C515.22 57.5766 515.268 49.8471 515.189 42.2871C515.169 40.3292 514.59 38.1414 514.738 37.3733C517.523 39.8034 521.567 45.7518 524.389 50.2733C525.722 52.3243 526.854 53.8809 528.137 55.7128" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
+</div>
 <div class="page home-page" id="top">
 
   <header class="header">
@@ -94,12 +188,15 @@
         <div class="showcase__group">
           <div class="showcase__row showcase__row--single">
             <a href="work/voyage-monitor" class="showcase__item showcase__item--four-three" aria-label="View Voyage Monitor project">
-              <img src="assets/images/showcase/90poe-animation.gif" alt="Voyage Monitor dashboard animation" decoding="async" width="1200" height="900" />
+              <video data-home-preview autoplay loop muted playsinline preload="auto" poster="assets/images/showcase/90poe-poster.webp" width="1200" height="900" aria-label="Voyage Monitor dashboard animation">
+                <source src="assets/images/showcase/90poe-preview.mp4" type="video/mp4" />
+              </video>
+              <img class="home-preview-still" src="assets/images/showcase/90poe-poster.webp" alt="Voyage Monitor dashboard" width="1200" height="900" hidden />
             </a>
           </div>
           <div class="showcase__row showcase__row--single">
             <a href="work/internal-panel" class="showcase__item showcase__item--ha" aria-label="View Internal Panel project">
-              <img src="assets/images/showcase/ha-2.png" alt="Housing Anywhere internal settlements panel" decoding="async" width="6912" height="4468" />
+              <img src="assets/images/showcase/ha-2-preview.webp" alt="Housing Anywhere internal settlements panel" decoding="async" width="6912" height="4468" />
             </a>
           </div>
           <div class="showcase__row showcase__row--single">
@@ -173,7 +270,7 @@
 </div>
 
 <script src="assets/vendor/lenis/lenis.min.js?v=1.3.26"></script>
-<script src="script.js?v=60"></script>
+<script src="script.js?v=61"></script>
 <script type="module" src="sound.js?v=1"></script>
 <script src="letter-animation-presets.js?v=6"></script>
 <script src="letter-animation.js?v=2"></script>

@@ -83,6 +83,10 @@ function initMediaLoading(root = document) {
     };
 
     if (media.tagName === "VIDEO") {
+      if (media.matches("[data-home-preview]") && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        media.pause();
+        media.closest(".showcase__item")?.classList.add("home-preview--static");
+      }
       const poster = media.getAttribute("poster");
       if (media.readyState >= 2) {
         finish();
@@ -98,7 +102,7 @@ function initMediaLoading(root = document) {
         media.addEventListener("loadeddata", stopLimit, { once: true });
         media.addEventListener("canplay", stopLimit, { once: true });
         media.addEventListener("error", stopLimit, { once: true });
-        const playback = media.play?.();
+        const playback = media.closest(".home-preview--static") ? null : media.play?.();
         if (playback?.catch) playback.catch(() => {});
         if (media.readyState >= 2) finish();
       };
@@ -299,7 +303,7 @@ function initShowcase() {
   const animate = (time) => {
     const elapsed = Math.min(50, time - previousTime);
     previousTime = time;
-    const frozen = document.hidden;
+    const frozen = document.hidden || document.documentElement.hasAttribute("data-home-intro");
     if (dragging || frozen) {
       /* Pointer tracking writes the transform itself. */
     } else if (notch) {
