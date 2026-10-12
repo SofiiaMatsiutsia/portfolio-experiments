@@ -24,17 +24,16 @@ let siteLenis = null;
 
 function initSiteScroll() {
   const homeMain = document.querySelector(".home .home-main");
-  const homeContent = homeMain?.querySelector(".home-main__content");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   if (homeMain) {
     document.querySelectorAll('a[href="#top"]').forEach((link) => {
       link.addEventListener("click", (event) => {
         event.preventDefault();
-        if (siteLenis) siteLenis.scrollTo(0, { force: true });
-        else homeMain.scrollTo({ top: 0, behavior: reducedMotion.matches ? "auto" : "smooth" });
+        homeMain.scrollTo({ top: 0, behavior: reducedMotion.matches ? "auto" : "smooth" });
       });
     });
+    return;
   }
 
   if (typeof Lenis !== "function") return;
@@ -47,22 +46,6 @@ function initSiteScroll() {
     respectReducedMotion: true,
     stopInertiaOnNavigate: true,
   };
-
-  if (homeMain && homeContent) {
-    const mobileLayout = window.matchMedia("(max-width: 1024px)");
-    const syncHomeScroll = () => {
-      if (siteLenis) {
-        siteLenis.destroy();
-        siteLenis = null;
-      }
-      if (!mobileLayout.matches) return;
-      siteLenis = new Lenis({ ...options, wrapper: homeMain, content: homeContent });
-      if (!document.getElementById("menu-overlay")?.hidden) siteLenis.stop();
-    };
-    syncHomeScroll();
-    mobileLayout.addEventListener("change", syncHomeScroll);
-    return;
-  }
 
   siteLenis = new Lenis({ ...options, anchors: true });
 }

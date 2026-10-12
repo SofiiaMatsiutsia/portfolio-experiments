@@ -17,7 +17,7 @@ window.PortfolioAnimationPresets = Object.freeze({
     baseLayers: ['l_1-base.svg', 'l_2-base.svg', 'l_3-base.svg', 'l_4-base.svg'],
     accentLayerPattern: 'l_{frame}-accent-{region}.svg',
     interaction: Object.freeze({
-      pauseOnDesktopHover: true,
+      pauseOnDesktopHover: false,
       pauseOnPress: true,
       pauseWhenOffscreen: true,
       pauseWhenDocumentHidden: true,
@@ -35,7 +35,7 @@ window.PortfolioAnimationPresets = Object.freeze({
     baseLayers: ['o-pink.svg', 'o_2-pink.svg', 'o_3-pink.svg', 'o_4-pink.svg'],
     accentLayerPattern: 'o_{frame}-accent-{region}.svg',
     interaction: Object.freeze({
-      pauseOnDesktopHover: true,
+      pauseOnDesktopHover: false,
       pauseOnPress: true,
       pauseWhenOffscreen: true,
       pauseWhenDocumentHidden: true,
@@ -53,7 +53,7 @@ window.PortfolioAnimationPresets = Object.freeze({
     baseLayers: ['h_1-base.svg', 'h_2-base.svg', 'h_3-base.svg', 'h_4-base.svg'],
     accentLayerPattern: 'h_{frame}-accent-{region}.svg',
     interaction: Object.freeze({
-      pauseOnDesktopHover: true,
+      pauseOnDesktopHover: false,
       pauseOnPress: true,
       pauseWhenOffscreen: true,
       pauseWhenDocumentHidden: true,

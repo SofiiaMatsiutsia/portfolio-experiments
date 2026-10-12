@@ -63,7 +63,7 @@ export class ImageAccordion {
     /* The page uses a deliberately near-square 1px corner with
        a 2px image gap, matching the supplied About treatment. */
     root.style.setProperty("--acc-gap", `${this.gap}px`);
-    root.style.setProperty("--acc-radius", "1px");
+    root.style.setProperty("--acc-radius", "var(--radius-image)");
 
     this.cells.forEach((cell, index) => {
       cell.tabIndex = 0;

@@ -52,6 +52,7 @@
   top: var(--cap-top);
   bottom: auto;
   height: var(--cap-art-height);
+  min-width: 0;
   min-height: 0;
 }
 
@@ -59,6 +60,7 @@
   content: "";
   position: absolute;
   inset: 0;
+  min-width: 44px;
   min-height: 44px;
 }
 
