@@ -45,6 +45,32 @@
 
 .animated-letter__mix { position: absolute; inset: 0; pointer-events: none; }
 
+/* All L layers share this tight, stable envelope (union of their SVG bounds).
+   Crop the transparent canvas in CSS without changing the source artwork. */
+.home .hero__mark .animated-letter__trigger {
+  font: inherit;
+  top: var(--cap-top);
+  bottom: auto;
+  height: var(--cap-art-height);
+  min-height: 0;
+}
+
+.home .hero__mark .animated-letter__trigger::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  min-height: 44px;
+}
+
+.home .hero__mark .animated-letter__trigger img {
+  inset: auto;
+  left: -4.554831%;
+  top: -6.986423%;
+  width: 107.62773%;
+  height: 113.558877%;
+  transform: none;
+}
+
 .animated-letter__trigger:focus-visible {
   outline: 2px solid #171615;
   outline-offset: 4px;
