@@ -160,14 +160,16 @@
     keyboardPressed = false;
     updatePaused();
   });
-  window.addEventListener('blur', () => {
+  function clearTransientPause() {
     hovered = false;
     pressedPointerId = null;
     keyboardPressed = false;
     updatePaused();
-  });
+  }
+  window.addEventListener('blur', clearTransientPause);
   reducedMotion.addEventListener('change', updatePaused);
   document.addEventListener('visibilitychange', schedule);
+  window.addEventListener('pageshow', clearTransientPause);
   if (preset.interaction.pauseWhenOffscreen && 'IntersectionObserver' in window) {
     new IntersectionObserver(entries => {
       visible = entries[0].isIntersecting;

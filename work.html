@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Work — Sofiia Matsiutsia</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-<link rel="stylesheet" href="styles.css?v=90" />
+<link rel="preload" href="assets/fonts/FolioBkBT-Book.ttf" as="font" type="font/ttf" crossorigin />
+<link rel="stylesheet" href="styles.css?v=130" />
 <link rel="stylesheet" href="assets/vendor/lenis/lenis.css?v=1.3.26" />
 <script>
   try { history.scrollRestoration = "manual"; } catch (e) {}
@@ -21,6 +22,7 @@
 </script>
 </head>
 <body class="work">
+  <a class="skip-link" href="#main-content">Skip to content</a>
 
   <header class="header">
     <a href="./" class="header__back" aria-label="Back to home">
@@ -42,7 +44,7 @@
           <img class="nav__mark-img nav__mark-img--selected" src="assets/icons/nav-work-selected.svg" alt="" width="82" height="29" />
         </span>
       </a>
-      <a class="nav__link nav__link--writings" data-cursor="soon">
+      <a class="nav__link nav__link--writings" data-cursor="soon" aria-disabled="true" aria-label="Writings — coming soon">
         <span class="nav__label">Writings</span>
         <span class="nav__mark" aria-hidden="true">
           <img class="nav__mark-img nav__mark-img--hover" src="assets/icons/writings-hover.svg" alt="" width="99" height="28" />
@@ -59,7 +61,7 @@
     </nav>
 
     <a href="./" class="logo" aria-label="Sofiia Matsiutsia — home">
-      <img src="assets/images/logo.gif" alt="Sofiia Matsiutsia" class="logo__mark" />
+      <img src="assets/images/sm-logo.svg" alt="Sofiia Matsiutsia" class="logo__mark"  width="266" height="34" />
     </a>
 
     <button type="button" class="sound-toggle" aria-label="Mute sound" aria-pressed="false">
@@ -79,7 +81,8 @@
     </button>
   </header>
 
-  <main class="work-main">
+  <main id="main-content" tabindex="-1" class="work-main">
+    <h1 class="visually-hidden">Selected work</h1>
     <div class="work-filters" role="group" aria-label="Filter projects">
       <button type="button" class="work-filter is-active" data-filter="all" aria-pressed="true">
         <span class="work-filter__label">All</span>
@@ -163,7 +166,7 @@
             <div class="work-item__body">
               <div class="work-item__text">
                 <h2 class="work-item__title">Unified internal panel</h2>
-                <p class="work-item__copy">Last 3 years we unified scattered internal workflows into a single Internal Panel, making life easier for Support, Sales, and Finance.</p>
+                <p class="work-item__copy">Unified scattered internal workflows into one panel for Support, Sales, and Finance.</p>
               </div>
               <div class="work-item__tags">
                 <span class="work-tag">#Research</span>
@@ -228,7 +231,7 @@
             <div class="work-item__body">
               <div class="work-item__text">
                 <h2 class="work-item__title">Vibe Coding Collective</h2>
-                <p class="work-item__copy">Have I told that I run AI community across the world? I also do the whole branding design there.</p>
+                <p class="work-item__copy">An AI community spanning 10 countries. I co-founded the collective and lead its brand and design.</p>
               </div>
               <div class="work-item__tags">
                 <span class="work-tag">#0→1</span>
@@ -294,7 +297,7 @@
     Menu
   </button>
 
-<div class="menu-overlay" id="menu-overlay" hidden>
+<div class="menu-overlay" id="menu-overlay" role="dialog" aria-modal="true" aria-label="Site menu" tabindex="-1" hidden>
   <a href="./" class="menu-overlay__logo" aria-label="Sofiia Matsiutsia — home">
     <img src="assets/images/sm-logo.svg" alt="Sofiia Matsiutsia" width="230" height="29" />
   </a>
@@ -311,7 +314,7 @@
   <nav class="menu-overlay__nav" aria-label="Primary">
     <a href="about" class="menu-overlay__link menu-overlay__link--about"><span>About</span></a>
     <a href="work" class="menu-overlay__link menu-overlay__link--work" aria-current="page"><span>Works</span></a>
-    <a class="menu-overlay__link menu-overlay__link--writings" data-cursor="soon"><span>Writings</span></a>
+    <a class="menu-overlay__link menu-overlay__link--writings" data-cursor="soon" aria-disabled="true" aria-label="Writings — coming soon"><span>Writings</span></a>
     <a href="talks" class="menu-overlay__link menu-overlay__link--talks"><span>Talks</span></a>
   </nav>
 
@@ -323,11 +326,11 @@
     <div class="menu-overlay__contact-row">
       <a href="https://www.linkedin.com/in/smatsiutsia/" class="menu-overlay__contact-link menu-overlay__contact-link--linkedin" target="_blank" rel="noopener noreferrer">
         <span>LinkedIn</span>
-        <img src="assets/icons/new-window-arrow-1.svg" alt="" class="menu-overlay__contact-arrow" aria-hidden="true" />
+        <img src="assets/icons/new-window-arrow-1.svg" alt="" class="menu-overlay__contact-arrow" aria-hidden="true"  width="16" height="16" />
       </a>
       <a href="https://x.com/SMatsiutsia" class="menu-overlay__contact-link menu-overlay__contact-link--twitter" target="_blank" rel="noopener noreferrer">
         <span>Twitter</span>
-        <img src="assets/icons/new-window-arrow-2.svg" alt="" class="menu-overlay__contact-arrow" aria-hidden="true" />
+        <img src="assets/icons/new-window-arrow-2.svg" alt="" class="menu-overlay__contact-arrow" aria-hidden="true"  width="16" height="16" />
       </a>
     </div>
   </div>
@@ -338,7 +341,7 @@
 </div>
 
 <script src="assets/vendor/lenis/lenis.min.js?v=1.3.26"></script>
-<script src="script.js?v=59"></script>
+<script src="script.js?v=63"></script>
 <script type="module" src="sound.js?v=1"></script>
 </body>
 </html>

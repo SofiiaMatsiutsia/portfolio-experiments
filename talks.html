@@ -6,15 +6,17 @@
 <title>Talks &amp; workshops — Sofiia Matsiutsia</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml" />
 <link rel="preload" href="assets/fonts/IBMPlexMono-Regular.ttf" as="font" type="font/ttf" crossorigin />
-<link rel="stylesheet" href="styles.css?v=123" />
+<link rel="preload" href="assets/fonts/FolioBkBT-Book.ttf" as="font" type="font/ttf" crossorigin />
+<link rel="stylesheet" href="styles.css?v=130" />
 <link rel="stylesheet" href="assets/vendor/lenis/lenis.css?v=1.3.26" />
-<link rel="stylesheet" href="letter-animation.css?v=1" />
+<link rel="stylesheet" href="letter-animation.css?v=6" />
 </head>
 <body class="talks">
+  <a class="skip-link" href="#main-content">Skip to content</a>
 
   <header class="header">
     <a href="./" class="logo" aria-label="Sofiia Matsiutsia — home">
-      <img src="assets/images/sm-logo.svg" alt="Sofiia Matsiutsia" class="logo__mark" />
+      <img src="assets/images/sm-logo.svg" alt="Sofiia Matsiutsia" class="logo__mark"  width="266" height="34" />
     </a>
 
     <nav class="nav" aria-label="Primary">
@@ -32,7 +34,7 @@
           <img class="nav__mark-img nav__mark-img--selected" src="assets/icons/nav-work-selected.svg" alt="" width="82" height="29" />
         </span>
       </a>
-      <a class="nav__link nav__link--writings" data-cursor="soon">
+      <a class="nav__link nav__link--writings" data-cursor="soon" aria-disabled="true" aria-label="Writings — coming soon">
         <span class="nav__label">Writings</span>
         <span class="nav__mark" aria-hidden="true">
           <img class="nav__mark-img nav__mark-img--hover" src="assets/icons/writings-hover.svg" alt="" width="99" height="28" />
@@ -81,7 +83,7 @@
             <img src="assets/images/talks/science-museum.jpg" alt="Speaking at The Science Museum, London" width="1000" height="750" fetchpriority="high" />
           </div>
           <div class="talk-card__body">
-            <h2 class="talk-card__title" id="science-museum-title"><span>The Science Museum, London</span><img src="assets/icons/new-window-arrow-1.svg" alt="" aria-hidden="true" /></h2>
+            <h2 class="talk-card__title" id="science-museum-title"><span>The Science Museum, London</span><img src="assets/icons/new-window-arrow-1.svg" alt="" aria-hidden="true"  width="16" height="16" /></h2>
             <p class="talk-card__desc">What role will sound play in the AI-augmented future life — with ElevenLabs &amp; Tavily. Watch the video.</p>
           </div>
         </a>
@@ -92,14 +94,14 @@
         <div class="talks-grid">
           <a class="talk-card talk-card--text talk-card--linked" href="https://oktech.jp/events/312103306-vibe-coding-collab" target="_blank" rel="noopener noreferrer">
             <div class="talk-card__body">
-              <h3 class="talk-card__title"><span>Workshop on Computer Vision for beginners</span><img src="assets/icons/new-window-arrow-1.svg" alt="" aria-hidden="true" /></h3>
+              <h3 class="talk-card__title"><span>Workshop on Computer Vision for beginners</span><img src="assets/icons/new-window-arrow-1.svg" alt="" aria-hidden="true"  width="16" height="16" /></h3>
               <p class="talk-card__desc">OKTech, Osaka, Japan — event page</p>
             </div>
           </a>
 
           <a class="talk-card talk-card--text talk-card--linked" href="https://open.spotify.com/episode/3fhuWfq1UQNzUBTdz8VoOh" target="_blank" rel="noopener noreferrer">
             <div class="talk-card__body">
-              <h3 class="talk-card__title"><span>Podcast: AI Applied Fluency</span><img src="assets/icons/new-window-arrow-1.svg" alt="" aria-hidden="true" /></h3>
+              <h3 class="talk-card__title"><span>Podcast: AI Applied Fluency</span><img src="assets/icons/new-window-arrow-1.svg" alt="" aria-hidden="true"  width="16" height="16" /></h3>
               <p class="talk-card__desc">Listen on Spotify</p>
             </div>
           </a>
@@ -116,7 +118,7 @@
 
           <a class="talk-card talk-card--text talk-card--linked" href="https://www.youtube.com/watch?v=Amef2nkVccI" target="_blank" rel="noopener noreferrer">
             <div class="talk-card__body">
-              <h3 class="talk-card__title"><span>3D Robots Vibe Coding with Dilum Sanjaya</span><img src="assets/icons/new-window-arrow-1.svg" alt="" aria-hidden="true" /></h3>
+              <h3 class="talk-card__title"><span>3D Robots Vibe Coding with Dilum Sanjaya</span><img src="assets/icons/new-window-arrow-1.svg" alt="" aria-hidden="true"  width="16" height="16" /></h3>
               <p class="talk-card__desc">Watch on YouTube</p>
             </div>
           </a>
@@ -194,23 +196,23 @@
   </main>
 
   <button type="button" class="menu-bar" id="menu-open" aria-haspopup="true" aria-controls="menu-overlay" aria-expanded="false">Menu</button>
-  <div class="menu-overlay" id="menu-overlay" hidden>
+  <div class="menu-overlay" id="menu-overlay" role="dialog" aria-modal="true" aria-label="Site menu" tabindex="-1" hidden>
     <a href="./" class="menu-overlay__logo" aria-label="Sofiia Matsiutsia — home"><img src="assets/images/sm-logo.svg" alt="Sofiia Matsiutsia" width="230" height="29" /></a>
     <div class="ring-stage" aria-hidden="true"><div class="ring ring--cover"></div><div class="ring ring--about"></div><div class="ring ring--works"></div><div class="ring ring--writings"></div><div class="ring ring--talks"></div><div class="ring ring--core"></div></div>
     <nav class="menu-overlay__nav" aria-label="Primary">
       <a href="about" class="menu-overlay__link menu-overlay__link--about"><span>About</span></a>
       <a href="work" class="menu-overlay__link menu-overlay__link--work"><span>Works</span></a>
-      <a class="menu-overlay__link menu-overlay__link--writings" data-cursor="soon"><span>Writings</span></a>
+      <a class="menu-overlay__link menu-overlay__link--writings" data-cursor="soon" aria-disabled="true" aria-label="Writings — coming soon"><span>Writings</span></a>
       <a href="talks" class="menu-overlay__link menu-overlay__link--talks" aria-current="page"><span>Talks</span></a>
     </nav>
-    <div class="menu-overlay__contact"><button type="button" class="menu-overlay__contact-link menu-overlay__contact-link--email"><span class="menu-overlay__contact-width" aria-hidden="true">Copy email</span><span class="menu-overlay__contact-text">Copy email</span></button><div class="menu-overlay__contact-row"><a href="https://www.linkedin.com/in/smatsiutsia/" class="menu-overlay__contact-link menu-overlay__contact-link--linkedin" target="_blank" rel="noopener noreferrer"><span>LinkedIn</span><img src="assets/icons/new-window-arrow-1.svg" alt="" class="menu-overlay__contact-arrow" aria-hidden="true" /></a><a href="https://x.com/SMatsiutsia" class="menu-overlay__contact-link menu-overlay__contact-link--twitter" target="_blank" rel="noopener noreferrer"><span>Twitter</span><img src="assets/icons/new-window-arrow-2.svg" alt="" class="menu-overlay__contact-arrow" aria-hidden="true" /></a></div></div>
+    <div class="menu-overlay__contact"><button type="button" class="menu-overlay__contact-link menu-overlay__contact-link--email"><span class="menu-overlay__contact-width" aria-hidden="true">Copy email</span><span class="menu-overlay__contact-text">Copy email</span></button><div class="menu-overlay__contact-row"><a href="https://www.linkedin.com/in/smatsiutsia/" class="menu-overlay__contact-link menu-overlay__contact-link--linkedin" target="_blank" rel="noopener noreferrer"><span>LinkedIn</span><img src="assets/icons/new-window-arrow-1.svg" alt="" class="menu-overlay__contact-arrow" aria-hidden="true"  width="16" height="16" /></a><a href="https://x.com/SMatsiutsia" class="menu-overlay__contact-link menu-overlay__contact-link--twitter" target="_blank" rel="noopener noreferrer"><span>Twitter</span><img src="assets/icons/new-window-arrow-2.svg" alt="" class="menu-overlay__contact-arrow" aria-hidden="true"  width="16" height="16" /></a></div></div>
     <button type="button" class="menu-bar menu-overlay__close" id="menu-close" aria-controls="menu-overlay">Close</button>
   </div>
 
   <script src="letter-animation-presets.js?v=6"></script>
-  <script src="letter-animation.js?v=2"></script>
+  <script src="letter-animation.js?v=3"></script>
 <script src="assets/vendor/lenis/lenis.min.js?v=1.3.26"></script>
-<script src="script.js?v=59"></script>
+<script src="script.js?v=63"></script>
   <script src="review-notes.js?v=2"></script>
   <script type="module" src="sound.js?v=1"></script>
 </body>

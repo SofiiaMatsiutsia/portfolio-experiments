@@ -1,0 +1,68 @@
+.home-intro { display: none; }
+html[data-home-intro="pending"]::before { content: ""; position: fixed; inset: 0; z-index: 10000; background: var(--home-intro-bg, var(--color-blue)); }
+/* The page keeps its layout and loads underneath this independent curtain. */
+html[data-home-intro] .home-intro {
+  display: grid;
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  overflow: hidden;
+  place-items: center;
+  background: var(--home-intro-bg, var(--color-blue));
+  cursor: default;
+  touch-action: none;
+  overscroll-behavior: none;
+}
+
+html[data-home-intro] .home-main {
+  overflow: hidden;
+}
+
+html[data-home-intro] .home-intro.is-revealing {
+  background: transparent;
+}
+
+.home-intro__signature {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  display: block;
+  width: clamp(260px, 35vw, 531px);
+  max-width: calc(100vw - 48px);
+  height: auto;
+  overflow: visible;
+}
+
+.home-intro__signature path {
+  opacity: 0;
+}
+
+.home-intro__reveal {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  visibility: hidden;
+}
+
+.is-revealing .home-intro__reveal {
+  visibility: visible;
+}
+
+.home-intro--reduced .home-intro__reveal { display: none; }
+
+.home-intro__cutout,
+.home-intro__bands {
+  transform-box: view-box;
+  transform-origin: 0 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-intro__signature path { opacity: 1; }
+  .home-intro__reveal { display: none; }
+}
+
+html.has-squish-cursor .home-intro, html.has-squish-cursor .home-intro * { cursor: default; }

@@ -5,15 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>About — Sofiia Matsiutsia</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-<link rel="stylesheet" href="styles.css?v=120" />
+<link rel="preload" href="assets/fonts/FolioBkBT-Book.ttf" as="font" type="font/ttf" crossorigin />
+<link rel="stylesheet" href="styles.css?v=130" />
 <link rel="stylesheet" href="assets/vendor/lenis/lenis.css?v=1.3.26" />
-<link rel="stylesheet" href="letter-animation.css?v=1" />
+<link rel="stylesheet" href="letter-animation.css?v=6" />
 </head>
 <body class="about">
+  <a class="skip-link" href="#main-content">Skip to content</a>
 
   <header class="header">
     <a href="./" class="logo" aria-label="Sofiia Matsiutsia — home">
-      <img src="assets/images/sm-logo.svg" alt="Sofiia Matsiutsia" class="logo__mark" />
+      <img src="assets/images/sm-logo.svg" alt="Sofiia Matsiutsia" class="logo__mark"  width="266" height="34" />
     </a>
 
     <nav class="nav" aria-label="Primary">
@@ -31,7 +33,7 @@
           <img class="nav__mark-img nav__mark-img--selected" src="assets/icons/nav-work-selected.svg" alt="" width="82" height="29" />
         </span>
       </a>
-      <a class="nav__link nav__link--writings" data-cursor="soon">
+      <a class="nav__link nav__link--writings" data-cursor="soon" aria-disabled="true" aria-label="Writings — coming soon">
         <span class="nav__label">Writings</span>
         <span class="nav__mark" aria-hidden="true">
           <img class="nav__mark-img nav__mark-img--hover" src="assets/icons/writings-hover.svg" alt="" width="99" height="28" />
@@ -64,25 +66,25 @@
     </button>
   </header>
 
-  <main class="about-main">
+  <main id="main-content" tabindex="-1" class="about-main">
     <div class="about-column">
       <section class="about-intro" aria-labelledby="about-title">
         <div class="about-intro__lead">
-          <p id="about-title"><span class="about-intro__mark animated-letter" data-animation-preset="mixedLetterO" data-letter="O"><span class="visually-hidden">O</span><button class="animated-letter__trigger" type="button" aria-label="Hold to pause O animation" disabled><img src="assets/images/letters/o/o_1.svg" alt="" width="1024" height="1024" draggable="false" /><img src="assets/images/letters/o/o_2.svg" alt="" width="1024" height="1024" draggable="false" hidden /><img src="assets/images/letters/o/o_3.svg" alt="" width="1024" height="1024" draggable="false" hidden /><img src="assets/images/letters/o/o_4.svg" alt="" width="1024" height="1024" draggable="false" hidden /></button></span><span class="about-intro__rose">VER THE PAST 8 YEARS</span>, I've designed across AI, B2B, SaaS, marketplaces, and internal tools. I'm drawn to tangled problems in complex domains, where solutions aren't obvious.</p>
+          <h1 id="about-title"><span class="about-intro__mark animated-letter" data-animation-preset="mixedLetterO" data-letter="O"><span class="visually-hidden">O</span><button class="animated-letter__trigger" type="button" aria-label="Hold to pause O animation" disabled><img src="assets/images/letters/o/o_1.svg" alt="" width="1024" height="1024" draggable="false" /><img src="assets/images/letters/o/o_2.svg" alt="" width="1024" height="1024" draggable="false" hidden /><img src="assets/images/letters/o/o_3.svg" alt="" width="1024" height="1024" draggable="false" hidden /><img src="assets/images/letters/o/o_4.svg" alt="" width="1024" height="1024" draggable="false" hidden /></button></span><span class="about-intro__rose">VER THE PAST 8 YEARS</span>, I've designed across AI, B2B, SaaS, marketplaces, and internal tools. I'm drawn to tangled problems in complex domains, where solutions aren't obvious.</h1>
         </div>
         <div class="about-intro__copy">
           <p>I like observing people: how they work, the shortcuts they invent, and the patterns they repeat.</p>
-          <p><strong>Design = Ownership</strong><br />From understanding the business, uncovering root causes to shaping the experience and monitoring product adoption. I am not scared to jump on a call with users, or pitch the presentation to stakeholders.</p>
+          <p><strong>Design = Ownership</strong><br />From understanding the business, uncovering root causes to shaping the experience and monitoring product adoption. I’m comfortable speaking directly with users and presenting the work to stakeholders.</p>
           <p>I thrive in collaborative environments where designers work with other disciplines, ask questions, and wear multiple hats.</p>
         </div>
       </section>
 
       <section class="about-experience" aria-labelledby="experience-title">
         <div class="about-section-heading">
-          <h1 id="experience-title">Last experience</h1>
+          <h2 id="experience-title">Last experience</h2>
           <a class="action-btn about-cv-link" href="assets/files/Sofiia_Matsiutsia_product_designer.docx" target="_blank" rel="noopener" download>
             <span>Download CV</span>
-            <img class="action-btn__arrow" src="assets/icons/new-window-arrow-1.svg" alt="" aria-hidden="true" />
+            <img class="action-btn__arrow" src="assets/icons/new-window-arrow-1.svg" alt="" aria-hidden="true"  width="16" height="16" />
           </a>
         </div>
 
@@ -91,16 +93,16 @@
             <p class="about-role__dates">Sep 2025 – Now</p>
             <div class="about-role__title"><a class="about-company about-company--blue" href="https://vibecoders.global/" target="_blank" rel="noopener">Vibe Coding Collective<span class="about-company__underline" data-underline-label="Vibe Coding Collective" style="--underline-image: url('assets/icons/about-vcc-underline.svg');" aria-hidden="true"></span></a><span>Co-Founder &amp; Design Lead</span></div>
             <ul class="about-role__highlights">
-              <li><img src="assets/icons/about-dot-1.svg" alt="" aria-hidden="true" /><span>Built an AI community across <a class="about-metric" href="work/vibe-coding-collective">10 countries</a></span></li>
-              <li><img src="assets/icons/about-dot-2.svg" alt="" aria-hidden="true" /><span><span class="about-accent about-accent--pink">Lead</span> partnerships, and design vision</span></li>
-              <li><img src="assets/icons/about-dot-3.svg" alt="" aria-hidden="true" /><span><span class="about-accent about-accent--pink">Research</span> in fields human–AI collaboration</span></li>
+              <li><img src="assets/icons/about-dot-1.svg" alt="" aria-hidden="true"  width="12" height="12" /><span>Built an AI community across <a class="about-metric" href="work/vibe-coding-collective">10 countries</a></span></li>
+              <li><img src="assets/icons/about-dot-2.svg" alt="" aria-hidden="true"  width="12" height="12" /><span><span class="about-accent about-accent--pink">Lead</span> partnerships, and design vision</span></li>
+              <li><img src="assets/icons/about-dot-3.svg" alt="" aria-hidden="true"  width="12" height="12" /><span><span class="about-accent about-accent--pink">Research</span> in fields human–AI collaboration</span></li>
             </ul>
             <div class="about-community-gallery">
               <div class="acc" data-image-accordion aria-label="Vibe Coding Collective photographs">
-                <div class="acc-cell"><img src="assets/images/about/vcc-1.jpg" alt="Vibe Coding Collective members working together" draggable="false" /></div>
-                <div class="acc-cell"><img src="assets/images/about/vcc-2.jpg" alt="A Vibe Coding Collective workshop speaker" draggable="false" /></div>
-                <div class="acc-cell"><img src="assets/images/about/vcc-3.jpg" alt="Vibe Coding Collective workshop attendees" draggable="false" /></div>
-                <div class="acc-cell"><img src="assets/images/about/vcc-4.jpg" alt="Vibe Coding Collective members laughing together" draggable="false" /></div>
+                <div class="acc-cell"><img src="assets/images/about/vcc-1.jpg" alt="Vibe Coding Collective members working together" draggable="false"  width="1600" height="1066" /></div>
+                <div class="acc-cell"><img src="assets/images/about/vcc-2.jpg" alt="A Vibe Coding Collective workshop speaker" draggable="false"  width="1600" height="1066" /></div>
+                <div class="acc-cell"><img src="assets/images/about/vcc-3.jpg" alt="Vibe Coding Collective workshop attendees" draggable="false"  width="1600" height="1201" /></div>
+                <div class="acc-cell"><img src="assets/images/about/vcc-4.jpg" alt="Vibe Coding Collective members laughing together" draggable="false"  width="1600" height="1201" /></div>
               </div>
             </div>
           </article>
@@ -109,9 +111,9 @@
             <p class="about-role__dates">Apr 2022 – Nov 2025</p>
             <div class="about-role__title"><a class="about-company about-company--blue" href="https://housinganywhere.com/" target="_blank" rel="noopener">HousingAnywhere<span class="about-company__underline" data-underline-label="HousingAnywhere" style="--underline-image: url('assets/icons/about-housing-underline.svg');" aria-hidden="true"></span></a><span>Senior Product Designer</span></div>
             <ul class="about-role__highlights">
-              <li><img src="assets/icons/about-dot-3.svg" alt="" aria-hidden="true" /><span>ID verification completion <a class="about-metric" href="work/housing-anywhere">+25%</a></span></li>
-              <li><img src="assets/icons/about-dot-2.svg" alt="" aria-hidden="true" /><span>Manual work <a class="about-metric" href="work/internal-panel">–75%</a>, saving <a class="about-metric" href="work/housing-anywhere">30+ hrs/week</a></span></li>
-              <li><img src="assets/icons/about-dot-1.svg" alt="" aria-hidden="true" /><span>Led the research for the <span class="about-accent about-accent--pink">AI search &amp; filtering</span></span></li>
+              <li><img src="assets/icons/about-dot-3.svg" alt="" aria-hidden="true"  width="12" height="12" /><span>ID verification completion <a class="about-metric" href="work/housing-anywhere">+25%</a></span></li>
+              <li><img src="assets/icons/about-dot-2.svg" alt="" aria-hidden="true"  width="12" height="12" /><span>Manual work <a class="about-metric" href="work/internal-panel">–75%</a>, saving <a class="about-metric" href="work/housing-anywhere">30+ hrs/week</a></span></li>
+              <li><img src="assets/icons/about-dot-1.svg" alt="" aria-hidden="true"  width="12" height="12" /><span>Led the research for the <span class="about-accent about-accent--pink">AI search &amp; filtering</span></span></li>
             </ul>
           </article>
 
@@ -119,9 +121,9 @@
             <p class="about-role__dates">Jan 2021 – Apr 2022</p>
             <div class="about-role__title"><a class="about-company about-company--blue" href="https://flatfy.com/" target="_blank" rel="noopener">Flatfy (LUN)<span class="about-company__underline" data-underline-label="Flatfy (LUN)" style="--underline-image: url('assets/icons/about-flatfy-underline.svg');" aria-hidden="true"></span></a><span>Senior Product Designer</span></div>
             <ul class="about-role__highlights">
-              <li><img src="assets/icons/about-dot-1.svg" alt="" aria-hidden="true" /><span><span class="about-accent about-accent--green">5–10M</span> monthly users</span></li>
-              <li><img src="assets/icons/about-dot-2.svg" alt="" aria-hidden="true" /><span>Filter usage <span class="about-accent about-accent--green">+19%</span></span></li>
-              <li><img src="assets/icons/about-dot-3.svg" alt="" aria-hidden="true" /><span>eCommerce rate <span class="about-accent about-accent--green">+3.8%</span></span></li>
+              <li><img src="assets/icons/about-dot-1.svg" alt="" aria-hidden="true"  width="12" height="12" /><span><span class="about-accent about-accent--green">5–10M</span> monthly users</span></li>
+              <li><img src="assets/icons/about-dot-2.svg" alt="" aria-hidden="true"  width="12" height="12" /><span>Filter usage <span class="about-accent about-accent--green">+19%</span></span></li>
+              <li><img src="assets/icons/about-dot-3.svg" alt="" aria-hidden="true"  width="12" height="12" /><span>eCommerce rate <span class="about-accent about-accent--green">+3.8%</span></span></li>
             </ul>
           </article>
         </div>
@@ -136,39 +138,40 @@
         </div>
         <div class="about-accordion-wrap">
           <div class="acc" data-image-accordion aria-label="Scuba diving and travel photographs">
-            <div class="acc-cell"><img src="assets/images/about/hobby-1.jpg" alt="Scuba diving in Iceland" draggable="false" /></div>
-            <div class="acc-cell"><img src="assets/images/about/hobby-4.jpg" alt="Sitting by icebergs in Iceland" draggable="false" /></div>
-            <div class="acc-cell"><img src="assets/images/about/hobby-japan.jpeg" alt="Autumn maple leaves framing a traditional wooden building in Japan" draggable="false" /></div>
+            <div class="acc-cell"><img src="assets/images/about/hobby-1.jpg" alt="Scuba diving in Iceland" draggable="false"  width="1600" height="1066" /></div>
+            <div class="acc-cell"><img src="assets/images/about/hobby-4.jpg" alt="Sitting by icebergs in Iceland" draggable="false"  width="1600" height="899" /></div>
+            <div class="acc-cell"><img src="assets/images/about/hobby-japan.jpeg" alt="Autumn maple leaves framing a traditional wooden building in Japan" draggable="false"  width="1086" height="724" /></div>
           </div>
         </div>
       </section>
 
       <div class="about-links" aria-label="Contact links">
         <button type="button" class="action-btn action-btn--copy"><span class="action-btn__width" aria-hidden="true">Copy email</span><span class="action-btn__text">Copy email</span></button>
-          <a class="action-btn" href="https://www.linkedin.com/in/smatsiutsia/" target="_blank" rel="noopener noreferrer"><span>LinkedIn</span><img class="action-btn__arrow" src="assets/icons/new-window-arrow-1.svg" alt="" aria-hidden="true" /></a>
-          <a class="action-btn" href="https://x.com/SMatsiutsia" target="_blank" rel="noopener noreferrer"><span>Twitter</span><img class="action-btn__arrow" src="assets/icons/new-window-arrow-2.svg" alt="" aria-hidden="true" /></a>
+      <noscript><a class="action-btn" href="mailto:sofiia.matsiutsia@gmail.com">Email me</a></noscript>
+          <a class="action-btn" href="https://www.linkedin.com/in/smatsiutsia/" target="_blank" rel="noopener noreferrer"><span>LinkedIn</span><img class="action-btn__arrow" src="assets/icons/new-window-arrow-1.svg" alt="" aria-hidden="true"  width="16" height="16" /></a>
+          <a class="action-btn" href="https://x.com/SMatsiutsia" target="_blank" rel="noopener noreferrer"><span>Twitter</span><img class="action-btn__arrow" src="assets/icons/new-window-arrow-2.svg" alt="" aria-hidden="true"  width="16" height="16" /></a>
       </div>
     </div>
   </main>
 
   <button type="button" class="menu-bar" id="menu-open" aria-haspopup="true" aria-controls="menu-overlay" aria-expanded="false">Menu</button>
-  <div class="menu-overlay" id="menu-overlay" hidden>
+  <div class="menu-overlay" id="menu-overlay" role="dialog" aria-modal="true" aria-label="Site menu" tabindex="-1" hidden>
     <a href="./" class="menu-overlay__logo" aria-label="Sofiia Matsiutsia — home"><img src="assets/images/sm-logo.svg" alt="Sofiia Matsiutsia" width="230" height="29" /></a>
     <div class="ring-stage" aria-hidden="true"><div class="ring ring--cover"></div><div class="ring ring--about"></div><div class="ring ring--works"></div><div class="ring ring--writings"></div><div class="ring ring--talks"></div><div class="ring ring--core"></div></div>
     <nav class="menu-overlay__nav" aria-label="Primary">
       <a href="about" class="menu-overlay__link menu-overlay__link--about" aria-current="page"><span>About</span></a>
       <a href="work" class="menu-overlay__link menu-overlay__link--work"><span>Works</span></a>
-      <a class="menu-overlay__link menu-overlay__link--writings" data-cursor="soon"><span>Writings</span></a>
+      <a class="menu-overlay__link menu-overlay__link--writings" data-cursor="soon" aria-disabled="true" aria-label="Writings — coming soon"><span>Writings</span></a>
       <a href="talks" class="menu-overlay__link menu-overlay__link--talks"><span>Talks</span></a>
     </nav>
-    <div class="menu-overlay__contact"><button type="button" class="menu-overlay__contact-link menu-overlay__contact-link--email"><span class="menu-overlay__contact-width" aria-hidden="true">Copy email</span><span class="menu-overlay__contact-text">Copy email</span></button><div class="menu-overlay__contact-row"><a href="https://www.linkedin.com/in/smatsiutsia/" class="menu-overlay__contact-link menu-overlay__contact-link--linkedin" target="_blank" rel="noopener noreferrer"><span>LinkedIn</span><img src="assets/icons/new-window-arrow-1.svg" alt="" class="menu-overlay__contact-arrow" aria-hidden="true" /></a><a href="https://x.com/SMatsiutsia" class="menu-overlay__contact-link menu-overlay__contact-link--twitter" target="_blank" rel="noopener noreferrer"><span>Twitter</span><img src="assets/icons/new-window-arrow-2.svg" alt="" class="menu-overlay__contact-arrow" aria-hidden="true" /></a></div></div>
+    <div class="menu-overlay__contact"><button type="button" class="menu-overlay__contact-link menu-overlay__contact-link--email"><span class="menu-overlay__contact-width" aria-hidden="true">Copy email</span><span class="menu-overlay__contact-text">Copy email</span></button><div class="menu-overlay__contact-row"><a href="https://www.linkedin.com/in/smatsiutsia/" class="menu-overlay__contact-link menu-overlay__contact-link--linkedin" target="_blank" rel="noopener noreferrer"><span>LinkedIn</span><img src="assets/icons/new-window-arrow-1.svg" alt="" class="menu-overlay__contact-arrow" aria-hidden="true"  width="16" height="16" /></a><a href="https://x.com/SMatsiutsia" class="menu-overlay__contact-link menu-overlay__contact-link--twitter" target="_blank" rel="noopener noreferrer"><span>Twitter</span><img src="assets/icons/new-window-arrow-2.svg" alt="" class="menu-overlay__contact-arrow" aria-hidden="true"  width="16" height="16" /></a></div></div>
     <button type="button" class="menu-bar menu-overlay__close" id="menu-close" aria-controls="menu-overlay">Close</button>
   </div>
 
   <script src="letter-animation-presets.js?v=6"></script>
-  <script src="letter-animation.js?v=2"></script>
+  <script src="letter-animation.js?v=3"></script>
 <script src="assets/vendor/lenis/lenis.min.js?v=1.3.26"></script>
-<script src="script.js?v=59"></script>
+<script src="script.js?v=63"></script>
 <script type="module" src="image-accordion.js?v=3"></script>
 <script type="module" src="sound.js?v=1"></script>
 </body>

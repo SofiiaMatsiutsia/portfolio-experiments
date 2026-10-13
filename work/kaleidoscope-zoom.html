@@ -5,10 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Kaleidoscope zoom — Sofiia Matsiutsia</title>
 <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
-<link rel="stylesheet" href="../styles.css?v=91" />
+<link rel="preload" href="../assets/fonts/FolioBkBT-Book.ttf" as="font" type="font/ttf" crossorigin />
+<link rel="stylesheet" href="../styles.css?v=130" />
 <link rel="stylesheet" href="../assets/vendor/lenis/lenis.css?v=1.3.26" />
 </head>
 <body class="case">
+  <a class="skip-link" href="#main-content">Skip to content</a>
 
   <header class="header">
     <nav class="nav" aria-label="Primary">
@@ -26,7 +28,7 @@
           <img class="nav__mark-img nav__mark-img--selected" src="../assets/icons/nav-work-selected.svg" alt="" width="82" height="29" />
         </span>
       </a>
-      <a class="nav__link nav__link--writings nav__link--muted" data-cursor="soon">
+      <a class="nav__link nav__link--writings nav__link--muted" data-cursor="soon" aria-disabled="true" aria-label="Writings — coming soon">
         <span class="nav__label">Writings</span>
         <span class="nav__mark" aria-hidden="true">
           <img class="nav__mark-img nav__mark-img--hover" src="../assets/icons/writings-hover.svg" alt="" width="99" height="28" />
@@ -43,7 +45,7 @@
     </nav>
 
     <a href="../" class="logo" aria-label="Sofiia Matsiutsia — home">
-      <img src="../assets/images/logo.gif" alt="Sofiia Matsiutsia" class="logo__mark" />
+      <img src="../assets/images/sm-logo.svg" alt="Sofiia Matsiutsia" class="logo__mark"  width="266" height="34" />
     </a>
 
     <button type="button" class="sound-toggle" aria-label="Mute sound" aria-pressed="false">
@@ -73,7 +75,7 @@
       </div>
     </aside>
 
-    <main class="case__main">
+    <main id="main-content" tabindex="-1" class="case__main">
       <div class="case__hero-block">
                 <figure class="case__hero case__hero--static">
           <video
@@ -113,11 +115,13 @@
     </main>
   </div>
 
-  <button type="button" class="menu-bar" id="menu-open" aria-haspopup="true" aria-controls="menu-overlay" aria-expanded="false">
+  <div class="case-controls" id="case-controls" aria-label="Case study navigation">
+    <button type="button" class="menu-bar" id="menu-open" aria-haspopup="true" aria-controls="menu-overlay" aria-expanded="false">
     Menu
   </button>
+  </div>
 
-<div class="menu-overlay" id="menu-overlay" hidden>
+<div class="menu-overlay" id="menu-overlay" role="dialog" aria-modal="true" aria-label="Site menu" tabindex="-1" hidden>
   <a href="../" class="menu-overlay__logo" aria-label="Sofiia Matsiutsia — home">
     <img src="../assets/images/sm-logo.svg" alt="Sofiia Matsiutsia" width="230" height="29" />
   </a>
@@ -134,7 +138,7 @@
   <nav class="menu-overlay__nav" aria-label="Primary">
     <a href="../about" class="menu-overlay__link menu-overlay__link--about"><span>About</span></a>
     <a href="../work" class="menu-overlay__link menu-overlay__link--work"><span>Works</span></a>
-    <a class="menu-overlay__link menu-overlay__link--writings" data-cursor="soon"><span>Writings</span></a>
+    <a class="menu-overlay__link menu-overlay__link--writings" data-cursor="soon" aria-disabled="true" aria-label="Writings — coming soon"><span>Writings</span></a>
     <a href="../talks" class="menu-overlay__link menu-overlay__link--talks"><span>Talks</span></a>
   </nav>
 
@@ -146,11 +150,11 @@
     <div class="menu-overlay__contact-row">
       <a href="https://www.linkedin.com/in/smatsiutsia/" class="menu-overlay__contact-link menu-overlay__contact-link--linkedin" target="_blank" rel="noopener noreferrer">
         <span>LinkedIn</span>
-        <img src="../assets/icons/new-window-arrow-1.svg" alt="" class="menu-overlay__contact-arrow" aria-hidden="true" />
+        <img src="../assets/icons/new-window-arrow-1.svg" alt="" class="menu-overlay__contact-arrow" aria-hidden="true"  width="16" height="16" />
       </a>
       <a href="https://x.com/SMatsiutsia" class="menu-overlay__contact-link menu-overlay__contact-link--twitter" target="_blank" rel="noopener noreferrer">
         <span>Twitter</span>
-        <img src="../assets/icons/new-window-arrow-2.svg" alt="" class="menu-overlay__contact-arrow" aria-hidden="true" />
+        <img src="../assets/icons/new-window-arrow-2.svg" alt="" class="menu-overlay__contact-arrow" aria-hidden="true"  width="16" height="16" />
       </a>
     </div>
   </div>
@@ -161,7 +165,7 @@
 </div>
 
 <script src="../assets/vendor/lenis/lenis.min.js?v=1.3.26"></script>
-<script src="../script.js?v=59"></script>
+<script src="../script.js?v=63"></script>
 <script type="module" src="../sound.js?v=1"></script>
 </body>
 </html>

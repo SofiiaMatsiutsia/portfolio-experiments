@@ -1,4 +1,6 @@
-const CARD_HOVER_COLORS = ["#4DCCF9", "#E8A7ED", "#86CD8B", "#F6AA81"];
+document.documentElement.classList.add("js");
+
+const CARD_HOVER_COLORS = ["var(--color-blue)", "var(--color-rose)", "var(--color-green)", "var(--color-orange)"];
 
 /* Production uses Vercel clean URLs. Local file previews still need the
    physical `.html` filenames, so restore them only for that protocol. */
@@ -54,77 +56,98 @@ initSiteScroll();
 
 function initMediaLoading(root = document) {
   const frames = root.querySelectorAll(
-    ".showcase__item, .work-item__media, .case__hero, .case-figure, .case-gallery__slide",
+    ".showcase__item, .work-item__media, .case__hero, .case-figure, .case-gallery__slide, .talk-card__media, .acc-cell, .case-project-link__media",
   );
-
   frames.forEach((frame) => {
+    if (frame.dataset.mediaInitialized) return;
     const media = frame.querySelector(":scope > img, :scope > video");
     if (!media) return;
-
+    frame.dataset.mediaInitialized = "true";
     frame.classList.add("media-slot");
-    let settled = false;
+    const isVideo = media.tagName === "VIDEO";
+    let posterReady = false;
+    let pendingLimit = 0;
+    let settleTimer = 0;
+    let fallback = null;
+    let observer = null;
 
     const finish = () => {
-      if (settled) return;
-      settled = true;
-      const wasPending = frame.classList.contains("is-pending");
-      frame.classList.remove("is-pending");
+      window.clearTimeout(pendingLimit);
+      window.clearTimeout(settleTimer);
+      observer?.disconnect();
+      frame.classList.remove("is-pending", "is-error");
       frame.classList.add("is-ready");
-      if (!wasPending) {
-        frame.classList.add("is-settled");
-        return;
-      }
-      window.setTimeout(() => frame.classList.add("is-settled"), 280);
+      frame.setAttribute("aria-busy", "false");
+      fallback?.remove();
+      fallback = null;
+      settleTimer = window.setTimeout(() => frame.classList.add("is-settled"), 240);
     };
-
+    const fail = () => {
+      if (posterReady) return finish();
+      window.clearTimeout(pendingLimit);
+      window.clearTimeout(settleTimer);
+      frame.classList.remove("is-pending", "is-ready", "is-settled");
+      frame.classList.add("is-error");
+      frame.setAttribute("aria-busy", "false");
+      if (fallback) return;
+      fallback = document.createElement("div");
+      fallback.className = "media-fallback";
+      const message = document.createElement("span");
+      message.textContent = frame.closest("a[href]") ? "Preview unavailable. Open the project to explore the work." : "Preview unavailable. Try loading it again.";
+      const retry = document.createElement("button");
+      retry.type = "button";
+      retry.textContent = "Retry preview";
+      retry.setAttribute("aria-label", `Retry ${media.alt || media.getAttribute("aria-label") || "image"} preview`);
+      // Retry lives inside project links. Never let it activate their navigation.
+      ["pointerdown", "pointerup"].forEach((type) => retry.addEventListener(type, (event) => event.stopPropagation()));
+      retry.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        fallback.remove();
+        fallback = null;
+        frame.classList.remove("is-error");
+        hold();
+        armLimit();
+        if (isVideo) media.load();
+        else { const source = media.src; media.removeAttribute("src"); media.src = source; }
+        probePoster();
+      });
+      fallback.append(message);
+      if (!frame.closest("a[href]")) fallback.append(retry);
+      frame.append(fallback);
+    };
     const hold = () => {
-      if (settled) return;
       frame.classList.add("is-pending");
+      frame.classList.remove("is-ready", "is-settled");
+      frame.setAttribute("aria-busy", "true");
     };
-
-    if (media.tagName === "VIDEO") {
-      const poster = media.getAttribute("poster");
-      if (media.readyState >= 2) {
-        finish();
-        return;
-      }
-      hold();
-      const armPlayback = () => {
-        media.addEventListener("loadeddata", finish, { once: true });
-        media.addEventListener("canplay", finish, { once: true });
-        media.addEventListener("error", finish, { once: true });
-        const pendingLimit = window.setTimeout(finish, 8000);
-        const stopLimit = () => window.clearTimeout(pendingLimit);
-        media.addEventListener("loadeddata", stopLimit, { once: true });
-        media.addEventListener("canplay", stopLimit, { once: true });
-        media.addEventListener("error", stopLimit, { once: true });
-        const playback = media.play?.();
-        if (playback?.catch) playback.catch(() => {});
-        if (media.readyState >= 2) finish();
-      };
-      if (poster) {
-        const probe = new Image();
-        probe.addEventListener("load", finish, { once: true });
-        probe.addEventListener("error", () => {
-          if (settled) return;
-          armPlayback();
-        }, { once: true });
-        probe.src = poster;
-        if (probe.complete && probe.naturalWidth > 0) finish();
-        return;
-      }
-      armPlayback();
-      return;
-    }
-
-    if (media.complete && media.naturalWidth > 0) {
+    const armLimit = () => {
+      window.clearTimeout(pendingLimit);
+      pendingLimit = window.setTimeout(fail, 20000);
+    };
+    const probePoster = () => {
+      if (!isVideo || !media.poster) return;
+      const probe = new Image();
+      probe.addEventListener("load", () => { posterReady = true; finish(); }, { once: true });
+      probe.src = media.poster;
+    };
+    media.addEventListener(isVideo ? "loadeddata" : "load", finish);
+    media.addEventListener("error", fail);
+    if (isVideo) media.querySelectorAll("source").forEach((source) => source.addEventListener("error", fail));
+    if (isVideo ? media.readyState >= 2 : media.complete && media.naturalWidth > 0) {
       finish();
       return;
     }
     hold();
-    media.addEventListener("load", finish, { once: true });
-    media.addEventListener("error", finish, { once: true });
-    if (media.complete) finish();
+    if (!isVideo && media.complete) { fail(); return; }
+    // A below-fold lazy image gets its full loading window when approached.
+    if ("IntersectionObserver" in window) {
+      observer = new IntersectionObserver((entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) { armLimit(); observer.disconnect(); }
+      }, { rootMargin: "200px" });
+      observer.observe(frame);
+    } else armLimit();
+    probePoster();
   });
 }
 
@@ -193,7 +216,9 @@ function initShowcase() {
     element.tabIndex = -1;
   });
   duplicate.querySelectorAll(".showcase__item").forEach((frame) => {
-    frame.classList.remove("media-slot", "is-pending", "is-ready", "is-settled");
+    frame.classList.remove("media-slot", "is-pending", "is-ready", "is-settled", "is-error");
+    delete frame.dataset.mediaInitialized;
+    frame.querySelector(".media-fallback")?.remove();
   });
   if ("inert" in duplicate) duplicate.inert = true;
   track.appendChild(duplicate);
@@ -299,7 +324,7 @@ function initShowcase() {
   const animate = (time) => {
     const elapsed = Math.min(50, time - previousTime);
     previousTime = time;
-    const frozen = document.hidden;
+    const frozen = document.hidden || document.documentElement.hasAttribute("data-home-intro") || viewport.matches(":focus-within") || (menuOverlay && !menuOverlay.hidden);
     if (dragging || frozen) {
       /* Pointer tracking writes the transform itself. */
     } else if (notch) {
@@ -379,7 +404,7 @@ function initShowcase() {
   );
 
   viewport.addEventListener("pointerdown", (event) => {
-    if (event.button !== 0) return;
+    if (event.button !== 0 || event.target.closest("button")) return;
     dragging = true;
     pointerId = event.pointerId;
     previousPointerPosition = pointerPosition(event);
@@ -548,18 +573,19 @@ function initCaseToc() {
   const labels = tocEntries.map((entry) => entry.btn.querySelector(".case__toc-label")?.textContent.trim() || "");
   const colors = tocEntries.map((entry) => {
     const item = entry.btn.closest("[data-toc-item]");
-    return item?.getAttribute("data-color") || "#dca8e8";
+    return `var(--color-${item?.getAttribute("data-color") || "rose"})`;
   });
   menuButtons.forEach((btn) => {
-    btn.style.setProperty("--item-color", btn.getAttribute("data-color") || "#dca8e8");
+    btn.style.setProperty("--item-color", `var(--color-${btn.getAttribute("data-color") || "rose"})`);
   });
 
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const OPTIMISTIC_MS = 1200;
   const EXIT_MS = 120;
   const TITLE_OUT_MS = 130;
-  const SCROLL_OFFSET = 80;
-  const SPY_LINE = 96;
+  const compactCase = window.matchMedia("(max-width: 1024px)");
+  const scrollOffset = () => compactCase.matches ? 24 : 80;
+  const spyLine = () => compactCase.matches ? 40 : 96;
 
   let activeIndex = 0;
   let optimisticUntil = 0;
@@ -575,6 +601,7 @@ function initCaseToc() {
       return menuOpen;
     },
     setOpen(next) {
+      if (next && !document.getElementById("menu-overlay")?.hidden) return;
       if (next === menuOpen) return;
       menuOpen = next;
       listeners.forEach((fn) => fn());
@@ -596,9 +623,9 @@ function initCaseToc() {
 
   function scrollToSection(el) {
     const header = headerOf(el);
-    const target = Math.max(0, window.scrollY + header.getBoundingClientRect().top - SCROLL_OFFSET);
+    const target = Math.max(0, window.scrollY + header.getBoundingClientRect().top - scrollOffset());
     if (siteLenis) {
-      siteLenis.scrollTo(header, { offset: -SCROLL_OFFSET });
+      siteLenis.scrollTo(header, { offset: -scrollOffset() });
       return;
     }
     window.scrollTo({ top: target, behavior: reducedMotion.matches ? "auto" : "smooth" });
@@ -610,12 +637,13 @@ function initCaseToc() {
     paint();
     scrollToSection(sections[index]);
     store.setOpen(false);
+    if (compactCase.matches) trigger.focus({ preventScroll: true });
   }
 
   function spy() {
     let next = 0;
     sections.forEach((el, i) => {
-      if (headerOf(el).getBoundingClientRect().top <= SPY_LINE) next = i;
+      if (headerOf(el).getBoundingClientRect().top <= spyLine()) next = i;
     });
 
     if (performance.now() >= optimisticUntil) activeIndex = next;
@@ -629,6 +657,7 @@ function initCaseToc() {
     const apply = () => {
       displayedIndex = nextIndex;
       triggerLabel.textContent = labels[nextIndex];
+      trigger.setAttribute("aria-label", "Contents: " + labels[nextIndex]);
       triggerLabel.classList.remove("is-fading");
     };
 
@@ -681,6 +710,7 @@ function initCaseToc() {
 
   function mountMenu() {
     window.clearTimeout(closeTimer);
+    fitMobileMenu();
     menu.hidden = false;
     if (reducedMotion.matches) {
       menu.classList.add("is-entered");
@@ -709,6 +739,39 @@ function initCaseToc() {
     (menuButtons[activeIndex] || menuButtons[0])?.focus();
   }
 
+  const mobileContents = root.querySelector("[data-toc-mobile]");
+  const dock = document.getElementById("case-controls");
+  const menuToggle = document.getElementById("menu-open");
+  function fitMobileMenu() {
+    if (!compactCase.matches || !dock) return;
+    const rect = dock.getBoundingClientRect();
+    menu.style.maxHeight = Math.max(44, rect.top - 28) + "px";
+  }
+  function placeContents() {
+    if (!mobileContents || !dock) return;
+    if (compactCase.matches) {
+      dock.insertBefore(mobileContents, menuToggle);
+      trigger.setAttribute("aria-label", "Contents: " + labels[activeIndex]);
+    } else {
+      if (store.open) {
+        store.setOpen(false);
+        railButtons[activeIndex]?.focus({ preventScroll: true });
+      }
+      root.appendChild(mobileContents);
+      menu.style.maxHeight = "";
+    }
+    fitMobileMenu();
+  }
+  document.addEventListener("site-menu-opening", () => {
+    store.setOpen(false);
+    window.clearTimeout(closeTimer);
+    menu.hidden = true;
+    menu.classList.remove("is-entered");
+  });
+  compactCase.addEventListener("change", placeContents);
+  window.addEventListener("resize", fitMobileMenu);
+  placeContents();
+
   store.subscribe(() => {
     trigger.setAttribute("aria-expanded", String(store.open));
     if (store.open) {
@@ -730,9 +793,10 @@ function initCaseToc() {
     }
     if (event.key === "ArrowDown" && !store.open) {
       event.preventDefault();
+      event.stopPropagation();
       store.setOpen(true);
     }
-    if (event.key === " ") event.preventDefault();
+    if (event.key === " ") { event.preventDefault(); store.setOpen(!store.open); }
   });
   trigger.addEventListener("click", () => {
     store.setOpen(!store.open);
@@ -753,7 +817,7 @@ function initCaseToc() {
 
   document.addEventListener("pointerdown", (event) => {
     if (!store.open) return;
-    if (root.contains(event.target)) return;
+    if (root.contains(event.target) || mobileContents?.contains(event.target)) return;
     store.setOpen(false);
   });
 
@@ -767,6 +831,12 @@ function initCaseToc() {
       return;
     }
 
+    if (event.key === "Tab") {
+      event.preventDefault();
+      store.setOpen(false);
+      (event.shiftKey ? trigger : menuToggle)?.focus({ preventScroll: true });
+      return;
+    }
     const last = menuButtons.length - 1;
     const focused = menuButtons.indexOf(document.activeElement);
     let next = focused;
@@ -811,7 +881,7 @@ function placeMobileChrome() {
 
   const apply = () => {
     if (mobileMenuQuery.matches) {
-      if (pageLogo.parentElement !== document.body) document.body.appendChild(pageLogo);
+      if (!document.body.matches(".home, .case") && pageLogo.parentElement !== document.body) document.body.appendChild(pageLogo);
       if (soundToggleEl.parentElement !== menuOverlay) {
         menuLogo.insertAdjacentElement("afterend", soundToggleEl);
       }
@@ -976,13 +1046,29 @@ function lockPageScroll(lock) {
   document.body.style.overflow = lock ? "hidden" : "";
 }
 
+let menuBackground = [];
+function setMenuBackgroundInert(lock) {
+  if (lock && !menuBackground.length) {
+    menuBackground = Array.from(document.body.children)
+      .filter((element) => element !== menuOverlay && !["SCRIPT", "STYLE", "LINK"].includes(element.tagName))
+      .map((element) => [element, element.inert]);
+    menuBackground.forEach(([element]) => { element.inert = true; });
+  } else if (!lock) {
+    menuBackground.forEach(([element, wasInert]) => { element.inert = wasInert; });
+    menuBackground = [];
+  }
+}
 function openMenu() {
+  document.dispatchEvent(new Event("site-menu-opening"));
+  document.body.classList.add("is-menu-open");
   const token = ++menuAnimToken;
   window.cuelume?.play("bloom");
   menuOverlay.hidden = false;
   menuOverlay.classList.add("is-open", "is-animating");
   menuOpenBtn.setAttribute("aria-expanded", "true");
   lockPageScroll(true);
+  setMenuBackgroundInert(true);
+  menuOverlay.focus({ preventScroll: true });
   siteLenis?.stop();
   playRingAnimations(true).then(() => {
     if (token !== menuAnimToken) return;
@@ -1003,14 +1089,18 @@ function closeMenu() {
     stopInFlightAnims();
     clearInlineAnimStyles();
     menuOverlay.hidden = true;
+    document.body.classList.remove("is-menu-open");
     menuOverlay.classList.remove("is-animating");
     lockPageScroll(false);
+    setMenuBackgroundInert(false);
+    if (mobileMenuQuery.matches) menuOpenBtn.focus({ preventScroll: true });
     siteLenis?.start();
   });
 }
 
 if (menuOpenBtn && menuCloseBtn && menuOverlay) {
   menuOpenBtn.addEventListener("click", openMenu);
+  mobileMenuQuery.addEventListener("change", () => { if (!mobileMenuQuery.matches && !menuOverlay.hidden) closeMenu(); });
   menuCloseBtn.addEventListener("click", closeMenu);
   menuLogo?.addEventListener("click", (e) => {
     if (!menuLogo.getAttribute("href")?.startsWith("#")) return;
@@ -1023,7 +1113,19 @@ if (menuOpenBtn && menuCloseBtn && menuOverlay) {
     closeMenu();
   });
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeMenu();
+    if (menuOverlay.hidden) return;
+    if (e.key === "Escape") { e.preventDefault(); closeMenu(); }
+    if (e.key === "Tab") {
+      const targets = Array.from(menuOverlay.querySelectorAll('a[href], button:not([disabled]), [tabindex="0"]'))
+        .filter((element) => element.getClientRects().length && getComputedStyle(element).visibility !== "hidden" && element.getAttribute("aria-disabled") !== "true");
+      const first = targets[0];
+      const last = targets[targets.length - 1];
+      if (e.shiftKey && (document.activeElement === first || document.activeElement === menuOverlay)) {
+        e.preventDefault(); last?.focus();
+      } else if (!e.shiftKey && (document.activeElement === last || document.activeElement === menuOverlay)) {
+        e.preventDefault(); first?.focus();
+      }
+    }
   });
 
   menuOverlay.querySelectorAll(".menu-overlay__link, .menu-overlay__contact-link").forEach((el) => {
@@ -1088,8 +1190,6 @@ function initSquishCursor() {
   const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const EASE = 0.38;
-  const POWER = 1.1;
-
   let el = null;
   let label = null;
   let rafId = 0;
@@ -1102,122 +1202,115 @@ function initSquishCursor() {
   let rot = 0;
   let seeded = false;
   let soon = false;
+  let interactive = false;
+  let pointerDown = false;
   let holdUntil = 0;
-  let cursorSize = 16;
 
   const canUseCursor = () => finePointer.matches && !reducedMotion.matches;
-
+  const isDragging = () => document.body.classList.contains("is-holding-review") || (pointerDown && Boolean(document.querySelector(
+    ".showcase.is-dragging, .case-gallery__viewport.is-dragging",
+  )));
   const setSoon = (next) => {
     if (!el || next === soon) return;
     soon = next;
-    if (soon && label) {
-      el.style.setProperty("--soon-width", `${Math.ceil(label.scrollWidth)}px`);
+    if (soon) {
+      el.style.setProperty("--soon-width", Math.ceil(label.scrollWidth) + "px");
       holdUntil = 0;
-    } else {
-      holdUntil = performance.now() + 260;
-    }
+    } else holdUntil = performance.now() + 260;
     el.classList.toggle("is-coming-soon", soon);
   };
-
+  function paintTarget(target) {
+    if (!el) return;
+    const dragging = isDragging();
+    setSoon(!dragging && Boolean(target?.closest?.('[data-cursor="soon"]')));
+    const control = target?.closest?.("a[href], button, [role=button], [role=menuitem]");
+    interactive = Boolean(control && !control.matches(":disabled, [aria-disabled=true]"));
+    el.classList.toggle("is-link", interactive && !soon && !dragging);
+  }
   const loop = () => {
-    if (!canUseCursor()) {
-      teardown();
-      return;
-    }
-
+    if (!canUseCursor()) { teardown(); return; }
     const dx = mx - x;
     const dy = my - y;
     x += dx * EASE;
     y += dy * EASE;
-
-    const speed = Math.min(Math.hypot(dx, dy) / 44, POWER);
-    const holdShape = soon || performance.now() < holdUntil;
-    if (holdShape) {
+    const dragging = isDragging();
+    const link = interactive && !soon && !dragging;
+    el.classList.toggle("is-link", link);
+    if (soon || link || dragging || performance.now() < holdUntil) {
       rot = 0;
       sx = 1;
       sy = 1;
     } else {
-      if (speed > 0.02) rot = (Math.atan2(dy, dx) * 180) / Math.PI;
+      const speed = Math.min(Math.hypot(dx, dy) / 44, 1.1);
+      if (speed > 0.02) rot = Math.atan2(dy, dx) * 180 / Math.PI;
       sx += (1 + speed - sx) * 0.18;
       sy += (1 - speed * 0.78 - sy) * 0.18;
     }
-
-    const half = cursorSize / 2;
-    el.style.transform = `translate3d(${x - half}px, ${y - half}px, 0) rotate(${rot}deg) scale(${sx}, ${sy})`;
+    el.style.transform = "translate3d(" + (x - 8) + "px," + (y - 8) + "px,0) rotate(" + rot + "deg) scale(" + sx + "," + sy + ")";
     rafId = requestAnimationFrame(loop);
   };
-
   const onMove = (event) => {
     sync();
     if (!el) return;
     mx = event.clientX;
     my = event.clientY;
-    const target = event.target;
-    setSoon(Boolean(target && target.closest && target.closest('[data-cursor="soon"]')));
-    const interactive = target && target.closest && target.closest("a[href], button, [role=button]");
-    el.classList.toggle("is-gradient", Boolean(interactive));
-    if (!seeded) {
-      x = mx;
-      y = my;
-      seeded = true;
-      el.classList.add("is-visible");
-    }
-  };
-
-  const onLeave = () => {
-    if (!el) return;
-    el.classList.remove("is-visible");
-    setSoon(false);
-  };
-
-  const onEnter = (event) => {
-    if (!el) return;
-    mx = event.clientX;
-    my = event.clientY;
-    x = mx;
-    y = my;
-    sx = 1;
-    sy = 1;
-    rot = 0;
+    paintTarget(event.target);
+    if (!seeded) { x = mx; y = my; seeded = true; }
     el.classList.add("is-visible");
   };
-
+  const onLeave = () => {
+    el?.classList.remove("is-visible", "is-link");
+    setSoon(false);
+    seeded = false;
+    interactive = false;
+  };
   const teardown = () => {
-    if (!el) return;
     cancelAnimationFrame(rafId);
-    rafId = 0;
-    el.remove();
+    el?.remove();
     el = null;
     label = null;
     seeded = false;
     soon = false;
-    holdUntil = 0;
+    interactive = false;
     document.documentElement.classList.remove("has-squish-cursor");
   };
-
   const setup = () => {
     if (el) return;
     el = document.createElement("div");
     el.className = "squish-cursor";
     el.setAttribute("aria-hidden", "true");
+    const dot = document.createElement("span");
+    dot.className = "squish-cursor__dot";
     label = document.createElement("span");
     label.className = "squish-cursor__label";
     label.textContent = "Coming soon";
-    el.appendChild(label);
-    document.body.appendChild(el);
-    cursorSize = el.offsetHeight || cursorSize;
+    dot.append(label);
+    const svgNamespace = "http://www.w3.org/2000/svg";
+    const triangle = document.createElementNS(svgNamespace, "svg");
+    triangle.classList.add("squish-cursor__triangle");
+    triangle.setAttribute("viewBox", "0 0 18 20");
+    triangle.setAttribute("focusable", "false");
+    const path = document.createElementNS(svgNamespace, "path");
+    path.setAttribute("d", "M1 1 L1 18 L16 11 Z");
+    triangle.append(path);
+    el.append(dot, triangle);
+    document.body.append(el);
     document.documentElement.classList.add("has-squish-cursor");
     rafId = requestAnimationFrame(loop);
   };
-
-  const sync = () => {
-    if (canUseCursor()) setup();
-    else teardown();
-  };
-
+  const sync = () => canUseCursor() ? setup() : teardown();
   window.addEventListener("pointermove", onMove, { passive: true });
   document.documentElement.addEventListener("pointerleave", onLeave);
-  document.documentElement.addEventListener("pointerenter", onEnter);
+  document.documentElement.addEventListener("pointerenter", onMove);
+  window.addEventListener("pointerdown", (event) => { pointerDown = true; paintTarget(event.target); }, { passive: true });
+  const release = () => {
+    pointerDown = false;
+    paintTarget(document.elementFromPoint(mx, my));
+  };
+  window.addEventListener("pointerup", release, { passive: true });
+  window.addEventListener("pointercancel", release, { passive: true });
+  window.addEventListener("scroll", () => paintTarget(document.elementFromPoint(mx, my)), { passive: true, capture: true });
+  window.addEventListener("blur", onLeave);
   finePointer.addEventListener("change", sync);
   reducedMotion.addEventListener("change", sync);
   sync();
@@ -1294,6 +1387,17 @@ function initWorkFilters() {
   const categoriesOf = (item) =>
     Array.from(item.querySelectorAll(".work-tag")).map((tag) => slugWorkFilter(tag.textContent));
 
+  pills.forEach((pill) => {
+    const filter = pill.getAttribute("data-filter");
+    const count = filter === "all" ? items.length : items.filter((item) => categoriesOf(item).includes(filter)).length;
+    const label = pill.querySelector(".work-filter__count");
+    if (label) label.textContent = String(count);
+  });
+  const empty = document.createElement("p");
+  empty.className = "work-empty";
+  empty.hidden = true;
+  empty.textContent = "No projects in this category yet. Choose All to explore the work.";
+  root.insertAdjacentElement("afterend", empty);
   const applyFilter = (value) => {
     pills.forEach((pill) => {
       const on = pill.getAttribute("data-filter") === value;
@@ -1308,6 +1412,7 @@ function initWorkFilters() {
       if (show) visible += 1;
     });
 
+    empty.hidden = visible > 0;
     const active = pills.find((pill) => pill.getAttribute("data-filter") === value);
     const label = active?.querySelector(".work-filter__label")?.textContent.trim() || "All";
     if (status) {
@@ -1317,6 +1422,7 @@ function initWorkFilters() {
     }
   };
 
+  applyFilter("all");
   const saved = readWorkNav();
   if (saved?.restore && saved.filter && saved.filter !== "all") {
     const savedPill = pills.find((pill) => pill.getAttribute("data-filter") === saved.filter);
@@ -1450,7 +1556,7 @@ function initPageTransitions() {
     }
   });
 
-  if (reducedMotion.matches) return;
+  if (document.body.classList.contains("home") || reducedMotion.matches) return;
   if (CSS.supports("view-transition-name", "none")) return;
   document.documentElement.classList.add("is-page-enter");
 }
@@ -1509,45 +1615,51 @@ function initCompanyUnderlines() {
 initCompanyUnderlines();
 
 function initCopyEmailButtons() {
-  const selectors = ".action-btn--copy, .menu-overlay__contact-link--email";
-  document.querySelectorAll(selectors).forEach((button) => {
-    const label =
-      button.querySelector(".action-btn__text") ||
-      button.querySelector(".menu-overlay__contact-text");
+  const status = document.createElement("p");
+  status.className = "visually-hidden";
+  status.setAttribute("role", "status");
+  status.setAttribute("aria-live", "polite");
+  status.setAttribute("aria-atomic", "true");
+  document.body.append(status);
+  document.querySelectorAll(".action-btn--copy, .menu-overlay__contact-link--email").forEach((button) => {
+    const label = button.querySelector(".action-btn__text, .menu-overlay__contact-text");
     if (!label) return;
-
     const defaultText = label.textContent.trim();
     let resetTimer = 0;
-
+    let busy = false;
     button.addEventListener("click", async () => {
-      let copied = true;
+      if (busy) return;
+      busy = true;
+      let copied = false;
       try {
         await navigator.clipboard.writeText(CONTACT_EMAIL);
+        copied = true;
       } catch {
         const area = document.createElement("textarea");
         area.value = CONTACT_EMAIL;
         area.setAttribute("readonly", "");
-        area.style.position = "fixed";
-        area.style.left = "-9999px";
-        document.body.appendChild(area);
+        area.className = "visually-hidden";
+        document.body.append(area);
         area.select();
-        try {
-          copied = document.execCommand("copy");
-        } finally {
-          area.remove();
-        }
+        try { copied = document.execCommand("copy"); } catch { copied = false; }
+        area.remove();
+        button.focus({ preventScroll: true });
       }
-
+      busy = false;
+      window.clearTimeout(resetTimer);
       if (!copied) {
         window.cuelume?.play("error");
-        return;
+        label.textContent = "Try again";
+        status.className = "contact-status";
+        status.textContent = `Couldn’t copy. Email me at ${CONTACT_EMAIL}`;
+        button.insertAdjacentElement("afterend", status);
+      } else {
+        window.cuelume?.play("success");
+        status.className = "visually-hidden";
+        status.textContent = "Email address copied";
+        label.textContent = "Copied";
+        button.classList.add("is-copied");
       }
-
-      window.cuelume?.play("success");
-
-      window.clearTimeout(resetTimer);
-      label.textContent = "Copied!";
-      button.classList.add("is-copied");
       resetTimer = window.setTimeout(() => {
         label.textContent = defaultText;
         button.classList.remove("is-copied");
@@ -1704,3 +1816,26 @@ function initCaseGalleries() {
 }
 
 initCaseGalleries();
+
+function initVideoVisibility() {
+  const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const videos = Array.from(document.querySelectorAll("video[autoplay]"));
+  const visible = new Set();
+  const sync = (video) => {
+    if (preference.matches || document.hidden || !visible.has(video)) video.pause();
+    else video.play().catch(() => { /* The poster/first frame remains a useful preview. */ });
+  };
+  const observer = "IntersectionObserver" in window ? new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) visible.add(entry.target); else visible.delete(entry.target);
+      sync(entry.target);
+    });
+  }) : null;
+  videos.forEach((video) => {
+    if (observer) observer.observe(video); else visible.add(video);
+    sync(video);
+  });
+  preference.addEventListener("change", () => videos.forEach(sync));
+  document.addEventListener("visibilitychange", () => videos.forEach(sync));
+}
+initVideoVisibility();

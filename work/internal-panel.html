@@ -5,10 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Unified internal panel — Sofiia Matsiutsia</title>
 <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
-<link rel="stylesheet" href="../styles.css?v=91" />
+<link rel="preload" href="../assets/fonts/FolioBkBT-Book.ttf" as="font" type="font/ttf" crossorigin />
+<link rel="stylesheet" href="../styles.css?v=130" />
 <link rel="stylesheet" href="../assets/vendor/lenis/lenis.css?v=1.3.26" />
 </head>
 <body class="case">
+  <a class="skip-link" href="#main-content">Skip to content</a>
 
   <header class="header">
     <nav class="nav" aria-label="Primary">
@@ -26,7 +28,7 @@
           <img class="nav__mark-img nav__mark-img--selected" src="../assets/icons/nav-work-selected.svg" alt="" width="82" height="29" />
         </span>
       </a>
-      <a class="nav__link nav__link--writings nav__link--muted" data-cursor="soon">
+      <a class="nav__link nav__link--writings nav__link--muted" data-cursor="soon" aria-disabled="true" aria-label="Writings — coming soon">
         <span class="nav__label">Writings</span>
         <span class="nav__mark" aria-hidden="true">
           <img class="nav__mark-img nav__mark-img--hover" src="../assets/icons/writings-hover.svg" alt="" width="99" height="28" />
@@ -43,7 +45,7 @@
     </nav>
 
     <a href="../" class="logo" aria-label="Sofiia Matsiutsia — home">
-      <img src="../assets/images/logo.gif" alt="Sofiia Matsiutsia" class="logo__mark" />
+      <img src="../assets/images/sm-logo.svg" alt="Sofiia Matsiutsia" class="logo__mark"  width="266" height="34" />
     </a>
 
     <button type="button" class="sound-toggle" aria-label="Mute sound" aria-pressed="false">
@@ -66,6 +68,7 @@
   <div class="case__layout">
     <aside class="case__rail">
       <div class="case__rail-inner">
+        <noscript><nav class="static-toc" aria-label="Page contents"><a href="#role">My role</a><a href="#improvements">Improvements</a><a href="#problems">Problems</a><a href="#solution">Solution</a><a href="#process">The process</a></nav></noscript>
       <a href="../work" class="case__back" aria-label="Back to work">
         <img src="../assets/icons/back-chevron.svg" alt="" width="38" height="26" />
       </a>
@@ -76,31 +79,31 @@
         <div class="case__toc-rail" data-toc-rail>
           <span class="case__toc-dot" data-toc-dot aria-hidden="true"></span>
           <ul class="case__toc-list">
-            <li class="case__toc-item" data-toc-item data-color="#dca8e8">
+            <li class="case__toc-item" data-toc-item data-color="rose">
               <button type="button" data-toc-id="role">
                 <span class="case__toc-spacer" aria-hidden="true"></span>
                 <span class="case__toc-label">My role</span>
               </button>
             </li>
-            <li class="case__toc-item" data-toc-item data-color="#94c890">
+            <li class="case__toc-item" data-toc-item data-color="green">
               <button type="button" data-toc-id="improvements">
                 <span class="case__toc-spacer" aria-hidden="true"></span>
                 <span class="case__toc-label">Improvements</span>
               </button>
             </li>
-            <li class="case__toc-item" data-toc-item data-color="#e8ac88">
+            <li class="case__toc-item" data-toc-item data-color="orange">
               <button type="button" data-toc-id="problems">
                 <span class="case__toc-spacer" aria-hidden="true"></span>
                 <span class="case__toc-label">Problems</span>
               </button>
             </li>
-            <li class="case__toc-item" data-toc-item data-color="#70c8f4">
+            <li class="case__toc-item" data-toc-item data-color="blue">
               <button type="button" data-toc-id="solution">
                 <span class="case__toc-spacer" aria-hidden="true"></span>
                 <span class="case__toc-label">Solution</span>
               </button>
             </li>
-            <li class="case__toc-item" data-toc-item data-color="#dca8e8">
+            <li class="case__toc-item" data-toc-item data-color="rose">
               <button type="button" data-toc-id="process">
                 <span class="case__toc-spacer" aria-hidden="true"></span>
                 <span class="case__toc-label">The process</span>
@@ -118,6 +121,7 @@
             aria-expanded="false"
             aria-controls="case-toc-menu"
           >
+            <span class="case__toc-trigger-kicker" aria-hidden="true">Contents</span>
             <span class="case__toc-trigger-label" data-toc-trigger-label>My role</span>
             <svg class="case__toc-chevron" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
               <path d="M1 1.5 6 6.5 11 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -125,31 +129,31 @@
           </button>
           <ul id="case-toc-menu" class="case__toc-menu" role="menu" hidden data-toc-menu>
             <li role="none">
-              <button type="button" role="menuitem" data-toc-id="role" data-color="#dca8e8">
+              <button type="button" role="menuitem" data-toc-id="role" data-color="rose">
                 <span class="case__toc-menu-dot" aria-hidden="true"></span>
                 <span class="case__toc-menu-label">My role</span>
               </button>
             </li>
             <li role="none">
-              <button type="button" role="menuitem" data-toc-id="improvements" data-color="#94c890">
+              <button type="button" role="menuitem" data-toc-id="improvements" data-color="green">
                 <span class="case__toc-menu-dot" aria-hidden="true"></span>
                 <span class="case__toc-menu-label">Improvements</span>
               </button>
             </li>
             <li role="none">
-              <button type="button" role="menuitem" data-toc-id="problems" data-color="#e8ac88">
+              <button type="button" role="menuitem" data-toc-id="problems" data-color="orange">
                 <span class="case__toc-menu-dot" aria-hidden="true"></span>
                 <span class="case__toc-menu-label">Problems</span>
               </button>
             </li>
             <li role="none">
-              <button type="button" role="menuitem" data-toc-id="solution" data-color="#70c8f4">
+              <button type="button" role="menuitem" data-toc-id="solution" data-color="blue">
                 <span class="case__toc-menu-dot" aria-hidden="true"></span>
                 <span class="case__toc-menu-label">Solution</span>
               </button>
             </li>
             <li role="none">
-              <button type="button" role="menuitem" data-toc-id="process" data-color="#dca8e8">
+              <button type="button" role="menuitem" data-toc-id="process" data-color="rose">
                 <span class="case__toc-menu-dot" aria-hidden="true"></span>
                 <span class="case__toc-menu-label">The process</span>
               </button>
@@ -160,7 +164,7 @@
       </div>
     </aside>
 
-    <main class="case__main">
+    <main id="main-content" tabindex="-1" class="case__main">
       <div class="case__hero-block">
                 <figure class="case__hero case__hero--static case__hero--frame">
           <img class="case__hero-media" src="../assets/images/internal-panel.jpg" width="2400" height="1551" alt="Bookings list in the Housing Anywhere internal panel" />
@@ -303,14 +307,35 @@
           </article>
         </section>
       </div>
+      <nav class="case-project-nav" aria-label="More projects">
+        <a class="case-project-nav__all" href="../work">All work</a>
+        <div class="case-project-nav__grid">
+          <a class="case-project-link case-project-link--previous" href="voyage-monitor" aria-label="Previous project: Voyage Monitor dashboard">
+            <div class="case-project-link__media">
+              <img src="../assets/images/voyage-monitor-poster.jpg" width="1200" height="900" alt="" loading="lazy" />
+            </div>
+            <span class="case-project-link__direction">Previous project <span aria-hidden="true">←</span></span>
+            <span class="case-project-link__title">Voyage Monitor dashboard</span>
+          </a>
+          <a class="case-project-link case-project-link--next" href="team-lift-ai" aria-label="Next project: AI-powered skills intelligence platform">
+            <div class="case-project-link__media">
+              <img src="../assets/images/team-lift.png" width="2400" height="1547" alt="" loading="lazy" />
+            </div>
+            <span class="case-project-link__direction">Next project <span aria-hidden="true">→</span></span>
+            <span class="case-project-link__title">AI-powered skills intelligence platform</span>
+          </a>
+        </div>
+      </nav>
     </main>
   </div>
 
-  <button type="button" class="menu-bar" id="menu-open" aria-haspopup="true" aria-controls="menu-overlay" aria-expanded="false">
+  <div class="case-controls" id="case-controls" aria-label="Case study navigation">
+    <button type="button" class="menu-bar" id="menu-open" aria-haspopup="true" aria-controls="menu-overlay" aria-expanded="false">
     Menu
   </button>
+  </div>
 
-<div class="menu-overlay" id="menu-overlay" hidden>
+<div class="menu-overlay" id="menu-overlay" role="dialog" aria-modal="true" aria-label="Site menu" tabindex="-1" hidden>
   <a href="../" class="menu-overlay__logo" aria-label="Sofiia Matsiutsia — home">
     <img src="../assets/images/sm-logo.svg" alt="Sofiia Matsiutsia" width="230" height="29" />
   </a>
@@ -327,7 +352,7 @@
   <nav class="menu-overlay__nav" aria-label="Primary">
     <a href="../about" class="menu-overlay__link menu-overlay__link--about"><span>About</span></a>
     <a href="../work" class="menu-overlay__link menu-overlay__link--work"><span>Works</span></a>
-    <a class="menu-overlay__link menu-overlay__link--writings" data-cursor="soon"><span>Writings</span></a>
+    <a class="menu-overlay__link menu-overlay__link--writings" data-cursor="soon" aria-disabled="true" aria-label="Writings — coming soon"><span>Writings</span></a>
     <a href="../talks" class="menu-overlay__link menu-overlay__link--talks"><span>Talks</span></a>
   </nav>
 
@@ -339,11 +364,11 @@
     <div class="menu-overlay__contact-row">
       <a href="https://www.linkedin.com/in/smatsiutsia/" class="menu-overlay__contact-link menu-overlay__contact-link--linkedin" target="_blank" rel="noopener noreferrer">
         <span>LinkedIn</span>
-        <img src="../assets/icons/new-window-arrow-1.svg" alt="" class="menu-overlay__contact-arrow" aria-hidden="true" />
+        <img src="../assets/icons/new-window-arrow-1.svg" alt="" class="menu-overlay__contact-arrow" aria-hidden="true"  width="16" height="16" />
       </a>
       <a href="https://x.com/SMatsiutsia" class="menu-overlay__contact-link menu-overlay__contact-link--twitter" target="_blank" rel="noopener noreferrer">
         <span>Twitter</span>
-        <img src="../assets/icons/new-window-arrow-2.svg" alt="" class="menu-overlay__contact-arrow" aria-hidden="true" />
+        <img src="../assets/icons/new-window-arrow-2.svg" alt="" class="menu-overlay__contact-arrow" aria-hidden="true"  width="16" height="16" />
       </a>
     </div>
   </div>
@@ -354,7 +379,7 @@
 </div>
 
 <script src="../assets/vendor/lenis/lenis.min.js?v=1.3.26"></script>
-<script src="../script.js?v=59"></script>
+<script src="../script.js?v=63"></script>
 <script type="module" src="../sound.js?v=1"></script>
 </body>
 </html>

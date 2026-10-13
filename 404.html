@@ -5,12 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Page not found — Sofiia Matsiutsia</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-<link rel="stylesheet" href="/styles.css?v=121" />
+<link rel="preload" href="/assets/fonts/FolioBkBT-Book.ttf" as="font" type="font/ttf" crossorigin />
+<link rel="stylesheet" href="/styles.css?v=130" />
 </head>
 <body class="not-found">
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="header">
     <a href="/" class="logo" aria-label="Sofiia Matsiutsia — home">
-      <img src="/assets/images/sm-logo.svg" alt="Sofiia Matsiutsia" class="logo__mark" />
+      <img src="/assets/images/sm-logo.svg" alt="Sofiia Matsiutsia" class="logo__mark"  width="266" height="34" />
     </a>
 
     <nav class="nav" aria-label="Primary">
@@ -26,7 +28,7 @@
           <img class="nav__mark-img nav__mark-img--hover" src="/assets/icons/work-hover.svg" alt="" width="63" height="28" />
         </span>
       </a>
-      <a class="nav__link nav__link--writings" data-cursor="soon">
+      <a class="nav__link nav__link--writings" data-cursor="soon" aria-disabled="true" aria-label="Writings — coming soon">
         <span class="nav__label">Writings</span>
         <span class="nav__mark" aria-hidden="true">
           <img class="nav__mark-img nav__mark-img--hover" src="/assets/icons/writings-hover.svg" alt="" width="99" height="28" />
@@ -43,7 +45,7 @@
     <a class="not-found__header-home" href="/">Home</a>
   </header>
 
-  <main class="not-found__main">
+  <main id="main-content" tabindex="-1" class="not-found__main">
     <section class="not-found__content" aria-labelledby="not-found-title">
       <div class="not-found__artwork" role="img" aria-label="Illustrated 404">
         <img src="/assets/images/letters/404/404_1.svg" alt="" width="1080" height="540" draggable="false" />

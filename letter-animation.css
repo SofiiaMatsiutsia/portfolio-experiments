@@ -74,11 +74,13 @@
 }
 
 .animated-letter__trigger:focus-visible {
-  outline: 2px solid #171615;
+  outline: 2px solid var(--color-black);
   outline-offset: 4px;
 }
 
 .about-intro__rose {
-  color: #f4a4f2;
-  white-space: nowrap;
+  color: var(--color-rose);
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: normal;
 }
