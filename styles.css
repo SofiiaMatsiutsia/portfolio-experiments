@@ -2784,7 +2784,7 @@ body.home {
 .home .hero__community {
   color: var(--color-blue);
   text-decoration: none;
-  background: url("assets/icons/ai-community-underline.svg") left bottom / 100% 0.15em no-repeat;
+  background: url("assets/icons/ai-community-underline.svg?v=2") left bottom / 100% 0.15em no-repeat;
   padding-bottom: 0.045em;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
@@ -3743,6 +3743,49 @@ body.home {
   height: 100%;
   overflow: visible;
   color: currentColor;
+}
+
+/* The resting artwork stays in place; only the decorative stroke swaps.
+   No transition or continuous motion, including under reduced motion. */
+.wave-link {
+  position: relative;
+}
+
+.wave-link__layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 0;
+  height: 0;
+  overflow: visible;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.wave-link__layer > svg {
+  position: absolute;
+  display: block;
+  max-width: none;
+  overflow: visible;
+}
+
+.wave-link--ready:focus-visible > .wave-link__layer {
+  visibility: visible;
+}
+
+.wave-link--ready:focus-visible > .about-company__underline {
+  visibility: hidden;
+}
+
+.home .hero__community.wave-link--ready:focus-visible {
+  background-image: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .wave-link--ready:hover > .wave-link__layer { visibility: visible; }
+  .wave-link--ready:hover > .about-company__underline { visibility: hidden; }
+  .home .hero__community.wave-link--ready:hover { background-image: none; }
 }
 
 .action-btn:is(:hover, :focus-visible) .action-btn__arrow {

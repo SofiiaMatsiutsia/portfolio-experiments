@@ -8,6 +8,10 @@ The homepage writes the inline signature over the shared blue for 1 second, hold
 
 The intro plays on every homepage visit, including reloads, ordinary navigation, and back/forward restoration. Its settings live in `homepage-intro-settings.js`. Completion is saved in `sessionStorage` under `portfolio:homepage-intro:v1` so the replay policy can be changed later without replacing the controller. The optimized WebP/MP4 previews remain available alongside the original showcase assets.
 
+## Link waves
+
+The drawn-underlined links on Home and About swap to a static sine wave on hover or keyboard focus. Shared wave settings live at the top of `underlined-links.js`. Both resting and hover strokes are 1.3px thick.
+
 ## Publishing
 
 - Canonical Git repository: `https://github.com/SofiiaMatsiutsia/portfolio-experiments.git`

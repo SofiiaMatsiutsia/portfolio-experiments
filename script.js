@@ -1602,7 +1602,8 @@ function initCompanyUnderlines() {
     path.setAttribute("d", pathData);
     path.setAttribute("fill", "none");
     path.setAttribute("stroke", "currentColor");
-    path.setAttribute("stroke-width", "2");
+    path.setAttribute("stroke-width", "1.3");
+    path.setAttribute("vector-effect", "non-scaling-stroke");
     path.setAttribute("stroke-linecap", "round");
     path.setAttribute("stroke-linejoin", "round");
 
