@@ -17,10 +17,8 @@
       state.id += 1;
       root.style.setProperty("--home-intro-bg", settings?.background || "var(--color-blue)");
       root.dataset.homeIntro = "pending";
-      const rate = settings?.rate || 1;
-      const lead = (settings?.delayMs || 0) + (settings?.writeMs || 1500) + (settings?.holdMs || 0);
-      const tail = Math.max(settings?.revealMs || 650, (settings?.fadeDelayMs || 0) + (settings?.fadeMs || 0));
-      state.armWatchdog(Math.max(lead / rate, settings?.readyLimitMs ?? 6000) + tail / rate + 600);
+      // The controller replaces this startup limit with its own animation budget.
+      state.armWatchdog(6000);
       state.onStart?.(settings);
     },
     finish() {

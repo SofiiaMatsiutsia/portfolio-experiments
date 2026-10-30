@@ -4,9 +4,13 @@ This is the source for the portfolio at [www.matsiutsia.com](https://www.matsiut
 
 ## Homepage intro
 
-The homepage writes the inline signature over the shared blue for 1 second, holds for 250ms, then reveals the page through pastel rings over 1.75 seconds. `homepage-intro.js` waits for first-screen fonts and media, with a six-second readiness limit. Reduced motion uses a static signature and a 180ms fade; Escape skips the intro.
+The homepage writes the inline signature over the shared blue for 1 second, holds for 250ms, then reveals the page through pastel rings over 1.75 seconds. The normal sequence never waits for fonts or media. A six-second watchdog releases the page if the controller fails to initialize; once it starts, its watchdog uses the remaining animation time plus 600ms. Reduced motion uses a static signature and a 180ms fade; Escape skips the intro.
 
-The intro plays on every homepage visit, including reloads, ordinary navigation, and back/forward restoration. Its settings live in `homepage-intro-settings.js`. Completion is saved in `sessionStorage` under `portfolio:homepage-intro:v1` so the replay policy can be changed later without replacing the controller. The optimized WebP/MP4 previews remain available alongside the original showcase assets.
+The intro plays on every homepage visit, including reloads, ordinary navigation, and back/forward restoration. Its settings live in `homepage-intro-settings.js`. Completion is saved in `sessionStorage` under `portfolio:homepage-intro:v1` so the replay policy can be changed later without replacing the controller. Explicit `waitForAssets: true` overrides retain the optional bounded readiness mode.
+
+The showcase initially loads WebP posters and the small Housing Anywhere image. Video sources stay in `data-src` until the intro ends and the tile becomes visible, including tiles in the duplicated loop. Hidden previews pause. Reduced motion and `navigator.connection.saveData` keep posters without automatic video downloads. Original GIF/PNG assets remain available for other pages. Homepage footer scripts defer in dependency order so their downloads cannot delay the intro controller.
+
+Run the regression checks with `node --test scripts/*.test.mjs` and `python3 scripts/check-interface.py`.
 
 ## Link waves
 

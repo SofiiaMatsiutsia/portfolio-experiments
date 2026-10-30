@@ -1820,11 +1820,28 @@ initCaseGalleries();
 
 function initVideoVisibility() {
   const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const videos = Array.from(document.querySelectorAll("video[autoplay]"));
+  const connection = navigator.connection;
+  // initShowcase has already cloned the track, so both groups are observed.
+  const videos = Array.from(document.querySelectorAll("video[autoplay], video[data-lazy-preview]"));
   const visible = new Set();
   const sync = (video) => {
-    if (preference.matches || document.hidden || !visible.has(video)) video.pause();
-    else video.play().catch(() => { /* The poster/first frame remains a useful preview. */ });
+    const lazy = video.hasAttribute("data-lazy-preview");
+    const holdPreview = lazy && (document.documentElement.hasAttribute("data-home-intro") || connection?.saveData);
+    if (preference.matches || document.hidden || !visible.has(video) || holdPreview) {
+      video.pause();
+      return;
+    }
+    if (lazy) {
+      let attached = false;
+      video.querySelectorAll("source[data-src]").forEach((source) => {
+        if (source.hasAttribute("src")) return;
+        source.src = source.dataset.src;
+        attached = true;
+      });
+      // Sources are withheld entirely: preload alone cannot prevent downloads.
+      if (attached) video.load();
+    }
+    video.play().catch(() => { /* The poster/first frame remains a useful preview. */ });
   };
   const observer = "IntersectionObserver" in window ? new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
@@ -1836,7 +1853,14 @@ function initVideoVisibility() {
     if (observer) observer.observe(video); else visible.add(video);
     sync(video);
   });
-  preference.addEventListener("change", () => videos.forEach(sync));
-  document.addEventListener("visibilitychange", () => videos.forEach(sync));
+  // A replay finishes the old controller before starting the new one. Read the
+  // final state after that synchronous handoff, rather than fetching in between.
+  const syncAll = () => queueMicrotask(() => videos.forEach(sync));
+  preference.addEventListener("change", syncAll);
+  connection?.addEventListener?.("change", syncAll);
+  document.addEventListener("visibilitychange", syncAll);
+  window.addEventListener("homepageintrochange", syncAll);
+  window.addEventListener("pageshow", syncAll);
+  window.addEventListener("pagehide", () => videos.forEach((video) => video.pause()));
 }
 initVideoVisibility();

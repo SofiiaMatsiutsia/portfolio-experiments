@@ -31,7 +31,7 @@
     const writeEnd = config.delayMs + (reduced ? 0 : config.writeMs);
     const revealStart = writeEnd + (reduced ? 0 : config.holdMs);
     const duration = revealStart + (reduced ? config.reducedFadeMs : Math.max(config.revealMs, config.fadeDelayMs + config.fadeMs));
-    const deadline = state.startedAt + Math.max(config.readyLimitMs, revealStart / config.rate);
+    const deadline = performance.now() + Math.max(config.readyLimitMs, revealStart / config.rate);
     let rate = config.rate;
     let manualPaused = false;
     let waitingForAssets = false;
@@ -47,7 +47,7 @@
     const currentTime = () => Math.min(duration, Math.max(0, Number(clock?.currentTime) || 0));
     const status = () => ({ active: isActive(), paused: manualPaused, waitingForAssets, phase, time: currentTime(), duration, rate });
     const notify = () => window.dispatchEvent(new Event("homepageintrochange"));
-    const armWatchdog = () => state.armWatchdog(manualPaused ? null : (duration - currentTime()) / rate + Math.max(0, deadline - performance.now()) + 600);
+    const armWatchdog = () => state.armWatchdog(manualPaused ? null : (duration - currentTime()) / rate + (config.waitForAssets && !assetsReady ? Math.max(0, deadline - performance.now()) : 0) + 600);
 
     state.cleanups.push(() => {
       if (state.id === id) lastStatus = { ...status(), active: false, paused: false, phase: currentTime() >= duration - 1 ? "complete" : "skipped" };
@@ -294,6 +294,7 @@
       clock = animate(overlay, [], { duration, fill: "both" });
       // Let the browser resolve an initially null document timeline before syncing.
       align(0, false);
+      armWatchdog();
       controller = {
         status,
         pause() { manualPaused = true; align(currentTime(), true); armWatchdog(); notify(); },

@@ -10,7 +10,7 @@
     originX: 50, originY: 100, seedDesktop: 92, seedMobileCap: 64, seedMobileVw: 12, overscan: 4,
     pinkWidth: 0.17, greenWidth: 0.17, peachWidth: 0.17,
     background: "var(--color-blue)", ink: "var(--color-white)", pink: "var(--color-rose)", green: "var(--color-green)", peach: "var(--color-orange)",
-    waitForAssets: true, readyLimitMs: 6000, replayPolicy: "always", simulateReduced: false,
+    waitForAssets: false, readyLimitMs: 6000, replayPolicy: "always", simulateReduced: false,
   };
   const bounds = {
     delayMs: [0, 5000], writeMs: [250, 15000], holdMs: [0, 10000], revealMs: [100, 8000],

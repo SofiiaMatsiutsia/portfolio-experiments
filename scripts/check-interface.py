@@ -24,7 +24,7 @@ class PageCheck(HTMLParser):
             for key in ('alt', 'width', 'height'):
                 if key not in attrs:
                     errors.append(f'{self.path.relative_to(ROOT)}: image missing {key}: {attrs.get("src")}')
-        for key in ('src', 'href', 'poster'):
+        for key in ('src', 'href', 'poster', 'data-src'):
             raw = attrs.get(key, '')
             url = urlsplit(raw)
             if not raw or raw.startswith('#') or url.scheme or url.netloc:

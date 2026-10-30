@@ -70,7 +70,7 @@ test('Escape skips a pending intro', () => {
 test('a missing animation controller is released by the bounded watchdog', () => {
   const b = browser();
   const watchdog = [...b.timers.values()][0];
-  assert.ok(watchdog.ms < 10000);
+  assert.equal(watchdog.ms, 6000);
   watchdog.fn();
   assert.equal(b.state.active, false);
   assert.equal(b.root.dataset.homeIntro, undefined);
