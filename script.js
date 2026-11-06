@@ -1878,6 +1878,8 @@ function initVideoVisibility() {
       // Sources are withheld entirely: preload alone cannot prevent downloads.
       if (attached) video.load();
     }
+    const requestedRate = Number.parseFloat(video.dataset?.playbackRate);
+    if (Number.isFinite(requestedRate) && requestedRate > 0) video.playbackRate = requestedRate;
     video.play().catch(() => { /* The poster/first frame remains a useful preview. */ });
   };
   const observer = "IntersectionObserver" in window ? new IntersectionObserver((entries) => {

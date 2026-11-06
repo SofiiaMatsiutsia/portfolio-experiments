@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Automating landlord payouts — Sofiia Matsiutsia</title>
+<meta name="description" content="Consolidating six systems and staging payout automation to reduce manual work by 75% and save the finance team 30 hours per week." />
+<link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="../styles.css?v=134" />
+<link rel="stylesheet" href="../assets/vendor/lenis/lenis.css?v=1.3.26" />
+<link rel="preload" href="../assets/fonts/SF-Pro-Display-Regular.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="../assets/fonts/SF-Pro-Display-Medium.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="landlord-verification.css?v=11" />
+<link rel="stylesheet" href="payout-automation.css?v=1" />
+</head>
+<body class="case case--verification case--payouts">
+  <a class="skip-link" href="#main-content">Skip to case study</a>
+
+  <header class="header">
+    <nav class="nav" aria-label="Primary">
+      <a href="../about" class="nav__link nav__link--about nav__link--muted">
+        <span class="nav__label">About</span>
+        <span class="nav__mark" aria-hidden="true">
+          <img class="nav__mark-img nav__mark-img--hover" src="../assets/icons/nav-about-hover.svg" alt="" width="89" height="29" />
+          <img class="nav__mark-img nav__mark-img--selected" src="../assets/icons/nav-about-selected.svg" alt="" width="89" height="29" />
+        </span>
+      </a>
+      <a href="../work" class="nav__link nav__link--work" aria-current="page">
+        <span class="nav__label">Work</span>
+        <span class="nav__mark" aria-hidden="true">
+          <img class="nav__mark-img nav__mark-img--hover" src="../assets/images/landlord-verification/work-hover.svg" alt="" width="63" height="28" />
+          <img class="nav__mark-img nav__mark-img--selected" src="../assets/images/landlord-verification/nav-work-selected.svg" alt="" width="63" height="22.2805" />
+        </span>
+      </a>
+      <a class="nav__link nav__link--writings nav__link--muted" data-cursor="soon" aria-disabled="true" aria-label="Writings — coming soon">
+        <span class="nav__label">Writings</span>
+        <span class="nav__mark" aria-hidden="true">
+          <img class="nav__mark-img nav__mark-img--hover" src="../assets/icons/writings-hover.svg" alt="" width="99" height="28" />
+          <img class="nav__mark-img nav__mark-img--selected" src="../assets/icons/writings-hover.svg" alt="" width="99" height="28" />
+        </span>
+      </a>
+      <a href="../talks" class="nav__link nav__link--talks nav__link--muted">
+        <span class="nav__label">Talks</span>
+        <span class="nav__mark" aria-hidden="true">
+          <img class="nav__mark-img nav__mark-img--hover" src="../assets/icons/nav-talks-hover.svg" alt="" width="82" height="29" />
+          <img class="nav__mark-img nav__mark-img--selected" src="../assets/icons/nav-talks-selected.svg" alt="" width="82" height="29" />
+        </span>
+      </a>
+    </nav>
+
+    <a href="../" class="logo" aria-label="Sofiia Matsiutsia — home">
+      <img src="../assets/images/landlord-verification/sm-logo.svg" alt="Sofiia Matsiutsia" class="logo__mark" width="261" height="33.3609" />
+    </a>
+
+    <button type="button" class="sound-toggle" aria-label="Mute sound" aria-pressed="false">
+      <img class="verification__sound-art" src="../assets/images/landlord-verification/mute-sound.svg" alt="" width="260.99" height="32" aria-hidden="true" />
+      <span class="sound-toggle__swap">
+        <svg class="sound-toggle__icon" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <g transform="scale(1.142857)">
+            <path class="sound-toggle__cone" d="M14.3771 4.15294C14.3771 4.15294 13.1661 4.21675 12.1387 5.33723C11.8929 5.60526 11.7793 5.76476 11.4168 6.21479C11.0544 6.66482 10.453 7.40623 10.0491 7.87896C9.476 8.54983 8.85206 9.07918 8.20174 9.63619C7.77163 10.0046 7.13753 10.0613 6.59962 10.1502C5.31076 10.3634 4.85099 10.6995 4.58763 10.8518C4.25778 11.0427 4.04327 11.398 3.5882 12.0752C3.26864 12.5501 3.24281 13.0283 3.22918 14.1917C3.22324 14.6991 3.05709 14.9785 3.18952 15.4532C3.40457 16.2242 3.74339 16.2448 4.62897 16.9121C5.04832 17.2281 5.38666 17.3082 5.65721 17.411C6.21292 17.6222 7.08198 17.8992 7.93266 18.1408C8.69608 18.3576 8.88943 18.6705 9.47024 19.3296C9.98666 19.9157 10.9588 21.0075 11.5354 21.6311C12.4965 22.6706 13.0774 22.8794 13.5839 23.0372C13.8176 23.1099 14.013 23.1127 14.2001 23.0573C14.7731 22.8878 14.8778 22.4486 15.1227 21.807C15.2114 21.5749 15.2331 21.2649 15.2563 20.3811C15.2795 19.4973 15.2765 18.0406 15.2703 17.2509C15.2635 16.3825 15.2544 16.0048 15.2735 15.5197C15.2809 15.3314 15.2936 15.2612 15.3992 13.7347C15.5048 12.2083 15.7056 9.2279 15.7986 7.59334C15.9027 5.76499 15.8097 5.35227 15.7298 4.99779L15.7294 4.996C15.6373 4.58711 15.4656 4.44472 15.1456 4.27447C14.8774 4.13177 14.676 4.10026 14.3771 4.15422" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <g class="sound-toggle__waves">
+              <path d="M19.4307 10.0904C19.4395 10.0992 19.8716 10.6518 20.5687 11.5567C20.9509 12.0528 21.0971 12.3382 21.2432 12.717C21.735 13.9916 21.663 14.8089 21.5478 15.4904C21.432 15.9003 20.7846 17.0402 20.1498 17.9844C20.043 18.1201 19.942 18.2406 19.7833 18.4456M21.7015 6.10969C21.8807 6.18462 22.3444 6.41534 23.2258 7.13046C23.7148 7.52727 24.2155 8.27763 24.6941 9.08695C25.0227 9.64268 25.1787 10.4409 25.3401 11.5498C25.428 12.1536 25.417 12.8544 25.3868 13.4499C25.3325 14.5218 25.0665 15.4036 24.8489 16.0401C24.7445 16.3456 24.6069 16.6622 24.2822 17.3973C24.0503 17.8769 23.6818 18.5728 23.3604 19.142C23.039 19.7111 22.7759 20.1324 22.4774 20.6337" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            </g>
+          </g>
+          <g class="sound-toggle__slash">
+            <path d="M27.9993 13.3343C27.222 14.2608 24.9398 17.3586 23.3092 19.3367M22.9395 13.1211C23.1307 13.3136 23.5079 13.6987 24.7534 14.6951C25.9988 15.6914 28.1011 17.2873 30.3134 18.9779" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </g>
+        </svg>
+      </span>
+    </button>
+  </header>
+
+  <!-- Visual and copy source: Figma Vr9SkM8NckWkwEtAuLkWxF, frame 925:904. -->
+  <main class="verification" id="main-content" tabindex="-1">
+    <div class="verification__hero-region">
+      <div class="verification__opening verification__text" id="overview">
+        <div class="verification__heading">
+          <div class="verification__brand"><span class="verification__brand-art"><img src="../assets/images/landlord-verification/housinganywhere-logo-updated.svg" alt="HousingAnywhere" width="95.4957" height="24.8456" /></span></div>
+          <div class="verification__title-group">
+            <div class="verification__tags" aria-label="Project focus and platforms">
+              <span>Internal operations</span><span>Finance</span>
+              <img class="verification__tag-separator" src="../assets/images/landlord-verification/tag-star.svg" alt="" width="8" height="8" />
+              <span>B2B</span>
+              <img class="verification__tag-separator" src="../assets/images/landlord-verification/tag-star.svg" alt="" width="8" height="8" />
+              <span>Web</span><span>Desktop</span>
+              <img class="verification__tag-separator" src="../assets/images/landlord-verification/tag-star.svg" alt="" width="8" height="8" />
+              <span>Design system</span>
+            </div>
+            <h1 class="case__title">Automating payouts to cut operational costs and reduce errors</h1>
+          </div>
+        </div>
+        <ul class="verification__highlights">
+          <li><img src="../assets/images/landlord-verification/summary-star.svg" alt="" width="16" height="16" /><span>Spotted a costly manual process while shadowing the finance team;</span></li>
+          <li><img src="../assets/images/landlord-verification/summary-star.svg" alt="" width="16" height="16" /><span>Mapped the checks and decisions;</span></li>
+          <li><img src="../assets/images/landlord-verification/summary-star.svg" alt="" width="16" height="16" /><span>Brought fragmented data from six systems into one;</span></li>
+          <li><img src="../assets/images/landlord-verification/summary-star.svg" alt="" width="16" height="16" /><span>Built trust in automation through a staged rollout;</span></li>
+          <li><img src="../assets/images/landlord-verification/summary-star.svg" alt="" width="16" height="16" /><span>Reduced manual work by 75% and saved the finance team 30 hours per week.</span></li>
+        </ul>
+      </div>
+      <figure class="verification__hero payouts__hero">
+        <img src="../assets/images/payout-automation/hero.png" alt="Payout review dashboard consolidating amount, landlord, booking, KYC, risk, tenant, and pay-in details." width="4096" height="2648" fetchpriority="high" decoding="async" />
+      </figure>
+    </div>
+
+    <div class="verification__body">
+      <div class="verification__intro-group verification__text">
+        <div class="verification__details">
+          <div class="verification__intro">
+            <h2 class="verification__details-label">Intro</h2>
+            <p>Every two weeks, six members of the finance team paused their other work to process landlord payouts.</p>
+            <p>For every payout, they moved between a spreadsheet, internal tools, HousingAnywhere profiles, HubSpot and Stripe. The process required sustained concentration, created significant stress and left room for costly manual errors.</p>
+            <p>I initiated a project to consolidate the required information and gradually automate routine payout decisions, allowing the finance team to focus on exceptions.</p>
+          </div>
+          <div class="verification__team">
+            <h2 class="verification__details-label">Team</h2>
+            <ul><li>1 Designer (me)</li><li>1 Product Owner</li><li>2 Developers (front+back)</li><li>6 Finance team members</li></ul>
+          </div>
+        </div>
+
+        <section class="verification__contribution" id="contribution" aria-labelledby="contribution-title">
+          <h2 class="verification__section-label" id="contribution-title">My contribution</h2>
+          <ul>
+            <li>Spotted the opportunity through interviews and shadowing;</li>
+            <li>Mapped the existing payout workflow and its decision points;</li>
+            <li>Documented the checks performed by the finance team;</li>
+            <li>Validated requirements and thresholds with finance;</li>
+            <li>Partnered with the Product Owner and backend engineers to define the scope;</li>
+            <li>Designed the consolidated payout overview;</li>
+            <li>Helped define the transition from manual review to automated processing.</li>
+          </ul>
+        </section>
+
+        <aside class="verification__context" aria-labelledby="context-title">
+          <img src="../assets/images/landlord-verification/binoculars.png" alt="" width="90" height="54" loading="lazy" decoding="async" />
+          <div class="verification__context-copy">
+            <h2 class="verification__details-label" id="context-title">Context</h2>
+            <p>One of HousingAnywhere’s 2024 objectives was to reduce the cost of internal operations while preparing the platform to scale in the US. The existing payout process did not scale with the business. Entering another market would increase the number of landlords and bookings, which would require more finance hours if every payout continued to be reviewed manually.</p>
+          </div>
+        </aside>
+      </div>
+
+      <section class="case-section payouts__problem" id="problem" aria-labelledby="problem-title">
+        <div class="verification__section-intro verification__text">
+          <div class="case-section__heading">
+            <p class="case-section__eyebrow">Problem</p>
+            <h2 class="case-section__title" id="problem-title">The finance team reviewed EVERY payout across multiple systems</h2>
+          </div>
+          <div class="case-section__copy">
+            <p>I discovered the problem while interviewing and shadowing the finance team. I wanted to understand their typical working day, and the payout process immediately stood out.</p>
+            <p>Every two weeks, the team opened a Google spreadsheet containing landlords and bookings that might require a payout. For each case, they collected information from 6 places:</p>
+            <ol>
+              <li>Moneta for bank and payment information;</li>
+              <li>The Admin Panel for landlord and booking details;</li>
+              <li>The landlord’s public HousingAnywhere profile to assess reliability;</li>
+              <li>HubSpot for unresolved support tickets;</li>
+              <li>Stripe to create and send the payout.</li>
+            </ol>
+          </div>
+          <div class="payouts__problem-cards" aria-label="Core problems">
+            <div class="payouts__problem-card">
+              <p class="payouts__problem-title">High cognitive load</p>
+              <p class="payouts__problem-label">Problem #1</p>
+            </div>
+            <div class="payouts__problem-card">
+              <p class="payouts__problem-title">Human error prone flow</p>
+              <p class="payouts__problem-label">Problem #2</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="case-section verification__process payouts__process" id="process" aria-labelledby="process-title">
+        <div class="case-section__heading verification__text">
+          <p class="case-section__eyebrow">Process</p>
+          <h2 class="case-section__title" id="process-title">Finding all the checks behind a payout decision</h2>
+        </div>
+
+        <article class="case-step">
+          <div class="verification__text verification__article-copy">
+            <h3 class="case-step__title">Interviewing and shadowing the finance team</h3>
+            <div class="case-section__copy">
+              <p>I started by observing the process rather than assuming which parts could be automated.</p>
+              <p>I shadowed the finance team as they prepared payouts and asked them to explain what they checked, where they found the information and what could prevent a payout from being released.</p>
+              <p>This revealed that the work was more than transferring money. It was a risk-assessment process built from many small signals across different systems.</p>
+            </div>
+          </div>
+          <figure class="payouts__figure payouts__figure--interviews">
+            <img src="../assets/images/payout-automation/interviews.png" alt="Interview database with notes from finance-team shadowing and interviews." width="3014" height="1636" loading="lazy" decoding="async" />
+            <figcaption>My internal database with all the interviews I conducted.</figcaption>
+          </figure>
+        </article>
+
+        <article class="case-step">
+          <div class="verification__text verification__article-copy">
+            <h3 class="case-step__title">Documenting the complete workflow</h3>
+            <div class="case-section__copy">
+              <p>I mapped the process from the moment HousingAnywhere received the tenant’s payment to the moment the landlord’s payout was released.</p>
+              <p>The workflow included several decision points:</p>
+              <ul>
+                <li>Does the landlord have a valid payout method?</li>
+                <li>Do the billing and bank details match?</li>
+                <li>Has the landlord completed the required KYC checks?</li>
+                <li>Are there fraud reports or suspicious booking signals?</li>
+                <li>Are there open support tickets or unresolved conversations?</li>
+                <li>Does the payout currency match the bank account?</li>
+                <li>Does the landlord or booking need manual review?</li>
+              </ul>
+              <p>The map made the complexity visible to the wider team. It also helped us separate routine checks from decisions that still required finance expertise.</p>
+            </div>
+          </div>
+          <figure class="payouts__figure payouts__figure--workflow">
+            <div class="payouts__media-crop"><img src="../assets/images/payout-automation/workflow-map.png" alt="Workflow map tracing payout decisions from payment receipt to landlord release." width="4096" height="1643" loading="lazy" decoding="async" /></div>
+            <figcaption>The map made the complexity visible to C-level</figcaption>
+          </figure>
+          <figure class="payouts__figure payouts__figure--statuses">
+            <img src="../assets/images/payout-automation/status-map.png" alt="Map of booking and payout status dependencies." width="2282" height="648" loading="lazy" decoding="async" />
+            <figcaption>Mapping the complexity of booking-payout statuses</figcaption>
+          </figure>
+        </article>
+
+        <article class="case-step">
+          <div class="verification__text verification__article-copy">
+            <h3 class="case-step__title">Validating the data and decision rules</h3>
+            <div class="case-section__copy">
+              <p>I iterated on the workflow with the finance team to verify that the checks, data sources and thresholds were correct.</p>
+              <p>This validation was essential. Missing even one important signal would force employees to leave the new system and search for it elsewhere, recreating the same cognitive load we were trying to remove.</p>
+              <p>I then worked with backend engineers and the Product Owner to understand which data could be collected in the Admin Panel and which checks could be automated reliably.</p>
+            </div>
+          </div>
+          <figure class="payouts__figure payouts__figure--states">
+            <div class="payouts__states-crop"><img src="../assets/images/payout-automation/states-and-edge-cases.png" alt="Design board documenting payout states, blocked cases, and exceptions." width="4096" height="3879" loading="lazy" decoding="async" /><span aria-hidden="true"></span></div>
+            <figcaption>Defining all states and edge cases</figcaption>
+          </figure>
+        </article>
+      </section>
+
+      <section class="case-section verification__solution payouts__solution" id="solution" aria-labelledby="solution-title">
+        <div class="case-section__heading verification__text">
+          <p class="case-section__eyebrow">Solution</p>
+          <h2 class="case-section__title" id="solution-title">One payout overview made checks visible and actionable</h2>
+        </div>
+
+        <article class="case-step">
+          <div class="verification__text verification__article-copy">
+            <h3 class="case-step__title">Bringing the full payout context into one place</h3>
+            <div class="case-section__copy">
+              <p>The first solution was a consolidated payout overview in the Admin Panel.</p>
+              <p>It brought together:</p>
+              <ul>
+                <li>The payout amount, fees and final total;</li>
+                <li>The landlord’s details and account history;</li>
+                <li>Booking and tenant information;</li>
+                <li>KYC and payout-method status;</li>
+                <li>Fraud and risk signals;</li>
+                <li>Support tickets and conversations;</li>
+                <li>Pay-in and settlement details.</li>
+              </ul>
+              <p>The interface used clear statuses to highlight missing information and values outside expected thresholds. Finance could assess the payout from one place and open the source systems only when a case required deeper investigation.</p>
+            </div>
+          </div>
+
+          <figure class="payouts__iteration-explorer" data-payout-iterations>
+            <figcaption class="payouts__iteration-controls">
+              <span>Explore all iterations:</span>
+              <div class="payouts__tabs" role="tablist" aria-label="Payout overview iterations">
+                <button type="button" id="payout-iteration-first-tab" role="tab" aria-selected="false" aria-controls="payout-iteration-first-panel" tabindex="-1" data-iteration-tab="first">First</button>
+                <button type="button" id="payout-iteration-second-tab" role="tab" aria-selected="false" aria-controls="payout-iteration-second-panel" tabindex="-1" data-iteration-tab="second">Second</button>
+                <button type="button" id="payout-iteration-last-tab" role="tab" aria-selected="true" aria-controls="payout-iteration-last-panel" tabindex="0" data-iteration-tab="last">Last</button>
+              </div>
+            </figcaption>
+            <div class="payouts__iteration-panels">
+              <div class="payouts__iteration-panel payouts__iteration-panel--first" id="payout-iteration-first-panel" role="tabpanel" aria-labelledby="payout-iteration-first-tab" tabindex="0" hidden>
+                <img src="../assets/images/payout-automation/iteration-first.png" alt="First payout-review iteration with manual first and second checks beside booking and payment details." width="2880" height="1988" loading="lazy" decoding="async" />
+                <span aria-hidden="true"></span>
+              </div>
+              <div class="payouts__iteration-panel payouts__iteration-panel--second" id="payout-iteration-second-panel" role="tabpanel" aria-labelledby="payout-iteration-second-tab" tabindex="0" hidden>
+                <img src="../assets/images/payout-automation/iteration-second.png" alt="Second payout-review iteration separating payout, advertiser, booking, listing, and tenant information." width="2880" height="2450" loading="lazy" decoding="async" />
+                <span aria-hidden="true"></span>
+              </div>
+              <div class="payouts__iteration-panel payouts__iteration-panel--last" id="payout-iteration-last-panel" role="tabpanel" aria-labelledby="payout-iteration-last-tab" tabindex="0">
+                <img src="../assets/images/payout-automation/iteration-last.png" alt="Final payout-review iteration consolidating payout, landlord, booking, KYC, risk, tenant, and pay-in details." width="2880" height="2048" loading="lazy" decoding="async" />
+                <span aria-hidden="true"></span>
+              </div>
+            </div>
+          </figure>
+        </article>
+
+        <article class="case-step">
+          <div class="verification__text verification__article-copy">
+            <h3 class="case-step__title">Building trust before full automation</h3>
+            <div class="case-section__copy">
+              <p>The finance team was initially hesitant to let the system make payout decisions automatically. They were responsible for the money and wanted to remain in control. This led us to a staged approach:</p>
+              <p>First, the system collected the information and highlighted potential issues, while finance continued to approve payouts manually. This allowed the team to compare the system’s assessment with its own judgment.</p>
+              <p>Once the checks had been validated, routine payouts could pass through automatically. Finance would only review cases marked as blocked, incomplete or unusual.</p>
+              <p>The project was completed before modern AI workflow tools became widely available. The rules, integrations and decision logic therefore had to be explicitly defined and implemented with backend engineers.</p>
+            </div>
+          </div>
+          <figure class="payouts__figure payouts__figure--next-stage">
+            <div class="payouts__next-stage-crop"><img src="../assets/images/payout-automation/next-stage.png" alt="Payout search table showing routine and exceptional payouts across multiple statuses." width="2880" height="2048" loading="lazy" decoding="async" /><span aria-hidden="true"></span></div>
+            <figcaption>Next stage of automation: search for all payouts</figcaption>
+          </figure>
+        </article>
+      </section>
+
+      <section class="case-section payouts__edge-cases" id="edge-cases" aria-labelledby="edge-cases-title">
+        <div class="verification__section-intro verification__text">
+          <div class="case-section__heading">
+            <p class="case-section__eyebrow">Edge cases</p>
+            <h2 class="case-section__title" id="edge-cases-title">Some payouts still required manual handling</h2>
+          </div>
+          <div class="case-section__copy">
+            <p>Sending money to Icelandic bank accounts involved specific financial-system requirements. Until those requirements could be handled safely, the system routed these payouts back to the finance team for manual processing.</p>
+            <p>Exceptions like this were part of the workflow rather than failures of the automation. The design needed to explain why a payout was blocked and give finance enough information to decide what to do next.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="case-section verification__impact" id="impact" aria-labelledby="impact-title">
+        <div class="verification__section-intro verification__text">
+          <div class="case-section__heading">
+            <p class="case-section__eyebrow">Impact</p>
+            <h2 class="case-section__title" id="impact-title">Reduced the operational cost and risk</h2>
+          </div>
+          <div class="case-section__copy">
+            <p>Staging the rollout let Finance validate automated checks before routine payouts moved through automatically. The result was 75% less manual work and 30 hours saved each week, while blocked, incomplete, and unusual cases remained available for review.</p>
+          </div>
+          <div class="verification__metrics">
+            <div class="verification__metric">
+              <p class="verification__metric-number">–75%</p>
+              <p class="verification__metric-label">Reduced manual work</p>
+            </div>
+            <div class="verification__metric">
+              <p class="verification__metric-number">–30 hours</p>
+              <p class="verification__metric-label">Saved per week</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="verification__learnings verification__text" id="learnings" aria-labelledby="learnings-title">
+        <h2 class="verification__section-label" id="learnings-title">Key learnings</h2>
+        <p>The project reinforced the value of observing internal teams in their real working environment. The automation opportunity only became visible when I saw the number of tools, checks and decisions involved in what initially appeared to be a simple operational task.</p>
+        <p>It also showed me that automation depends on trust. Giving finance visibility into the consolidated data and automated checks made the transition safer and helped the team build confidence in the system before handing over routine decisions.</p>
+      </section>
+      <nav class="case-project-nav" aria-label="More case studies">
+        <a class="case-project-nav__all" href="../work">All work</a>
+        <div class="case-project-nav__grid">
+          <a class="case-project-link case-project-link--previous" href="housinganywhere-landlord-verification" aria-label="Previous case study: Helping landlords get verified">
+            <div class="case-project-link__media"><img src="../assets/demos/verification-cover/poster.webp" width="1728" height="1117" alt="" loading="lazy" /></div>
+            <span class="case-project-link__direction">Previous case study <span aria-hidden="true">←</span></span>
+            <span class="case-project-link__title">Helping landlords get verified</span>
+          </a>
+          <a class="case-project-link case-project-link--next" href="voyage-monitor" aria-label="Next case study: Voyage Monitor dashboard">
+            <div class="case-project-link__media"><img src="../assets/images/showcase/90poe-poster.webp" width="1200" height="900" alt="" loading="lazy" /></div>
+            <span class="case-project-link__direction">Next case study <span aria-hidden="true">→</span></span>
+            <span class="case-project-link__title">Voyage Monitor dashboard</span>
+          </a>
+        </div>
+      </nav>
+    </div>
+  </main>
+
+  <aside class="case__rail verification__contents">
+    <div class="case__rail-inner">
+      <nav class="case__toc is-visible" aria-label="Page contents" data-toc data-toc-section-labels data-toc-placement="bottom">
+        <div class="case__toc-rail" data-toc-rail hidden>
+          <ul class="case__toc-list">
+            <li class="case__toc-item" data-toc-item data-color="#dca8e8"><button type="button" data-toc-id="overview"><span class="case__toc-spacer" aria-hidden="true"></span><span class="case__toc-label">Overview</span></button></li>
+            <li class="case__toc-item" data-toc-item data-color="#dca8e8"><button type="button" data-toc-id="contribution"><span class="case__toc-spacer" aria-hidden="true"></span><span class="case__toc-label">My contribution</span></button></li>
+            <li class="case__toc-item" data-toc-item data-color="#e8ac88"><button type="button" data-toc-id="problem"><span class="case__toc-spacer" aria-hidden="true"></span><span class="case__toc-label">Problem</span></button></li>
+            <li class="case__toc-item" data-toc-item data-color="#dca8e8"><button type="button" data-toc-id="process"><span class="case__toc-spacer" aria-hidden="true"></span><span class="case__toc-label">Process</span></button></li>
+            <li class="case__toc-item" data-toc-item data-color="#70c8f4"><button type="button" data-toc-id="solution"><span class="case__toc-spacer" aria-hidden="true"></span><span class="case__toc-label">Solution</span></button></li>
+            <li class="case__toc-item" data-toc-item data-color="#94c890"><button type="button" data-toc-id="edge-cases"><span class="case__toc-spacer" aria-hidden="true"></span><span class="case__toc-label">Edge cases</span></button></li>
+            <li class="case__toc-item" data-toc-item data-color="#dca8e8"><button type="button" data-toc-id="impact"><span class="case__toc-spacer" aria-hidden="true"></span><span class="case__toc-label">Impact</span></button></li>
+            <li class="case__toc-item" data-toc-item data-color="#e8ac88"><button type="button" data-toc-id="learnings"><span class="case__toc-spacer" aria-hidden="true"></span><span class="case__toc-label">Key learnings</span></button></li>
+          </ul>
+        </div>
+        <div class="case__toc-mobile" data-toc-mobile>
+          <button type="button" class="case__toc-trigger" data-toc-trigger aria-haspopup="menu" aria-expanded="false" aria-controls="payout-case-toc-menu">
+            <span class="visually-hidden">Page contents: </span>
+            <span class="case__toc-trigger-label" data-toc-trigger-label>Overview</span>
+            <svg class="case__toc-chevron" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true"><path d="M1 1.5 6 6.5 11 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          </button>
+          <ul id="payout-case-toc-menu" class="case__toc-menu" role="menu" hidden data-toc-menu>
+            <li role="none"><button type="button" role="menuitem" data-toc-id="overview" data-color="#dca8e8"><span class="case__toc-menu-dot" aria-hidden="true"></span><span class="case__toc-menu-label">Overview</span></button></li>
+            <li role="none"><button type="button" role="menuitem" data-toc-id="contribution" data-color="#dca8e8"><span class="case__toc-menu-dot" aria-hidden="true"></span><span class="case__toc-menu-label">My contribution</span></button></li>
+            <li role="none"><button type="button" role="menuitem" data-toc-id="problem" data-color="#e8ac88"><span class="case__toc-menu-dot" aria-hidden="true"></span><span class="case__toc-menu-label">Problem</span></button></li>
+            <li role="none"><button type="button" role="menuitem" data-toc-id="process" data-color="#dca8e8"><span class="case__toc-menu-dot" aria-hidden="true"></span><span class="case__toc-menu-label">Process</span></button></li>
+            <li role="none"><button type="button" role="menuitem" data-toc-id="solution" data-color="#70c8f4"><span class="case__toc-menu-dot" aria-hidden="true"></span><span class="case__toc-menu-label">Solution</span></button></li>
+            <li role="none"><button type="button" role="menuitem" data-toc-id="edge-cases" data-color="#94c890"><span class="case__toc-menu-dot" aria-hidden="true"></span><span class="case__toc-menu-label">Edge cases</span></button></li>
+            <li role="none"><button type="button" role="menuitem" data-toc-id="impact" data-color="#dca8e8"><span class="case__toc-menu-dot" aria-hidden="true"></span><span class="case__toc-menu-label">Impact</span></button></li>
+            <li role="none"><button type="button" role="menuitem" data-toc-id="learnings" data-color="#e8ac88"><span class="case__toc-menu-dot" aria-hidden="true"></span><span class="case__toc-menu-label">Key learnings</span></button></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </aside>
+
+  <button type="button" class="menu-bar" id="menu-open" aria-haspopup="true" aria-controls="menu-overlay" aria-expanded="false">Menu</button>
+
+  <div class="menu-overlay" id="menu-overlay" role="dialog" aria-modal="true" aria-label="Site menu" tabindex="-1" hidden>
+    <a href="../" class="menu-overlay__logo" aria-label="Sofiia Matsiutsia — home">
+      <img src="../assets/images/sm-logo.svg" alt="Sofiia Matsiutsia" width="230" height="29" />
+    </a>
+    <div class="ring-stage" aria-hidden="true">
+      <div class="ring ring--cover"></div><div class="ring ring--about"></div><div class="ring ring--works"></div><div class="ring ring--writings"></div><div class="ring ring--talks"></div><div class="ring ring--core"></div>
+    </div>
+    <nav class="menu-overlay__nav" aria-label="Primary">
+      <a href="../about" class="menu-overlay__link menu-overlay__link--about"><span>About</span></a>
+      <a href="../work" class="menu-overlay__link menu-overlay__link--work" aria-current="page"><span>Works</span></a>
+      <a class="menu-overlay__link menu-overlay__link--writings" data-cursor="soon" aria-disabled="true" aria-label="Writings — coming soon"><span>Writings</span></a>
+      <a href="../talks" class="menu-overlay__link menu-overlay__link--talks"><span>Talks</span></a>
+    </nav>
+    <div class="menu-overlay__contact">
+      <button type="button" class="menu-overlay__contact-link menu-overlay__contact-link--email">
+        <span class="menu-overlay__contact-width" aria-hidden="true">Copy email</span><span class="menu-overlay__contact-text">Copy email</span>
+      </button>
+      <div class="menu-overlay__contact-row">
+        <a href="https://www.linkedin.com/in/smatsiutsia/" class="menu-overlay__contact-link menu-overlay__contact-link--linkedin" target="_blank" rel="noopener noreferrer"><span>LinkedIn</span><img src="../assets/icons/new-window-arrow-1.svg" alt="" width="16" height="16" class="menu-overlay__contact-arrow" aria-hidden="true" /></a>
+        <a href="https://x.com/SMatsiutsia" class="menu-overlay__contact-link menu-overlay__contact-link--twitter" target="_blank" rel="noopener noreferrer"><span>Twitter</span><img src="../assets/icons/new-window-arrow-2.svg" alt="" width="16" height="16" class="menu-overlay__contact-arrow" aria-hidden="true" /></a>
+      </div>
+    </div>
+    <button type="button" class="menu-bar menu-overlay__close" id="menu-close" aria-controls="menu-overlay">Close</button>
+  </div>
+
+  <script src="../assets/vendor/lenis/lenis.min.js?v=1.3.26"></script>
+  <script src="../script.js?v=65"></script>
+  <script src="payout-automation.js?v=1" defer></script>
+  <script type="module" src="../sound.js?v=1"></script>
+</body>
+</html>

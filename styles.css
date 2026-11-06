@@ -2171,6 +2171,7 @@ a.card {
 
 .work-item__media {
   width: 100%;
+  aspect-ratio: 1728 / 1117;
   overflow: hidden;
   position: relative;
   border-radius: var(--radius-image);
@@ -2187,7 +2188,7 @@ a.work-item:active .work-item__media {
 .work-item__media img,
 .work-item__media video {
   width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
   object-fit: cover;
 }
@@ -2195,8 +2196,170 @@ a.work-item:active .work-item__media {
 .work-item__media--placeholder {
   display: grid;
   place-items: center;
-  aspect-ratio: 2400 / 1551;
+  aspect-ratio: 1728 / 1117;
   padding: 24px;
+}
+
+.work-item__media--shared-background,
+.home .showcase__item--shared-background {
+  background: var(--surface-placeholder) url("assets/images/work-covers/shared-noisy-background.jpg") center / cover no-repeat;
+}
+
+.work-item__media--single-phone > img,
+.home .showcase__item--single-phone > img {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: auto;
+  height: 100%;
+  object-fit: contain;
+  transform: translateX(-50%);
+}
+
+.internal-panel-cover {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.internal-panel-cover__outer {
+  position: absolute;
+  top: 8.1%;
+  left: 2.55%;
+  width: 94.33%;
+  height: 83.8%;
+  border: 1px solid color-mix(in srgb, var(--color-white) 20%, transparent);
+  border-radius: clamp(10px, 1.96vw, 34px);
+  box-shadow: 0 0 4px color-mix(in srgb, var(--color-white) 10%, transparent);
+}
+
+.internal-panel-cover__screen {
+  position: absolute;
+  top: 9.85%;
+  left: 3.7%;
+  width: 92.01%;
+  height: 80.3%;
+  overflow: hidden;
+  border: clamp(4px, 0.7vw, 10px) solid color-mix(in srgb, var(--color-black) 7%, transparent);
+  border-radius: clamp(6px, 0.8vw, 14px);
+}
+
+.internal-panel-cover__screen > img {
+  position: absolute;
+  top: -7.86%;
+  left: 0;
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: 126.05%;
+  object-fit: cover;
+}
+
+.work-item__media--phone-animation > .work-item__phone-frame {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: auto;
+  height: 100%;
+  object-fit: contain;
+  transform: translateX(-50%);
+}
+
+.work-item__phone-frame--base {
+  animation: work-housing-phone-base 1.437741s linear infinite;
+}
+
+.work-item__phone-frame--middle {
+  opacity: 0;
+  animation: work-housing-phone-middle 1.437741s linear infinite;
+}
+
+.work-item__phone-frame--final {
+  opacity: 0;
+  animation: work-housing-phone-final 1.437741s linear infinite;
+}
+
+.work-item__media--voyage {
+  display: grid;
+  place-items: center;
+}
+
+.voyage-cover__stage {
+  position: relative;
+  width: auto;
+  height: 100%;
+  aspect-ratio: 4 / 3;
+}
+
+.voyage-cover__dashboard {
+  --voyage-motion-ease: linear(0, 0.0216, 0.0747, 0.1458, 0.2255, 0.3076, 0.3879, 0.4638, 0.5339, 0.5974, 0.6542, 0.7044, 0.7484, 0.7866, 0.8196, 0.8479, 0.8722, 0.8928, 0.9103, 0.9251, 0.9375, 0.948, 0.9568, 0.9642, 0.9703, 0.9754, 0.9797, 0.9832, 0.9862, 0.9886, 0.9906, 0.9923, 0.9936, 0.9948, 0.9957, 0.9965, 0.9971, 0.9976, 0.9981, 0.9984, 0.9987, 0.9989, 0.9991, 0.9993, 0.9994, 0.9995, 0.9996, 0.9997, 0.9998);
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  width: 88.1%;
+  height: 60.1%;
+  overflow: hidden;
+  border: 4px solid var(--surface-canvas);
+  border-radius: var(--radius-control);
+  box-shadow: 0 0 3px 1px color-mix(in srgb, var(--color-black) 10%, transparent);
+  transform: translateX(-50%);
+  transform-origin: center;
+  animation: work-voyage-dashboard 8.000036s linear infinite;
+}
+
+.voyage-cover__dashboard > img {
+  position: absolute;
+  top: 0;
+  left: -1%;
+  width: 102%;
+  height: 105.4%;
+  object-fit: cover;
+}
+
+@keyframes work-voyage-dashboard {
+  0% {
+    transform: translateX(-50%) translate(0, 0) scale(1);
+    animation-timing-function: var(--voyage-motion-ease);
+  }
+  13.23% {
+    transform: translateX(-50%) translate(0, 0) scale(1.3);
+    animation-timing-function: var(--voyage-motion-ease);
+  }
+  29.782% {
+    transform: translateX(-50%) translate(52.6%, 47.9%) scale(2);
+    animation-timing-function: var(--voyage-motion-ease);
+  }
+  48.543% {
+    transform: translateX(-50%) translate(52.6%, -34.24%) scale(2);
+    animation-timing-function: var(--voyage-motion-ease);
+  }
+  66.092% {
+    transform: translateX(-50%) translate(-51.55%, -0.05%) scale(2.5);
+  }
+  71.344% {
+    transform: translateX(-50%) translate(-51.55%, -0.05%) scale(2.5);
+    animation-timing-function: var(--voyage-motion-ease);
+  }
+  93.735%, 100% {
+    transform: translateX(-50%) translate(-0.1%, -0.05%) scale(1);
+  }
+}
+
+@keyframes work-housing-phone-base {
+  0% { opacity: 1; animation-timing-function: step-end; }
+  33.476%, 100% { opacity: 0; }
+}
+
+@keyframes work-housing-phone-middle {
+  0% { opacity: 0; animation-timing-function: step-end; }
+  33.476% { opacity: 1; animation-timing-function: step-end; }
+  67.37%, 100% { opacity: 0; }
+}
+
+@keyframes work-housing-phone-final {
+  0% { opacity: 0; animation-timing-function: step-end; }
+  67.37% { opacity: 1; animation-timing-function: step-end; }
+  100% { opacity: 0; }
 }
 
 .work-cover-card {
@@ -2285,6 +2448,22 @@ a.work-item:focus-visible {
   .work-item__media img,
   .work-item__media video {
     transform: none;
+  }
+
+  .work-item__phone-frame--base {
+    animation: none;
+    opacity: 1;
+  }
+
+  .work-item__phone-frame--middle,
+  .work-item__phone-frame--final {
+    display: none;
+    animation: none;
+  }
+
+  .voyage-cover__dashboard {
+    animation: none;
+    transform: translateX(-50%);
   }
 }
 
@@ -2585,6 +2764,10 @@ body.home {
   background: var(--surface-placeholder);
 }
 
+.home .showcase__row .showcase__item.showcase__item--shared-background {
+  background: var(--surface-placeholder) url("assets/images/work-covers/shared-noisy-background.jpg") center / cover no-repeat;
+}
+
 .home .showcase__item--landscape {
   aspect-ratio: 4096 / 2648;
 }
@@ -2605,7 +2788,8 @@ body.home {
   aspect-ratio: 6912 / 4468;
 }
 
-.home .showcase__item--verification {
+.home .showcase__item--verification,
+.home .showcase__item--work-cover {
   position: relative;
   aspect-ratio: 1728 / 1117;
 }
@@ -2621,6 +2805,83 @@ body.home {
   height: 100%;
   object-fit: cover;
   pointer-events: none;
+}
+
+.home .showcase__row .showcase__item--single-phone > img {
+  width: auto;
+  height: 100%;
+  object-fit: contain;
+}
+
+.home .showcase__item--housing-mobile,
+.home .showcase__item--housing-scroll {
+  position: relative;
+}
+
+.home .showcase__item--housing-mobile > .showcase__housing-frame {
+  position: absolute;
+  top: -0.95%;
+  left: 50%;
+  width: auto;
+  height: 100%;
+  object-fit: contain;
+  transform: translateX(-50%);
+}
+
+.home .showcase__housing-frame--base {
+  animation: home-housing-base 1.935645s linear infinite;
+}
+
+.home .showcase__housing-frame--middle {
+  opacity: 0;
+  animation: home-housing-middle 1.935645s linear infinite;
+}
+
+.home .showcase__housing-frame--final {
+  opacity: 0;
+  animation: home-housing-final 1.935645s linear infinite;
+}
+
+.home .showcase__item--housing-scroll > video {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: fill;
+  clip-path: inset(6.27% 17.5% 6.28% round clamp(5px, 1.7vw, 12px));
+  pointer-events: none;
+}
+
+@keyframes home-housing-base {
+  0% { opacity: 1; animation-timing-function: step-end; }
+  30.927%, 100% { opacity: 0; }
+}
+
+@keyframes home-housing-middle {
+  0% { opacity: 0; animation-timing-function: step-end; }
+  30.927% { opacity: 1; animation-timing-function: step-end; }
+  62.239%, 100% { opacity: 0; }
+}
+
+@keyframes home-housing-final {
+  0% { opacity: 0; animation-timing-function: step-end; }
+  62.239% { opacity: 1; animation-timing-function: step-end; }
+  100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home .showcase__housing-frame--base {
+    animation: none;
+    opacity: 1;
+  }
+
+  .home .showcase__housing-frame--middle,
+  .home .showcase__housing-frame--final {
+    display: none;
+    animation: none;
+  }
 }
 
 .home .showcase:focus-visible {
@@ -2743,7 +3004,8 @@ body.home {
     aspect-ratio: 6912 / 4468;
   }
 
-  .home .showcase__item--verification {
+  .home .showcase__item--verification,
+  .home .showcase__item--work-cover {
     width: auto;
     aspect-ratio: 1728 / 1117;
   }

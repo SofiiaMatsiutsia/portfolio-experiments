@@ -205,6 +205,9 @@ body.case--verification .verification__body {
   margin-inline: auto;
   padding-block: var(--verification-space-40) max(120px, calc(80px + env(safe-area-inset-bottom)));
 }
+body.case--verification .verification__body > .case-project-nav {
+  width: 100%;
+}
 body.case--verification .verification__intro-group {
   display: flex;
   flex-direction: column;
