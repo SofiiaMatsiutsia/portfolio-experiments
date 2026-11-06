@@ -1,0 +1,68 @@
+@font-face {
+  font-family: "Folio Bk BT";
+  src: url("../assets/fonts/FolioBkBT-Book.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+:root {
+  color-scheme: light;
+  --page: var(--surface-canvas);
+  --paper: var(--color-white);
+  --elevated: var(--color-white);
+  --ink: var(--color-black);
+  --subtext: var(--color-grey);
+  --muted: var(--color-grey);
+  --line: var(--border-subtle);
+  --axis: var(--color-grey);
+  --link: var(--color-black);
+  --link-hover: var(--color-black);
+  --deep: var(--color-blue);
+  --marker: var(--color-black);
+  font-family: "Folio Bk BT", Helvetica, Arial, sans-serif;
+}
+html { -webkit-text-size-adjust: 100%; }
+body { font-synthesis: none; -webkit-font-smoothing: antialiased; }
+.dive-widget, .mark-tip { font-family: inherit; }
+.dive-widget-head h2 { font-size: 16px; letter-spacing: -0.01em; }
+.article-head h3 { font-size: 24px; line-height: 1.2; letter-spacing: -0.02em; }
+.article-body { gap: var(--space-3); padding: var(--space-3); }
+.note, .default-copy, .credit-line { font-size: 16px; line-height: 1.5; font-weight: 400; }
+.default-copy { max-width: 45ch; }
+.info-pop, .mark-tip { padding: var(--space-3); font-size: 14px; line-height: 1.5; border-radius: var(--radius-control); box-shadow: 0 2px 16px var(--border-subtle); }
+.info-btn { width: 28px; height: 28px; font-size: 14px; line-height: 1; border-radius: var(--radius-control); }
+.scale-toggle { border-radius: var(--radius-control); }
+.scale-toggle button { min-height: 32px; padding: var(--space-1) var(--space-2); font-size: 14px; }
+.collapse-btn { width: 32px; height: 32px; }
+.identity { font-size: 14px; }
+.identity-place { font-weight: 400; }
+.article-body a { text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--color-blue); }
+.dive-widget-map, .dive-widget-map .chart-host { background: var(--color-blue); }
+button:focus-visible, a:focus-visible { outline: 2px solid var(--color-black); outline-offset: 3px; }
+.dive-home {
+  position: fixed;
+  bottom: var(--space-3);
+  right: var(--space-3);
+  z-index: 40;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-white);
+  color: var(--color-black);
+  border-radius: var(--radius-control);
+  font-size: 14px;
+  text-decoration: none;
+  box-shadow: 0 0 0 1px var(--border-subtle);
+}
+.dive-boot { padding: var(--space-6); max-width: 45ch; font-size: 16px; line-height: 1.5; }
+.dive-boot[hidden] { display: none; }
+@media (max-width: 640px) {
+  .scale-toggle button, .info-btn, .collapse-btn { min-height: 44px; }
+  .dive-widget-head { flex-wrap: wrap; gap: var(--space-2); }
+  .dive-widget-scatter .dive-widget-head { padding-right: 32px; }
+  .head-controls { flex-wrap: wrap; }
+}
+.dive-widget-head { flex: 0 0 auto; }
+/* Reserve space for the return link; it must never cover a chart annotation. */
+#studio { height: calc(100dvh - 68px); }

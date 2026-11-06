@@ -112,6 +112,9 @@
       this.events = new AbortController();
       const options = {signal:this.events.signal};
       document.addEventListener('visibilitychange', () => this.syncPlayback(), options);
+      window.addEventListener('homepageintrochange', () => {
+        queueMicrotask(() => this.syncPlayback());
+      }, options);
       window.addEventListener('pagehide', () => { this.suspended = true; this.syncPlayback(); }, options);
       window.addEventListener('pageshow', () => { this.suspended = false; this.syncPlayback(); }, options);
       this.motion.addEventListener('change', () => {
@@ -307,7 +310,8 @@
     }
 
     syncPlayback() {
-      const canPlay = this.loaded && !this.motion.matches && this.inView && !document.hidden &&
+      const introActive = this.showcase && document.documentElement.hasAttribute('data-home-intro');
+      const canPlay = this.loaded && !this.motion.matches && this.inView && !introActive && !document.hidden &&
         !this.suspended && !this.link?.hidden && this.isConnected;
       if (canPlay===this.playing) return;
       if (!canPlay) { this.pauseTracks(); return; }

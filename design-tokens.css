@@ -1,0 +1,51 @@
+/* One source of truth for the portfolio interface. Artwork and project captures
+   are content; all interface colors use this seven-color palette. */
+:root {
+  --color-rose: #e8a7ed;
+  --color-green: #86cd8b;
+  --color-orange: #f6aa81;
+  --color-blue: #4dccf9;
+  --color-grey: #707070;
+  --color-white: #ffffff;
+  --color-black: #171615;
+  --surface-canvas: color-mix(in srgb, var(--color-black) 5%, var(--color-white));
+  --surface-placeholder: color-mix(in srgb, var(--color-black) 9%, var(--color-white));
+  --border-subtle: color-mix(in srgb, var(--color-black) 12%, transparent);
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-30: 120px;
+  --text-caption: 0.875rem;
+  --text-control: 1rem;
+  --text-body: 1.25rem;
+  --text-title: 1.5rem;
+  --text-section: 2rem;
+  --text-display: clamp(2rem, 4vw, 3rem);
+  --leading-body: 1.5;
+  --leading-heading: 1.2;
+  --tracking-heading: -0.02em;
+  --reading-measure: 65ch;
+  --content-max: 1512px;
+  --section-space: var(--space-24);
+  --gutter: var(--space-5);
+  --radius-image: 4px;
+  --radius-control: 4px;
+  --radius-card: 6px;
+  --duration-feedback: 160ms;
+  --ease-feedback: cubic-bezier(0.16, 1, 0.3, 1);
+}
+@media (max-width: 1024px) {
+  :root { --gutter: var(--space-4); --section-space: var(--space-20); }
+}
+@media (max-width: 640px) {
+  :root { --text-body: 1.125rem; --text-section: 1.5rem; --section-space: var(--space-16); }
+}
