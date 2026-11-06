@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Helping landlords publish their first listing — Sofiia Matsiutsia</title>
+<meta name="description" content="Redesigning landlord verification at HousingAnywhere to increase first-listing publication by 25% and reduce Support inquiries by 63%." />
+<link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="../styles.css?v=91" />
+<link rel="stylesheet" href="../assets/vendor/lenis/lenis.css?v=1.3.26" />
+<link rel="preload" href="../assets/fonts/SF-Pro-Display-Regular.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="../assets/fonts/SF-Pro-Display-Medium.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="landlord-verification.css?v=11" />
+<link rel="stylesheet" href="landlord-verification-player.css?v=5" />
+</head>
+<body class="case case--verification">
+  <a class="verification__skip-link" href="#main-content">Skip to case study</a>
+
+  <header class="header">
+    <nav class="nav" aria-label="Primary">
+      <a href="../about" class="nav__link nav__link--about nav__link--muted">
+        <span class="nav__label">About</span>
+        <span class="nav__mark" aria-hidden="true">
+          <img class="nav__mark-img nav__mark-img--hover" src="../assets/icons/nav-about-hover.svg" alt="" width="89" height="29" />
+          <img class="nav__mark-img nav__mark-img--selected" src="../assets/icons/nav-about-selected.svg" alt="" width="89" height="29" />
+        </span>
+      </a>
+      <a href="../work" class="nav__link nav__link--work" aria-current="page">
+        <span class="nav__label">Work</span>
+        <span class="nav__mark" aria-hidden="true">
+          <img class="nav__mark-img nav__mark-img--hover" src="../assets/images/landlord-verification/work-hover.svg" alt="" width="63" height="28" />
+          <img class="nav__mark-img nav__mark-img--selected" src="../assets/images/landlord-verification/nav-work-selected.svg" alt="" width="63" height="22.2805" />
+        </span>
+      </a>
+      <a class="nav__link nav__link--writings nav__link--muted" data-cursor="soon">
+        <span class="nav__label">Writings</span>
+        <span class="nav__mark" aria-hidden="true">
+          <img class="nav__mark-img nav__mark-img--hover" src="../assets/icons/writings-hover.svg" alt="" width="99" height="28" />
+          <img class="nav__mark-img nav__mark-img--selected" src="../assets/icons/writings-hover.svg" alt="" width="99" height="28" />
+        </span>
+      </a>
+      <a href="../talks" class="nav__link nav__link--talks nav__link--muted">
+        <span class="nav__label">Talks</span>
+        <span class="nav__mark" aria-hidden="true">
+          <img class="nav__mark-img nav__mark-img--hover" src="../assets/icons/nav-talks-hover.svg" alt="" width="82" height="29" />
+          <img class="nav__mark-img nav__mark-img--selected" src="../assets/icons/nav-talks-selected.svg" alt="" width="82" height="29" />
+        </span>
+      </a>
+    </nav>
+
+    <a href="../" class="logo" aria-label="Sofiia Matsiutsia — home">
+      <img src="../assets/images/landlord-verification/sm-logo.svg" alt="Sofiia Matsiutsia" class="logo__mark" width="261" height="33.3609" />
+    </a>
+
+    <button type="button" class="sound-toggle" aria-label="Mute sound" aria-pressed="false">
+      <img class="verification__sound-art" src="../assets/images/landlord-verification/mute-sound.svg" alt="" width="260.99" height="32" aria-hidden="true" />
+      <span class="sound-toggle__swap">
+        <svg class="sound-toggle__icon" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <g transform="scale(1.142857)">
+            <path class="sound-toggle__cone" d="M14.3771 4.15294C14.3771 4.15294 13.1661 4.21675 12.1387 5.33723C11.8929 5.60526 11.7793 5.76476 11.4168 6.21479C11.0544 6.66482 10.453 7.40623 10.0491 7.87896C9.476 8.54983 8.85206 9.07918 8.20174 9.63619C7.77163 10.0046 7.13753 10.0613 6.59962 10.1502C5.31076 10.3634 4.85099 10.6995 4.58763 10.8518C4.25778 11.0427 4.04327 11.399 3.5882 12.0752C3.26864 12.5501 3.24281 13.0283 3.22918 14.1917C3.22324 14.6991 3.05709 14.9785 3.18952 15.4532C3.40457 16.2242 3.74339 16.2448 4.62897 16.9121C5.04832 17.2281 5.38666 17.3082 5.65721 17.411C6.21292 17.6222 7.08198 17.8992 7.93266 18.1408C8.69608 18.3576 8.88943 18.6705 9.47024 19.3296C9.98666 19.9157 10.9588 21.0075 11.5354 21.6311C12.4965 22.6706 13.0774 22.8794 13.5839 23.0372C13.8176 23.1099 14.013 23.1127 14.2001 23.0573C14.7731 22.8878 14.8778 22.4486 15.1227 21.807C15.2114 21.5749 15.2331 21.2649 15.2563 20.3811C15.2795 19.4973 15.2765 18.0406 15.2703 17.2509C15.2635 16.3825 15.2544 16.0048 15.2735 15.5197C15.2809 15.3314 15.2936 15.2612 15.3992 13.7347C15.5048 12.2083 15.7056 9.2279 15.7986 7.59334C15.9027 5.76499 15.8097 5.35227 15.7298 4.99779L15.7294 4.996C15.6373 4.58711 15.4656 4.44472 15.1456 4.27447C14.8774 4.13177 14.676 4.10026 14.3771 4.15422" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <g class="sound-toggle__waves">
+              <path d="M19.4307 10.0904C19.4395 10.0992 19.8716 10.6518 20.5687 11.5567C20.9509 12.0528 21.0971 12.3382 21.2432 12.717C21.735 13.9916 21.663 14.8089 21.5478 15.4904C21.432 15.9003 20.7846 17.0402 20.1498 17.9844C20.043 18.1201 19.942 18.2406 19.7833 18.4456M21.7015 6.10969C21.8807 6.18462 22.3444 6.41534 23.2258 7.13046C23.7148 7.52727 24.2155 8.27763 24.6941 9.08695C25.0227 9.64268 25.1787 10.4409 25.3401 11.5498C25.428 12.1536 25.417 12.8544 25.3868 13.4499C25.3325 14.5218 25.0665 15.4036 24.8489 16.0401C24.7445 16.3456 24.6069 16.6622 24.2822 17.3973C24.0503 17.8769 23.6818 18.5728 23.3604 19.142C23.039 19.7111 22.7759 20.1324 22.4774 20.6337" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+          </g>
+          <g class="sound-toggle__slash">
+            <path d="M27.9993 13.3343C27.222 14.2608 24.9398 17.3586 23.3092 19.3367M22.9395 13.1211C23.1307 13.3136 23.5079 13.6987 24.7534 14.6951C25.9988 15.6914 28.1011 17.2873 30.3134 18.9779" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+        </svg>
+      </span>
+    </button>
+  </header>
+
+  <!-- Visual and copy source: Figma Vr9SkM8NckWkwEtAuLkWxF, frame 795:656. -->
+  <main class="verification" id="main-content" tabindex="-1">
+    <div class="verification__hero-region">
+      <div class="verification__opening verification__text" id="overview">
+        <div class="verification__heading">
+          <div class="verification__brand"><span class="verification__brand-art"><img src="../assets/images/landlord-verification/housinganywhere-logo-updated.svg" alt="HousingAnywhere" width="95.4957" height="24.8456" /></span></div>
+          <div class="verification__title-group">
+            <div class="verification__tags" aria-label="Project focus and platforms">
+              <span>User activation</span><span>Verification</span><span>KYC</span>
+              <img class="verification__tag-separator" src="../assets/images/landlord-verification/tag-star.svg" alt="" width="8" height="8" />
+              <span>B2C</span>
+              <img class="verification__tag-separator" src="../assets/images/landlord-verification/tag-star.svg" alt="" width="8" height="8" />
+              <span>Web</span><span>Desktop</span><span>Mobile</span>
+            </div>
+            <h1 class="case__title">Helping landlords publish their first listing</h1>
+          </div>
+        </div>
+        <ul class="verification__highlights">
+          <li><img src="../assets/images/landlord-verification/summary-star.svg" alt="" width="16" height="16" /><span>Spotted UX friction that was holding landlords back from publishing their first listing;</span></li>
+          <li><img src="../assets/images/landlord-verification/summary-star.svg" alt="" width="16" height="16" /><span>Connected the opportunity to business OKRs;</span></li>
+          <li><img src="../assets/images/landlord-verification/summary-star.svg" alt="" width="16" height="16" /><span>Sold the idea to stakeholders and got it onto the roadmap;</span></li>
+          <li><img src="../assets/images/landlord-verification/summary-star.svg" alt="" width="16" height="16" /><span>Led the redesign to boost landlords’ activation.</span></li>
+          <li><img src="../assets/images/landlord-verification/summary-star.svg" alt="" width="16" height="16" /><span>Achieved a 25% increase in the listing publishing rate and 63% fewer inquiries to Support.</span></li>
+        </ul>
+      </div>
+      <figure class="verification__hero"><img src="../assets/images/landlord-verification/hero-listings.png" alt="HousingAnywhere listings dashboard with verification progress on desktop and mobile." width="1200" height="457" fetchpriority="high" decoding="async" /></figure>
+    </div>
+    <div class="verification__body">
+      <div class="verification__intro-group verification__text">
+        <div class="verification__details">
+          <div class="verification__intro">
+            <h2 class="verification__details-label">Intro</h2>
+            <p>Landlords were getting stuck between registration and publishing their first listing on the global real estate marketplace HousingAnywhere. Verification requirements used inconsistent terminology and requested weird information, even before users understood why it was needed.</p>
+          </div>
+          <div class="verification__team">
+            <h2 class="verification__details-label">Team</h2>
+            <ul><li>1 Designer (me)</li><li>1 Product Owner</li><li>2 Developers (front+back)</li><li>1 Copywriter</li></ul>
+          </div>
+        </div>
+        <section class="verification__contribution" id="contribution" aria-labelledby="contribution-title">
+          <h2 class="verification__section-label" id="contribution-title">My contribution</h2>
+          <ul>
+            <li>Spotted the pattern;</li>
+            <li>Interviewed customer support and account managers to find root causes;</li>
+            <li>Defined the verification milestones;</li>
+            <li>Partnered with the Product Owner, Engineers, and C-level to secure the project;</li>
+            <li>Designed the verification progress component;</li>
+            <li>Collaborated with a copywriter on terminology;</li>
+            <li>Defined related tasks for Platform designers.</li>
+          </ul>
+        </section>
+        <aside class="verification__context" aria-labelledby="context-title">
+          <img src="../assets/images/landlord-verification/binoculars.png" alt="" width="90" height="54" loading="lazy" decoding="async" />
+          <div class="verification__context-copy"><h2 class="verification__details-label" id="context-title">Context</h2><p>In Q2 2025, the company aimed to reduce scammers and become more trustworthy. Letting landlords message tenants without finishing the ID verification first was one of the biggest root causes of scams.</p></div>
+        </aside>
+      </div>
+      <section class="case-section verification__problem" id="problem" aria-labelledby="problem-title">
+        <div class="verification__section-intro verification__text">
+          <div class="case-section__heading"><p class="case-section__eyebrow">Problem</p><h2 class="case-section__title" id="problem-title">Landlords were getting stuck before publishing their first listing</h2></div>
+          <div class="case-section__copy"><p>Customer Support was regularly guiding landlords through verification. After hearing these reports, I recreated the journey several times. Even with knowledge of the product, I struggled to understand which steps mattered and what completing them would allow me to do.</p><p>The instructions made it difficult for landlords to understand what prevented publication. Support agents were filling the gaps in a journey intended to be self-service, while the business faced drop-off before landlords published their first listing.</p></div>
+        </div>
+        <figure class="verification-journey" data-verification-player data-duration="18" aria-labelledby="journey-caption">
+          <div class="verification-journey__player">
+            <div class="verification-journey__viewport" data-journey-viewport>
+              <button class="verification-journey__screen-toggle" type="button" data-journey-screen-toggle aria-label="Play animation" title="Play animation" hidden></button>
+              <img class="verification-journey__poster" src="../assets/images/landlord-verification/animation/previous-journey-poster.png" alt="A landlord encounters repeated identity and email verification demands before publishing a listing." width="400" height="600" loading="lazy" decoding="async" />
+              <div class="verification-journey__scene" data-journey-scene data-node-id="824:2" aria-hidden="true">
+                <div class="journey-plane" data-node-id="824:3" data-motion-node data-motion-y="0">
+                  <div class="journey-messages" data-node-id="824:4">
+                    <div class="journey-row journey-row--customer journey-row--intro" data-node-id="824:5" data-motion-node data-motion-y="8"><div class="journey-bubble " ><p>Just created my first account with you! Excited :3</p></div><img class="journey-avatar" src="../assets/images/landlord-verification/animation/customer-happy.svg" alt="" width="40" height="40" decoding="async" /></div>
+<div class="journey-row journey-row--customer journey-row--question" data-node-id="824:15" data-motion-node data-motion-y="8"><div class="journey-bubble " ><p>Will you teach me how to publish listings here?</p></div><img class="journey-avatar" src="../assets/images/landlord-verification/animation/customer-happy.svg" alt="" width="40" height="40" decoding="async" /></div>
+<div class="journey-reply" data-node-id="828:2"><div class="journey-row journey-row--id" data-node-id="824:25" data-motion-node data-motion-y="8"><img class="journey-avatar" src="../assets/images/landlord-verification/animation/housinganywhere-avatar.svg" alt="" width="40" height="40" decoding="async" /><div class="journey-image journey-image--id"><img class="" src="../assets/images/landlord-verification/animation/verify-id.png" alt="" width="40" height="40" decoding="async" /></div></div><div class="journey-row journey-typing" data-node-id="824:108" data-motion-node data-motion-y="4"><img class="journey-avatar" src="../assets/images/landlord-verification/animation/housinganywhere-avatar.svg" alt="" width="40" height="40" decoding="async" /><div class="journey-bubble " data-node-id="824:111" data-motion-node><p>typing...</p></div></div></div>
+<div class="journey-customer-slot" data-node-id="824:281"><div class="journey-row journey-row--customer journey-row--short journey-row--done" data-node-id="824:35" data-motion-node data-motion-y="8"><div class="journey-bubble " ><p>Ok, done!</p></div><img class="journey-avatar" src="../assets/images/landlord-verification/animation/customer-happy.svg" alt="" width="40" height="40" decoding="async" /></div><div class="journey-row journey-row--customer journey-selfie" data-node-id="841:2" data-motion-node data-motion-y="4"><div class="journey-bubble " ><p>taking a picture...</p></div><img class="journey-avatar" src="../assets/images/landlord-verification/animation/customer-happy.svg" alt="" width="40" height="40" decoding="async" /></div></div>
+<div class="journey-reply" data-node-id="828:13"><div class="journey-row journey-row--email" data-node-id="824:45" data-motion-node data-motion-y="8"><img class="journey-avatar" src="../assets/images/landlord-verification/animation/housinganywhere-avatar.svg" alt="" width="40" height="40" decoding="async" /><div class="journey-image journey-image--email"><img class="" src="../assets/images/landlord-verification/animation/verify-email.png" alt="" width="40" height="40" decoding="async" /></div></div><div class="journey-row journey-typing" data-node-id="824:127" data-motion-node data-motion-y="4"><img class="journey-avatar" src="../assets/images/landlord-verification/animation/housinganywhere-avatar.svg" alt="" width="40" height="40" decoding="async" /><div class="journey-bubble " data-node-id="824:130" data-motion-node><p>typing...</p></div></div></div>
+<div class="journey-customer-slot" data-node-id="824:282"><div class="journey-row journey-row--customer journey-row--short journey-row--again" data-node-id="824:55" data-motion-node data-motion-y="8"><div class="journey-bubble " ><p>Again?</p></div><img class="journey-avatar" src="../assets/images/landlord-verification/animation/customer-sad.svg" alt="" width="40" height="40" decoding="async" /></div></div>
+<div class="journey-reply" data-node-id="828:24"><div class="journey-row journey-row--continue" data-node-id="824:65" data-motion-node data-motion-y="8"><img class="journey-avatar" src="../assets/images/landlord-verification/animation/housinganywhere-avatar.svg" alt="" width="40" height="40" decoding="async" /><div class="journey-image journey-image--continue"><img class="" src="../assets/images/landlord-verification/animation/continue-verification.png" alt="" width="40" height="40" decoding="async" /></div></div><div class="journey-row journey-typing" data-node-id="824:146" data-motion-node data-motion-y="4"><img class="journey-avatar" src="../assets/images/landlord-verification/animation/housinganywhere-avatar.svg" alt="" width="40" height="40" decoding="async" /><div class="journey-bubble " data-node-id="824:149" data-motion-node><p>typing...</p></div></div></div>
+<div class="journey-reply" data-node-id="828:35"><div class="journey-row journey-row--booking" data-node-id="824:75" data-motion-node data-motion-y="8"><img class="journey-avatar" src="../assets/images/landlord-verification/animation/housinganywhere-avatar.svg" alt="" width="40" height="40" decoding="async" /><div class="journey-booking"><div class="journey-image journey-image--booking"><img class="" src="../assets/images/landlord-verification/animation/first-booking.png" alt="" width="634" height="1118" decoding="async" /></div><div class="journey-booking__fade"></div></div></div><div class="journey-row journey-typing" data-node-id="824:165" data-motion-node data-motion-y="4"><img class="journey-avatar" src="../assets/images/landlord-verification/animation/housinganywhere-avatar.svg" alt="" width="40" height="40" decoding="async" /><div class="journey-bubble " data-node-id="824:168" data-motion-node><p>typing...</p></div></div></div>
+<div class="journey-reply" data-node-id="828:46"><div class="journey-row journey-row--fee" data-node-id="824:87" data-motion-node data-motion-y="8"><img class="journey-avatar" src="../assets/images/landlord-verification/animation/housinganywhere-avatar.svg" alt="" width="40" height="40" decoding="async" /><div class="journey-bubble " ><p>And you owe me a fee.</p></div></div><div class="journey-row journey-typing" data-node-id="824:184" data-motion-node data-motion-y="4"><img class="journey-avatar" src="../assets/images/landlord-verification/animation/housinganywhere-avatar.svg" alt="" width="40" height="40" decoding="async" /><div class="journey-bubble " data-node-id="824:187" data-motion-node><p>typing...</p></div></div></div>
+<div class="journey-customer-slot" data-node-id="824:283"><div class="journey-row journey-row--customer journey-row--short journey-row--customer-typing" data-node-id="824:98" data-motion-node data-motion-y="8"><div class="journey-bubble " ><p>typing...</p></div><img class="journey-avatar" src="../assets/images/landlord-verification/animation/customer-angry.svg" alt="" width="40" height="40" decoding="async" /></div></div>
+                  </div>
+                </div>
+                <div class="journey-final" data-node-id="824:219" data-motion-node>
+                  <div class="journey-contents" data-node-id="824:220"><div class="journey-contents" data-node-id="824:221"><div class="journey-contents" data-node-id="824:222">
+                    <div class="journey-row journey-row--customer journey-row--intro" data-node-id="824:223"><div class="journey-bubble " ><p>Just created my first account with you, housinganywhere.com</p></div><img class="journey-avatar" src="../assets/images/landlord-verification/animation/customer-happy.svg" alt="" width="40" height="40" decoding="async" /></div>
+<div class="journey-row journey-row--customer journey-row--question" data-node-id="824:227"><div class="journey-bubble " ><p>Will you teach me how to publish listings here?</p></div><img class="journey-avatar" src="../assets/images/landlord-verification/animation/customer-happy.svg" alt="" width="40" height="40" decoding="async" /></div>
+<div class="journey-row journey-row--customer journey-row--short" data-node-id="824:231"><div class="journey-bubble " ><p>Ok, done!</p></div><img class="journey-avatar" src="../assets/images/landlord-verification/animation/customer-happy.svg" alt="" width="40" height="40" decoding="async" /></div>
+<div class="journey-row journey-row--customer journey-row--short" data-node-id="824:235"><div class="journey-bubble " ><p>Again?</p></div><img class="journey-avatar" src="../assets/images/landlord-verification/animation/customer-sad.svg" alt="" width="40" height="40" decoding="async" /></div>
+<div class="journey-row journey-row--id" data-node-id="824:239"><img class="journey-avatar" src="../assets/images/landlord-verification/animation/housinganywhere-avatar.svg" alt="" width="40" height="40" decoding="async" /><div class="journey-image journey-image--id"><img class="" src="../assets/images/landlord-verification/animation/verify-id.png" alt="" width="40" height="40" decoding="async" /></div></div>
+<div class="journey-row journey-row--email" data-node-id="824:243"><img class="journey-avatar" src="../assets/images/landlord-verification/animation/housinganywhere-avatar.svg" alt="" width="40" height="40" decoding="async" /><div class="journey-image journey-image--email"><img class="" src="../assets/images/landlord-verification/animation/verify-email.png" alt="" width="40" height="40" decoding="async" /></div></div>
+<div class="journey-row journey-row--continue" data-node-id="824:247"><img class="journey-avatar" src="../assets/images/landlord-verification/animation/housinganywhere-avatar.svg" alt="" width="40" height="40" decoding="async" /><div class="journey-image journey-image--continue"><img class="" src="../assets/images/landlord-verification/animation/continue-verification.png" alt="" width="40" height="40" decoding="async" /></div></div>
+<div class="journey-row" data-node-id="824:251"><img class="journey-avatar" src="../assets/images/landlord-verification/animation/housinganywhere-avatar.svg" alt="" width="40" height="40" decoding="async" /><div class="journey-bubble journey-static-typing" ><p>typing...</p></div></div>
+<div class="journey-row journey-row--booking" data-node-id="824:256"><img class="journey-avatar" src="../assets/images/landlord-verification/animation/housinganywhere-avatar.svg" alt="" width="40" height="40" decoding="async" /><div class="journey-booking"><div class="journey-image journey-image--booking"><img class="" src="../assets/images/landlord-verification/animation/first-booking.png" alt="" width="634" height="1118" decoding="async" /></div><div class="journey-booking__fade"></div></div></div>
+<div class="journey-row journey-row--fee" data-node-id="824:262"><img class="journey-avatar" src="../assets/images/landlord-verification/animation/housinganywhere-avatar.svg" alt="" width="40" height="40" decoding="async" /><div class="journey-bubble " ><p>And you owe me a fee.</p></div></div>
+<div class="journey-row journey-row--customer journey-row--short" data-node-id="824:267"><div class="journey-bubble " ><p>typing...</p></div><img class="journey-avatar" src="../assets/images/landlord-verification/animation/customer-angry.svg" alt="" width="40" height="40" decoding="async" /></div>
+                  </div></div></div>
+                  <div class="journey-deleted" data-node-id="824:271" data-motion-node><img class="journey-avatar" src="../assets/images/landlord-verification/animation/customer-angry-small.svg" alt="" width="20" height="20" decoding="async" /><p>User deleted account</p></div>
+                  <div class="journey-desaturate" data-node-id="824:274"></div>
+                </div>
+              </div>
+            </div>
+            <div class="verification-journey__controls" data-journey-controls role="group" aria-label="Conversation animation controls" hidden>
+              <button class="verification-journey__toggle" type="button" data-journey-toggle data-playing="false" aria-label="Play animation" title="Play animation">
+                <svg data-play-icon width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><path d="M4 2.5v9L11 7z" /></svg>
+                <svg data-pause-icon width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><path d="M3 2.5h3v9H3zm5 0h3v9H8z" /></svg>
+              </button>
+              <input class="verification-journey__seek" data-journey-seek type="range" min="0" max="18" step="0.1" value="0" aria-label="Animation progress" aria-valuetext="0 seconds of 18 seconds" />
+            </div>
+          </div>
+          <figcaption class="verification-journey__caption" id="journey-caption">Imagine how landlords experience the onboarding.</figcaption>
+          <div class="visually-hidden">
+            <p>Animation transcript: a conversation illustrating the previous verification journey.</p>
+            <ol>
+              <li>Landlord: “Just created my first account with you! Excited :3”</li>
+              <li>Landlord: “Will you teach me how to publish listings here?”</li>
+              <li>HousingAnywhere: “Unlock listings. To publish listings, confirm your ID with a selfie.”</li>
+              <li>The landlord takes a picture, then replies: “Ok, done!”</li>
+              <li>HousingAnywhere: “Your email is not verified yet.”</li>
+              <li>Landlord: “Again?”</li>
+              <li>HousingAnywhere requests identity verification again, then shows the requirements for getting the first booking and a fee message.</li>
+              <li>The frustrated landlord starts typing, then deletes the account.</li>
+            </ol>
+          </div>
+        </figure>
+      </section>
+      <section class="case-section verification__process" id="process" aria-labelledby="process-title">
+        <div class="case-section__heading"><p class="case-section__eyebrow">Process</p><h2 class="case-section__title" id="process-title">Find out all sides of the problem from HubSpot tickets, recreating the flow, and research</h2></div>
+        <article class="case-step">
+          <div class="verification__text verification__article-copy">
+            <h3 class="case-step__title">Interviewing customer support and account managers</h3>
+            <div class="case-section__copy"><p>To go deeper into the root causes of the problem, I interviewed people from customer support and account managers who were responsible for helping landlords verify their account and proceed to publishing the listing. The main problems that they reported were focused around unclear terminology, inconsistent experience, and unexpected errors.</p></div>
+          </div>
+        </article>
+        <article class="case-step">
+          <div class="verification__text verification__article-copy">
+            <h3 class="case-step__title">Discovering all edge cases and misalignments</h3>
+            <div class="case-section__copy"><p>The audit revealed a sequencing problem. Landlords encountered prompts for Know Your Customer (KYC) checks shortly after registration, although those checks were needed to receive payouts. They also needed to complete the identity checks required to publish a listing.</p><p>The interface gave publication and payout requirements similar prominence, making their priority unclear. Inconsistent labels also blurred the distinction between identity verification and KYC.</p></div>
+          </div>
+          <figure class="verification__research">
+            <img src="../assets/images/landlord-verification/research-journey.png" alt="Audit map of the existing landlord journey and verification prompts." width="4096" height="813" loading="lazy" decoding="async" />
+            <img src="../assets/images/landlord-verification/research-screens.png" alt="Documented verification screens highlighting inconsistent requirements and terminology." width="1000" height="532" loading="lazy" decoding="async" />
+            <img src="../assets/images/landlord-verification/research-copy.png" alt="Comparison of verification copy across the landlord experience." width="1000" height="295" loading="lazy" decoding="async" />
+            <figcaption>Documenting the messy journey and copy</figcaption>
+          </figure>
+        </article>
+        <article class="case-step">
+          <div class="verification__text verification__article-copy">
+            <h3 class="case-step__title">Mapped the journey around two milestones</h3>
+            <div class="case-section__copy"><p>For each milestone, I worked through what landlords needed to complete, what could wait, and how to explain the next action. This informed the priority of prompts across the dashboard, account settings and listings page. I worked with a copywriter to standardise the terminology.</p></div>
+          </div>
+          <figure class="verification__text verification-milestones-demo" aria-label="Interactive journey and verification milestones">
+            <iframe data-verification-milestones src="../assets/demos/onboarding-copy/embed.html?v=3" title="Interactive journey and verification milestones" width="750" height="496" loading="lazy"></iframe>
+          </figure>
+          <div class="verification__text"><div class="case-section__copy"><p>During the project, we found inconsistencies in documentation about mobile verification. I brought the question of whether we should add mobile verification as a new step to business and compliance stakeholders.</p></div></div>
+        </article>
+      </section>
+      <section class="case-section verification__solution" id="solution" aria-labelledby="solution-title">
+        <div class="case-section__heading"><p class="case-section__eyebrow">Solution</p><h2 class="case-section__title" id="solution-title">A gamified progress component showed landlords what to complete next</h2></div>
+        <article class="case-step">
+          <div class="verification__text verification__article-copy">
+            <h3 class="case-step__title verification__h3-relaxed">Connecting progress to specific actions</h3>
+            <div class="case-section__copy"><p>The previous percentage-based indicator gave landlords little context about the work remaining. I designed a component that paired a circular progress indicator with named verification steps.</p></div>
+          </div>
+          <figure class="verification__text verification-onboarding-demo" aria-label="Interactive verification progress demo"><verification-onboarding></verification-onboarding></figure>
+          <figure class="verification__text verification-card-animation">
+            <video
+              data-verification-card-video
+              width="1500"
+              height="492"
+              muted
+              playsinline
+              controls
+              preload="none"
+              poster="../assets/images/landlord-verification/verification-card-poster.png"
+              aria-describedby="verification-card-animation-caption"
+            >
+              <source src="../assets/videos/verification-card-loop.mp4" type="video/mp4" />
+            </video>
+            <button
+              class="verification-card-animation__toggle"
+              type="button"
+              data-verification-card-toggle
+              aria-label="Play verification card animation"
+              hidden
+            >
+              <svg class="verification-card-animation__play" width="16" height="18" viewBox="0 0 16 18" fill="none" aria-hidden="true">
+                <path d="M15 7.268a2 2 0 0 1 0 3.464L3 17.66A2 2 0 0 1 0 15.928V2.072A2 2 0 0 1 3 .34L15 7.268Z" fill="currentColor" />
+              </svg>
+              <svg class="verification-card-animation__pause" width="16" height="18" viewBox="0 0 16 18" fill="none" aria-hidden="true">
+                <rect width="5" height="18" rx="1.5" fill="currentColor" />
+                <rect x="11" width="5" height="18" rx="1.5" fill="currentColor" />
+              </svg>
+            </button>
+            <figcaption class="visually-hidden" id="verification-card-animation-caption">A confirmation card appears to show that the landlord is verified and can publish listings.</figcaption>
+          </figure>
+        </article>
+        <article class="case-step">
+          <div class="verification__text verification__article-copy">
+            <h3 class="case-step__title">Making listing publishing the first goal</h3>
+            <div class="case-section__copy"><p>I focused the initial experience on the requirements for publishing. The design allowed landlords to prepare a listing draft before completing verification, while keeping publication blocked until the required checks were complete.</p><p>The banner explained the connection directly: verify your profile to publish your listings. Individual actions showed what was complete and what still needed attention.</p><p>Contributed it to the design library for reuse across other relevant cases.</p></div>
+          </div>
+          <figure class="verification__dashboard"><img src="../assets/images/landlord-verification/publication-dashboard.png" alt="Publication-first listings dashboard with a verification checklist on desktop and mobile." width="1200" height="482" loading="lazy" decoding="async" /></figure>
+        </article>
+      </section>
+      <section class="case-section verification__edge-cases" id="existing-landlords" aria-labelledby="existing-landlords-title">
+        <div class="verification__section-intro verification__text">
+          <div class="case-section__heading"><p class="case-section__eyebrow">Edge cases</p><h2 class="case-section__title" id="existing-landlords-title">Existing landlords needed a transition from older verification rules</h2></div>
+          <div class="case-section__copy"><p>Some landlords already had bookings and had joined before identity verification was introduced. Their older verification statuses meant we needed to decide how the new requirements would apply to them.</p><p>I worked with internal teams on a transition approach covering verification deadlines, email communication and account-manager follow-up. We also considered manual verification in Internal Panel for established partners trusted by the company.</p></div>
+        </div>
+      </section>
+      <section class="case-section verification__impact" id="design-outcome" aria-labelledby="design-outcome-title">
+        <div class="verification__section-intro verification__text">
+          <div class="case-section__heading"><p class="case-section__eyebrow">Impact</p><h2 class="case-section__title" id="design-outcome-title">Boosted landlord activation and security</h2></div>
+          <div class="case-section__copy"><p>The redesigned journey connected verification tasks with the actions they enabled. Publication became the first goal, and the progress component showed the checks needed to reach it.</p></div>
+          <div class="verification__metrics">
+            <div class="verification__metric" data-verification-metric>
+              <p class="verification__metric-number" aria-hidden="true"><span>+</span><span class="verification__metric-digits" data-metric-value data-target="25">25</span><span>%</span></p>
+              <span class="visually-hidden">25% increase.</span>
+              <p class="verification__metric-label">More first listings were published</p>
+            </div>
+            <div class="verification__metric" data-verification-metric>
+              <p class="verification__metric-number" aria-hidden="true"><span>–</span><span class="verification__metric-digits" data-metric-value data-target="63">63</span><span>%</span></p>
+              <span class="visually-hidden">63% decrease.</span>
+              <p class="verification__metric-label">Inquiries to Support</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="verification__learnings verification__text" id="learnings" aria-labelledby="learnings-title"><h2 class="verification__section-label" id="learnings-title">Key learnings</h2><p>The project reinforced the value of investigating support work alongside the customer journey.</p></section>
+    </div>
+  </main>
+  <aside class="case__rail verification__contents">
+    <div class="case__rail-inner">
+      <nav class="case__toc is-visible" aria-label="Page contents" data-toc data-toc-section-labels data-toc-placement="bottom">
+        <div class="case__toc-rail" data-toc-rail hidden>
+          <ul class="case__toc-list"><li class="case__toc-item" data-toc-item data-color="#dca8e8"><button type="button" data-toc-id="overview"><span class="case__toc-spacer" aria-hidden="true"></span><span class="case__toc-label">Overview</span></button></li>
+<li class="case__toc-item" data-toc-item data-color="#dca8e8"><button type="button" data-toc-id="contribution"><span class="case__toc-spacer" aria-hidden="true"></span><span class="case__toc-label">My contribution</span></button></li>
+<li class="case__toc-item" data-toc-item data-color="#e8ac88"><button type="button" data-toc-id="problem"><span class="case__toc-spacer" aria-hidden="true"></span><span class="case__toc-label">Problem</span></button></li>
+<li class="case__toc-item" data-toc-item data-color="#dca8e8"><button type="button" data-toc-id="process"><span class="case__toc-spacer" aria-hidden="true"></span><span class="case__toc-label">Process</span></button></li>
+<li class="case__toc-item" data-toc-item data-color="#70c8f4"><button type="button" data-toc-id="solution"><span class="case__toc-spacer" aria-hidden="true"></span><span class="case__toc-label">Solution</span></button></li>
+<li class="case__toc-item" data-toc-item data-color="#94c890"><button type="button" data-toc-id="existing-landlords"><span class="case__toc-spacer" aria-hidden="true"></span><span class="case__toc-label">Edge cases</span></button></li>
+<li class="case__toc-item" data-toc-item data-color="#dca8e8"><button type="button" data-toc-id="design-outcome"><span class="case__toc-spacer" aria-hidden="true"></span><span class="case__toc-label">Impact</span></button></li>
+<li class="case__toc-item" data-toc-item data-color="#e8ac88"><button type="button" data-toc-id="learnings"><span class="case__toc-spacer" aria-hidden="true"></span><span class="case__toc-label">Key learnings</span></button></li></ul>
+        </div>
+        <div class="case__toc-mobile" data-toc-mobile>
+          <button type="button" class="case__toc-trigger" data-toc-trigger aria-haspopup="menu" aria-expanded="false" aria-controls="case-toc-menu">
+            <span class="visually-hidden">Page contents: </span>
+            <span class="case__toc-trigger-label" data-toc-trigger-label>Overview</span>
+            <svg class="case__toc-chevron" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true"><path d="M1 1.5 6 6.5 11 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          </button>
+          <ul id="case-toc-menu" class="case__toc-menu" role="menu" hidden data-toc-menu><li role="none"><button type="button" role="menuitem" data-toc-id="overview" data-color="#dca8e8"><span class="case__toc-menu-dot" aria-hidden="true"></span><span class="case__toc-menu-label">Overview</span></button></li>
+<li role="none"><button type="button" role="menuitem" data-toc-id="contribution" data-color="#dca8e8"><span class="case__toc-menu-dot" aria-hidden="true"></span><span class="case__toc-menu-label">My contribution</span></button></li>
+<li role="none"><button type="button" role="menuitem" data-toc-id="problem" data-color="#e8ac88"><span class="case__toc-menu-dot" aria-hidden="true"></span><span class="case__toc-menu-label">Problem</span></button></li>
+<li role="none"><button type="button" role="menuitem" data-toc-id="process" data-color="#dca8e8"><span class="case__toc-menu-dot" aria-hidden="true"></span><span class="case__toc-menu-label">Process</span></button></li>
+<li role="none"><button type="button" role="menuitem" data-toc-id="solution" data-color="#70c8f4"><span class="case__toc-menu-dot" aria-hidden="true"></span><span class="case__toc-menu-label">Solution</span></button></li>
+<li role="none"><button type="button" role="menuitem" data-toc-id="existing-landlords" data-color="#94c890"><span class="case__toc-menu-dot" aria-hidden="true"></span><span class="case__toc-menu-label">Edge cases</span></button></li>
+<li role="none"><button type="button" role="menuitem" data-toc-id="design-outcome" data-color="#dca8e8"><span class="case__toc-menu-dot" aria-hidden="true"></span><span class="case__toc-menu-label">Impact</span></button></li>
+<li role="none"><button type="button" role="menuitem" data-toc-id="learnings" data-color="#e8ac88"><span class="case__toc-menu-dot" aria-hidden="true"></span><span class="case__toc-menu-label">Key learnings</span></button></li></ul>
+        </div>
+      </nav>
+    </div>
+  </aside>
+
+  <button type="button" class="menu-bar" id="menu-open" aria-haspopup="true" aria-controls="menu-overlay" aria-expanded="false">
+    Menu
+  </button>
+
+<div class="menu-overlay" id="menu-overlay" hidden>
+  <a href="../" class="menu-overlay__logo" aria-label="Sofiia Matsiutsia — home">
+    <img src="../assets/images/sm-logo.svg" alt="Sofiia Matsiutsia" width="230" height="29" />
+  </a>
+
+  <div class="ring-stage" aria-hidden="true">
+    <div class="ring ring--cover"></div>
+    <div class="ring ring--about"></div>
+    <div class="ring ring--works"></div>
+    <div class="ring ring--writings"></div>
+    <div class="ring ring--talks"></div>
+    <div class="ring ring--core"></div>
+  </div>
+
+  <nav class="menu-overlay__nav" aria-label="Primary">
+    <a href="../about" class="menu-overlay__link menu-overlay__link--about"><span>About</span></a>
+    <a href="../work" class="menu-overlay__link menu-overlay__link--work"><span>Works</span></a>
+    <a class="menu-overlay__link menu-overlay__link--writings" data-cursor="soon"><span>Writings</span></a>
+    <a href="../talks" class="menu-overlay__link menu-overlay__link--talks"><span>Talks</span></a>
+  </nav>
+
+  <div class="menu-overlay__contact">
+    <button type="button" class="menu-overlay__contact-link menu-overlay__contact-link--email">
+      <span class="menu-overlay__contact-width" aria-hidden="true">Copy email</span>
+      <span class="menu-overlay__contact-text">Copy email</span>
+    </button>
+    <div class="menu-overlay__contact-row">
+      <a href="https://www.linkedin.com/in/smatsiutsia/" class="menu-overlay__contact-link menu-overlay__contact-link--linkedin" target="_blank" rel="noopener noreferrer">
+        <span>LinkedIn</span>
+        <img src="../assets/icons/new-window-arrow-1.svg" alt="" class="menu-overlay__contact-arrow" aria-hidden="true" />
+      </a>
+      <a href="https://x.com/SMatsiutsia" class="menu-overlay__contact-link menu-overlay__contact-link--twitter" target="_blank" rel="noopener noreferrer">
+        <span>Twitter</span>
+        <img src="../assets/icons/new-window-arrow-2.svg" alt="" class="menu-overlay__contact-arrow" aria-hidden="true" />
+      </a>
+    </div>
+  </div>
+
+  <button type="button" class="menu-bar menu-overlay__close" id="menu-close" aria-controls="menu-overlay">
+    Close
+  </button>
+</div>
+
+<script src="../assets/vendor/lenis/lenis.min.js?v=1.3.26"></script>
+<script src="../script.js?v=63"></script>
+<script src="landlord-verification-player.js?v=3"></script>
+<script src="../assets/demos/verification-onboarding/onboarding.js?v=4" defer></script>
+<script src="landlord-verification-onboarding.js?v=2" defer></script>
+<script src="landlord-verification-video.js?v=2" defer></script>
+<script src="landlord-verification-milestones.js?v=2" defer></script>
+<script src="landlord-verification-metrics.js?v=1" defer></script>
+<script type="module" src="../sound.js?v=1"></script>
+</body>
+</html>

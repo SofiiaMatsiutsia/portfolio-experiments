@@ -1,9 +1,12 @@
 const CARD_HOVER_COLORS = ["#4DCCF9", "#E8A7ED", "#86CD8B", "#F6AA81"];
 
-/* Production uses Vercel clean URLs. Local file previews still need the
-   physical `.html` filenames, so restore them only for that protocol. */
-function initLocalFileLinks() {
-  if (window.location.protocol !== "file:") return;
+/* Vercel resolves clean URLs; file previews and simple localhost servers need
+   physical filenames, especially /work, which also names a directory. */
+function initLocalPreviewLinks() {
+  const { protocol, hostname } = window.location;
+  const localHttp = /^(?:http|https):$/.test(protocol) &&
+    ["localhost", "127.0.0.1", "[::1]", "0.0.0.0"].includes(hostname);
+  if (protocol !== "file:" && !localHttp) return;
 
   document.querySelectorAll("a[href]").forEach((link) => {
     const href = link.getAttribute("href");
@@ -18,7 +21,7 @@ function initLocalFileLinks() {
   });
 }
 
-initLocalFileLinks();
+initLocalPreviewLinks();
 
 let siteLenis = null;
 
@@ -548,6 +551,10 @@ function initCaseToc() {
   const menuButtons = Array.from(root.querySelectorAll("[data-toc-menu] [data-toc-id]"));
   const trigger = root.querySelector("[data-toc-trigger]");
   const triggerLabel = root.querySelector("[data-toc-trigger-label]");
+  const includeSectionLabels = root.hasAttribute("data-toc-section-labels");
+  const bottomPlacement = root.getAttribute("data-toc-placement") === "bottom";
+  const rail = root.closest(".case__rail");
+  const compactToc = window.matchMedia("(max-width: 1299px)");
   const tocEntries = railButtons
     .map((btn) => {
       const id = btn?.getAttribute("data-toc-id");
@@ -604,7 +611,28 @@ function initCaseToc() {
 
   function headerOf(el) {
     if (el.matches("h1, h2, h3, h4")) return el;
+    if (includeSectionLabels) {
+      const headingGroup = el.querySelector(".case-section__heading");
+      if (headingGroup) return headingGroup;
+    }
     return el.querySelector(".case-section__title, .case-step__title, h2, h3") || el;
+  }
+
+  function sectionOffset() {
+    if (bottomPlacement) {
+      const header = document.querySelector(".header");
+      const headerStyle = header ? getComputedStyle(header) : null;
+      const hasTopHeader = headerStyle &&
+        (headerStyle.position === "fixed" || headerStyle.position === "sticky") &&
+        headerStyle.top !== "auto";
+      const clearance = hasTopHeader
+        ? Math.max(0, parseFloat(headerStyle.top) || 0) + header.offsetHeight
+        : 0;
+      return Math.max(32, clearance + 24);
+    }
+    if (!includeSectionLabels || !compactToc.matches || !rail) return SCROLL_OFFSET;
+    const stickyTop = parseFloat(getComputedStyle(rail).top) || 0;
+    return Math.max(SCROLL_OFFSET, stickyTop + rail.offsetHeight + 24);
   }
 
   function indexForId(id) {
@@ -613,9 +641,10 @@ function initCaseToc() {
 
   function scrollToSection(el) {
     const header = headerOf(el);
-    const target = Math.max(0, window.scrollY + header.getBoundingClientRect().top - SCROLL_OFFSET);
+    const offset = sectionOffset();
+    const target = Math.max(0, window.scrollY + header.getBoundingClientRect().top - offset);
     if (siteLenis) {
-      siteLenis.scrollTo(header, { offset: -SCROLL_OFFSET });
+      siteLenis.scrollTo(header, { offset: -offset });
       return;
     }
     window.scrollTo({ top: target, behavior: reducedMotion.matches ? "auto" : "smooth" });
@@ -627,13 +656,20 @@ function initCaseToc() {
     paint();
     scrollToSection(sections[index]);
     store.setOpen(false);
+    if (bottomPlacement && menu.contains(document.activeElement)) {
+      trigger.focus({ preventScroll: true });
+    }
   }
 
   function spy() {
     let next = 0;
+    const spyLine = includeSectionLabels || bottomPlacement ? sectionOffset() + 16 : SPY_LINE;
     sections.forEach((el, i) => {
-      if (headerOf(el).getBoundingClientRect().top <= SPY_LINE) next = i;
+      if (headerOf(el).getBoundingClientRect().top <= spyLine) next = i;
     });
+    if (bottomPlacement && window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2) {
+      next = sections.length - 1;
+    }
 
     if (performance.now() >= optimisticUntil) activeIndex = next;
 
@@ -749,11 +785,21 @@ function initCaseToc() {
       event.preventDefault();
       store.setOpen(true);
     }
-    if (event.key === " ") event.preventDefault();
+    // Keep native Space activation for the bottom-placed contents button.
+    if (event.key === " " && !bottomPlacement) event.preventDefault();
   });
   trigger.addEventListener("click", () => {
     store.setOpen(!store.open);
   });
+
+  if (bottomPlacement) {
+    root.addEventListener("focusout", (event) => {
+      if (!root.contains(event.relatedTarget)) store.setOpen(false);
+    });
+    document.getElementById("menu-open")?.addEventListener("click", () => {
+      store.setOpen(false);
+    });
+  }
 
   railButtons.forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -1287,16 +1333,6 @@ function withInstantScroll(fn) {
   html.classList.remove("is-restoring-scroll");
 }
 
-function slugWorkFilter(label) {
-  return label
-    .replace(/^#/, "")
-    .trim()
-    .toLowerCase()
-    .replace(/→/g, "-")
-    .replace(/_/g, "-")
-    .replace(/\s+/g, "-");
-}
-
 function initWorkFilters() {
   const root = document.querySelector(".work-filters");
   if (!root) return;
@@ -1309,7 +1345,7 @@ function initWorkFilters() {
   const visiblePills = () => pills.filter((pill) => !pill.hidden);
 
   const categoriesOf = (item) =>
-    Array.from(item.querySelectorAll(".work-tag")).map((tag) => slugWorkFilter(tag.textContent));
+    (item.dataset.categories || "").split(/\s+/).filter(Boolean);
 
   const applyFilter = (value) => {
     pills.forEach((pill) => {

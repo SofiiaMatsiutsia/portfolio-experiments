@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Work — Sofiia Matsiutsia</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-<link rel="stylesheet" href="styles.css?v=89" />
+<link rel="stylesheet" href="styles.css?v=121" />
 <link rel="stylesheet" href="assets/vendor/lenis/lenis.css?v=1.3.26" />
 <script>
   try { history.scrollRestoration = "manual"; } catch (e) {}
@@ -83,7 +83,7 @@
     <div class="work-filters" role="group" aria-label="Filter projects">
       <button type="button" class="work-filter is-active" data-filter="all" aria-pressed="true">
         <span class="work-filter__label">All</span>
-        <span class="work-filter__count">6</span>
+        <span class="work-filter__count">7</span>
       </button>
       <button type="button" class="work-filter" data-filter="0-1" aria-pressed="false">
         <span class="work-filter__label">0→1</span>
@@ -91,15 +91,15 @@
       </button>
       <button type="button" class="work-filter" data-filter="research" aria-pressed="false">
         <span class="work-filter__label">Research</span>
-        <span class="work-filter__count">4</span>
+        <span class="work-filter__count">5</span>
       </button>
       <button type="button" class="work-filter" data-filter="product-strategy" aria-pressed="false">
         <span class="work-filter__label">Product strategy</span>
-        <span class="work-filter__count">4</span>
+        <span class="work-filter__count">5</span>
       </button>
       <button type="button" class="work-filter" data-filter="interface-design" aria-pressed="false">
         <span class="work-filter__label">Interface design</span>
-        <span class="work-filter__count">6</span>
+        <span class="work-filter__count">7</span>
       </button>
       <button type="button" class="work-filter" data-filter="graphic-design" aria-pressed="false">
         <span class="work-filter__label">Graphic design</span>
@@ -126,10 +126,24 @@
         <span class="work-filter__count">1</span>
       </button>
     </div>
-    <p class="visually-hidden" data-filter-status aria-live="polite">Showing all 6 projects</p>
+    <p class="visually-hidden" data-filter-status aria-live="polite">Showing all 7 projects</p>
 
     <div class="work-columns">
-          <a href="work/voyage-monitor" class="work-item">
+          <div class="work-cover-card">
+            <a href="work/housinganywhere-landlord-verification" class="work-item" data-categories="research product-strategy interface-design">
+              <div class="work-item__media work-item__media--verification-cover">
+                <img src="assets/demos/verification-cover/poster.webp" alt="Verification progress cards for publishing a listing, getting a booking, and receiving payouts." width="1728" height="1117" loading="lazy" decoding="async" />
+                <verification-work-cover aria-hidden="true"></verification-work-cover>
+              </div>
+              <div class="work-item__body">
+                <div class="work-item__text">
+                  <h2 class="work-item__title">Helping landlords get verified</h2>
+                  <p class="work-item__copy">Organising verification around the steps landlords need to publish their first listing, receive bookings and get paid.</p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <a href="work/voyage-monitor" class="work-item" data-categories="0-1 research product-strategy interface-design">
             <div class="work-item__media">
               <video
                 src="assets/images/voyage-monitor.mp4"
@@ -148,15 +162,9 @@
                 <h2 class="work-item__title">Voyage Monitor dashboard</h2>
                 <p class="work-item__copy">Real-time dashboard with vessel KPIs, map, compass, and sensor data.</p>
               </div>
-              <div class="work-item__tags">
-                <span class="work-tag">#0→1</span>
-                <span class="work-tag">#Research</span>
-                <span class="work-tag">#Product_strategy</span>
-                <span class="work-tag">#Interface_design</span>
-              </div>
             </div>
           </a>
-          <a href="work/internal-panel" class="work-item">
+          <a href="work/internal-panel" class="work-item" data-categories="research product-strategy interface-design">
             <div class="work-item__media">
               <img src="assets/images/ha-unified-panel.png" alt="Housing Anywhere unified internal panel" width="2800" height="1810" />
             </div>
@@ -165,14 +173,9 @@
                 <h2 class="work-item__title">Unified internal panel</h2>
                 <p class="work-item__copy">Last 3 years we unified scattered internal workflows into a single Internal Panel, making life easier for Support, Sales, and Finance.</p>
               </div>
-              <div class="work-item__tags">
-                <span class="work-tag">#Research</span>
-                <span class="work-tag">#Product_strategy</span>
-                <span class="work-tag">#Interface_design</span>
-              </div>
             </div>
           </a>
-          <a href="https://www.linkedin.com/posts/smatsiutsia_how-we-designers-test-ideas-10000x-faster-activity-7421962190988943360-BrU-?utm_source=share&amp;utm_medium=member_desktop&amp;rcm=ACoAACC8G0QBiWeI60DBzFjNyI_r9bzeq7yk6Vs" class="work-item" target="_blank" rel="noopener noreferrer">
+          <a href="https://www.linkedin.com/posts/smatsiutsia_how-we-designers-test-ideas-10000x-faster-activity-7421962190988943360-BrU-?utm_source=share&amp;utm_medium=member_desktop&amp;rcm=ACoAACC8G0QBiWeI60DBzFjNyI_r9bzeq7yk6Vs" class="work-item" data-categories="research interface-design vibe-projects" target="_blank" rel="noopener noreferrer">
             <div class="work-item__media">
               <img src="assets/images/ai-assisted-filtering.jpg" alt="AI-assisted filtering prototype" width="1080" height="764" />
             </div>
@@ -181,14 +184,9 @@
                 <h2 class="work-item__title">AI-assisted filtering for search</h2>
                 <p class="work-item__copy">Designed AI-assisted filtering to let user control card properties, inspired by the concept of the “Malleable Interfaces”. Non-conversational search alternative, reduced cognitive load vs. natural language prompts.</p>
               </div>
-              <div class="work-item__tags">
-                <span class="work-tag">#Research</span>
-                <span class="work-tag">#Interface_design</span>
-                <span class="work-tag">#Vibe_projects</span>
-              </div>
             </div>
           </a>
-          <a href="work/team-lift-ai" class="work-item">
+          <a href="work/team-lift-ai" class="work-item" data-categories="0-1 research product-strategy interface-design graphic-design">
             <div class="work-item__media">
               <img src="assets/images/team-lift-cover.png" alt="TeamLift skills wallet" width="2800" height="1810" />
             </div>
@@ -197,16 +195,9 @@
                 <h2 class="work-item__title">AI-powered skills intelligence platform</h2>
                 <p class="work-item__copy">Web platform that connects to a company’s existing data sources and builds a private knowledge graph of every employee’s actual capabilities.</p>
               </div>
-              <div class="work-item__tags">
-                <span class="work-tag">#0→1</span>
-                <span class="work-tag">#Research</span>
-                <span class="work-tag">#Product_strategy</span>
-                <span class="work-tag">#Interface_design</span>
-                <span class="work-tag">#Graphic_design</span>
-              </div>
             </div>
           </a>
-          <a href="work/housing-anywhere" class="work-item">
+          <a href="work/housing-anywhere" class="work-item" data-categories="interface-design graphic-design">
             <div class="work-item__media">
               <img src="assets/images/housing-anywhere-mobile.gif" alt="Housing Anywhere mobile product animation" width="2804" height="2104" />
             </div>
@@ -215,13 +206,9 @@
                 <h2 class="work-item__title">Housing Anywhere</h2>
                 <p class="work-item__copy">A global rental platform that connects tenants with landlords for mid- to long-term stays.</p>
               </div>
-              <div class="work-item__tags">
-                <span class="work-tag">#Interface_design</span>
-                <span class="work-tag">#Graphic_design</span>
-              </div>
             </div>
           </a>
-          <a href="https://vibecoders.global/" class="work-item" target="_blank" rel="noopener noreferrer">
+          <a href="https://vibecoders.global/" class="work-item" data-categories="0-1 product-strategy interface-design graphic-design" target="_blank" rel="noopener noreferrer">
             <div class="work-item__media">
               <img src="assets/images/vibe-coding-collective.png" alt="Vibe Coding Collective branding" width="1516" height="1258" />
             </div>
@@ -230,15 +217,9 @@
                 <h2 class="work-item__title">Vibe Coding Collective</h2>
                 <p class="work-item__copy">Have I told that I run AI community across the world? I also do the whole branding design there.</p>
               </div>
-              <div class="work-item__tags">
-                <span class="work-tag">#0→1</span>
-                <span class="work-tag">#Product_strategy</span>
-                <span class="work-tag">#Interface_design</span>
-                <span class="work-tag">#Graphic_design</span>
-              </div>
             </div>
           </a>
-          <a href="https://www.linkedin.com/posts/smatsiutsia_everyone-is-talking-about-fable-from-anthropic-activity-7479864887842848768-k7h2" class="work-item" data-held hidden target="_blank" rel="noopener noreferrer">
+          <a href="https://www.linkedin.com/posts/smatsiutsia_everyone-is-talking-about-fable-from-anthropic-activity-7479864887842848768-k7h2" class="work-item" data-categories="3d game-design exploration vibe-projects" data-held hidden target="_blank" rel="noopener noreferrer">
             <div class="work-item__media">
               <img src="assets/images/tower-defence.jpg" alt="3D tower defence experiment" width="1080" height="648" />
             </div>
@@ -247,15 +228,9 @@
                 <h2 class="work-item__title">Exercise on building 3D tower defence games</h2>
                 <p class="work-item__copy">Learned how to build a three.js environment, render characters with Meshy.AI and Blender, and think through camera work and attack logic.</p>
               </div>
-              <div class="work-item__tags">
-                <span class="work-tag">#3D</span>
-                <span class="work-tag">#Game_design</span>
-                <span class="work-tag">#Exploration</span>
-                <span class="work-tag">#Vibe_projects</span>
-              </div>
             </div>
           </a>
-          <a href="https://www.linkedin.com/posts/smatsiutsia_working-on-vibe-coded-fire-balls-the-at-v0-activity-7426600561866674176-kvSb?" class="work-item" data-held hidden target="_blank" rel="noopener noreferrer">
+          <a href="https://www.linkedin.com/posts/smatsiutsia_working-on-vibe-coded-fire-balls-the-at-v0-activity-7426600561866674176-kvSb?" class="work-item" data-categories="mediapipe exploration vibe-projects" data-held hidden target="_blank" rel="noopener noreferrer">
             <div class="work-item__media">
               <img src="assets/images/dragon-ball.jpg" alt="Dragon Ball fire-ball experiment" width="1080" height="540" />
             </div>
@@ -264,14 +239,9 @@
                 <h2 class="work-item__title">Dragon Ball — Fire Ball!</h2>
                 <p class="work-item__copy">Never gets boring playing with Three.js, MediaPipe, and Gemini.</p>
               </div>
-              <div class="work-item__tags">
-                <span class="work-tag">#MediaPipe</span>
-                <span class="work-tag">#Exploration</span>
-                <span class="work-tag">#Vibe_projects</span>
-              </div>
             </div>
           </a>
-          <a href="https://ai.studio/apps/6b3256e6-9ae6-4c43-9736-82127585a88d?fullscreenApplet=true" class="work-item" data-held hidden target="_blank" rel="noopener noreferrer">
+          <a href="https://ai.studio/apps/6b3256e6-9ae6-4c43-9736-82127585a88d?fullscreenApplet=true" class="work-item" data-categories="mediapipe exploration vibe-projects" data-held hidden target="_blank" rel="noopener noreferrer">
             <div class="work-item__media">
               <img src="assets/images/kaleidoscope-zoom.jpg" alt="Hand-tracked kaleidoscope shader" width="1080" height="542" />
             </div>
@@ -279,11 +249,6 @@
               <div class="work-item__text">
                 <h2 class="work-item__title">Kaleidoscope zoom</h2>
                 <p class="work-item__copy">Hand-tracked kaleidoscope shader — pinch right to zoom, pinch left to reshape the pattern. Hand tracking by MediaPipe, shader by gleurop on Shadertoy.</p>
-              </div>
-              <div class="work-item__tags">
-                <span class="work-tag">#MediaPipe</span>
-                <span class="work-tag">#Exploration</span>
-                <span class="work-tag">#Vibe_projects</span>
               </div>
             </div>
           </a>
@@ -338,7 +303,8 @@
 </div>
 
 <script src="assets/vendor/lenis/lenis.min.js?v=1.3.26"></script>
-<script src="script.js?v=59"></script>
+<script src="script.js?v=64"></script>
+<script src="assets/demos/verification-cover/cover.js?v=2" defer></script>
 <script type="module" src="sound.js?v=1"></script>
 </body>
 </html>

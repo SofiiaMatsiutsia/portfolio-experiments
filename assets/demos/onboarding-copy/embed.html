@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en" class="is-embed">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f3f3">
+  <meta name="description" content="The wording changes behind publishing and payout verification.">
+  <title>Onboarding copy changes</title>
+  <link rel="preload" href="./fonts/SF-Pro-Display-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./fonts/SF-Pro-Display-Medium.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="./style.css?v=3">
+  <script src="./script.js?v=3" defer></script>
+</head>
+<body>
+  <main class="page">
+    <section class="explorer" aria-label="Onboarding copy changes">
+      <div class="diagram-shell">
+        <div class="diagram" id="diagram" role="img" aria-label="Original onboarding: verify email to complete verification; verify account to show listings in search results; verify ID to unlock listing; verify identity to complete verification and receive payouts.">
+          <div class="publishing-highlight" id="publishing-highlight" aria-hidden="true"></div>
+          <svg class="connections" id="connections" aria-hidden="true"><g id="paths"></g></svg>
+          <div class="tile action" data-node="email" aria-hidden="true"><span class="verb">Verify</span><span class="noun">email</span></div>
+          <div class="tile action" data-node="account" aria-hidden="true"><span class="verb">Verify</span><span class="noun">account</span></div>
+          <div class="tile action" data-node="id" aria-hidden="true"><span class="verb">Verify</span><span class="rename"><span class="old">ID</span><span class="new">identity</span></span></div>
+          <div class="tile action" data-node="identity" aria-hidden="true"><span class="verb">Verify</span><span class="rename"><span class="old">identity</span><span class="new">KYC</span></span></div>
+          <div class="tile action mobile" data-node="mobile" aria-hidden="true"><span class="verb">Verify</span><span class="noun">mobile</span><span class="new-badge">new</span></div>
+          <div class="tile action" data-node="method" aria-hidden="true"><span class="verb">Add</span><span class="noun">payout method</span></div>
+          <div class="tile outcome old-outcome" data-node="completeEmail" aria-hidden="true"><span class="outcome-label">complete verification</span></div>
+          <div class="tile outcome old-outcome" data-node="search" aria-hidden="true"><span class="outcome-label">show listings in search results</span></div>
+          <div class="tile outcome old-outcome" data-node="unlock" aria-hidden="true"><span class="outcome-label">unlock listing</span></div>
+          <div class="tile outcome old-outcome" data-node="completeIdentity" aria-hidden="true"><span class="outcome-label">complete verification</span></div>
+          <div class="tile outcome goal" data-node="publish" aria-hidden="true"><span class="outcome-label">Publish listing</span></div>
+          <div class="tile outcome payout" data-node="payout" aria-hidden="true"><span class="outcome-label">receive payouts</span></div>
+        </div>
+      </div>
+      <div class="timeline">
+        <div class="range-wrap">
+          <div class="range-rail" aria-hidden="true"><span id="range-fill"></span><i style="left:0%"></i><i style="left:25%"></i><i style="left:50%"></i><i style="left:75%"></i><i style="left:100%"></i></div>
+          <input type="range" id="progress" min="0" max="100" step="0.1" value="0" aria-label="Onboarding copy changes" aria-valuetext="Before, change 1 of 5" aria-describedby="timeline-hint slider-help">
+        </div>
+        <nav class="checkpoints" aria-label="Copy change checkpoints">
+          <button type="button" data-stage="0" aria-current="step">Before</button>
+          <button type="button" data-stage="1">Grouped verbs</button>
+          <button type="button" data-stage="2">Clarified copy</button>
+          <button type="button" data-stage="3">Added mobile</button>
+          <button type="button" data-stage="4">Final</button>
+        </nav>
+        <p id="timeline-hint" class="timeline-hint">Scroll to explore, or drag the timeline.</p>
+        <p id="slider-help" class="sr-only">Drag or use the arrow keys to move through the wording changes. Home goes to Before; End goes to Final. You can also select a named checkpoint.</p>
+      </div>
+      <p class="sr-only" id="stage-announcement" role="status" aria-live="polite" aria-atomic="true"></p>
+    </section>
+  </main>
+</body>
+</html>
