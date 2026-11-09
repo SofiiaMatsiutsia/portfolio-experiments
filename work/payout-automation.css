@@ -10,12 +10,12 @@ body.case--payouts .payouts__hero > img {
   object-fit: cover;
 }
 
-body.case--payouts .verification__intro p + p,
-body.case--payouts .verification__team li + li {
+body.case--payouts .study__intro p + p,
+body.case--payouts .study__team li + li {
   margin-top: 6px;
 }
 
-body.case--payouts .payouts__problem .verification__section-intro {
+body.case--payouts .payouts__problem .study__section-intro {
   align-items: center;
 }
 
@@ -24,13 +24,13 @@ body.case--payouts .payouts__problem .case-section__copy {
 }
 
 body.case--payouts .payouts__problem .case-section__copy ol,
-body.case--payouts .verification__article-copy .case-section__copy ul {
+body.case--payouts .study__article-copy .case-section__copy ul {
   margin: 0;
   padding-inline-start: 27px;
 }
 
 body.case--payouts .payouts__problem .case-section__copy li + li,
-body.case--payouts .verification__article-copy .case-section__copy li + li {
+body.case--payouts .study__article-copy .case-section__copy li + li {
   margin-top: 0;
 }
 
@@ -103,7 +103,7 @@ body.case--payouts .payouts__figure > img {
 
 body.case--payouts .payouts__figure figcaption,
 body.case--payouts .payouts__iteration-controls {
-  color: var(--verification-muted);
+  color: var(--study-muted);
   font-size: 18px;
   line-height: 1.2;
   letter-spacing: 0.014em;
@@ -177,7 +177,7 @@ body.case--payouts .payouts__states-crop span {
   background: linear-gradient(to bottom, rgba(248, 248, 248, 0) 64.761%, #f8f8f8 99.927%);
 }
 
-body.case--payouts .verification__solution .case-section__copy {
+body.case--payouts .study__solution .case-section__copy {
   font-size: 18px;
 }
 
@@ -316,19 +316,19 @@ body.case--payouts .payouts__next-stage-crop span {
   background: linear-gradient(to bottom, rgba(248, 248, 248, 0) 68.125%, #f8f8f8 100%);
 }
 
-body.case--payouts .verification__metric-number {
+body.case--payouts .study__metric-number {
   min-width: 0;
   font-variant-numeric: tabular-nums;
 }
 
-body.case--payouts .verification__learnings p {
+body.case--payouts .study__learnings p {
   margin: 0;
   font-size: 18px;
   line-height: 1.5;
   opacity: 0.7;
 }
 
-body.case--payouts .verification__learnings p + p {
+body.case--payouts .study__learnings p + p {
   margin-top: 6px;
 }
 

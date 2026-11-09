@@ -16,7 +16,8 @@
     {title:'Final',description:'To publish a listing, verify email, mobile, and identity. To receive payouts, verify KYC and add a payout method. Mobile is the only new step; the payout-method requirement already existed.'}
   ];
   const embedded=parent!==window;
-  let progress=0,activeStage=-1,animation=0,animationTarget=null;
+  // Selection is always a complete stage. Only the diagram's visual progress interpolates.
+  let progress=0,activeStage=0,animation=0,animationTarget=null,settleTimer=0;
   let manuallyControlled=false,controlFocused=false,pointerActive=false;
   let layouts=[],heights={},taskW=155,goalW=134,left=0,right=181,diagramHeight=320;
   const clamp=(n,a=0,b=1)=>Math.max(a,Math.min(b,n));
@@ -119,7 +120,7 @@
     const automatic=embedded&&!reducedMotion.matches&&!manuallyControlled;
     explorer.dataset.automatic=String(automatic);
     explorer.dataset.mode=automatic?'scroll':'manual';
-    $('#timeline-hint').textContent=automatic?'Scroll to explore, or drag the timeline.':'Drag the timeline or select a stage.';
+    $('#timeline-hint').textContent=automatic?'Scroll to explore, select a stage, or drag the timeline.':'Select a stage or drag the timeline.';
   }
   window.addEventListener('message',event=>{
     if(!embedded||event.source!==parent||event.origin!==location.origin)return;
@@ -133,13 +134,19 @@
     if(message.resume===true)manuallyControlled=false;
     if(manuallyControlled)return;
     updateHint();
-    goTo(message.progress);
+    goTo(message.progress,{animate:true});
   });
 
   function updateStage(index){
-    if(index===activeStage)return;
     activeStage=index;
     checkpoints.forEach((el,i)=>{if(i===index)el.setAttribute('aria-current','step');else el.removeAttribute('aria-current');});
+    const valueText=`${stages[index].title}, change ${index+1} of 5`;
+    diagram.setAttribute('aria-label',stages[index].description);
+    range.value=index*25;
+    range.setAttribute('aria-valuetext',valueText);
+    $('#range-fill').style.transform=`scaleX(${index/4})`;
+    document.querySelectorAll('.range-rail i').forEach((el,j)=>el.classList.toggle('passed',index>=j));
+    explorer.dataset.stage=String(index);
   }
 
   function render(){
@@ -170,13 +177,6 @@
     nodes.payout.querySelector('.outcome-label').textContent=p>=1.5?'Receive payouts':'receive payouts';
     $('#publishing-highlight').style.opacity=Math.max(0,1-Math.abs(p-1));
     drawConnections(current,p);
-    const stage=Math.min(4,Math.floor(p)),atCheckpoint=progress===stage*25;
-    updateStage(stage);
-    const valueText=atCheckpoint?`${stages[stage].title}, change ${stage+1} of 5`:`Between ${stages[stage].title} and ${stages[stage+1].title}`;
-    diagram.setAttribute('aria-label',atCheckpoint?stages[stage].description:`${valueText}. ${stages[stage].description}`);
-    range.value=progress;range.setAttribute('aria-valuetext',valueText);
-    $('#range-fill').style.transform=`scaleX(${progress/100})`;
-    document.querySelectorAll('.range-rail i').forEach((el,j)=>el.classList.toggle('passed',progress>=j*25));
     diagram.dataset.progress=progress.toFixed(1);
   }
 
@@ -208,9 +208,9 @@
     $('#paths').innerHTML=paths.join('');
   }
 
-  function stop(){cancelAnimationFrame(animation);animation=0;animationTarget=null;}
+  function stop(){cancelAnimationFrame(animation);clearTimeout(settleTimer);animation=0;animationTarget=null;settleTimer=0;}
+  function settle(){stop();progress=activeStage*25;render();}
   function beginManual(){
-    stop();
     if(!manuallyControlled){
       manuallyControlled=true;
       notifyParent({type:'verification-copy:manual'});
@@ -218,45 +218,58 @@
     updateHint();
   }
   function announceStage(){
-    const index=Math.round(progress/25);
-    $('#stage-announcement').textContent=`${stages[index].title}, change ${index+1} of 5`;
+    $('#stage-announcement').textContent=`${stages[activeStage].title}, change ${activeStage+1} of 5`;
   }
   function setProgress(value){
-    const next=Math.round(clamp(value,0,100)*10)/10;
-    progress=reducedMotion.matches?Math.round(next/25)*25:next;
+    progress=clamp(value,0,100);
     render();
   }
   function directionalTarget(direction){
-    if(reducedMotion.matches)return (Math.round(progress/25)+direction)*25;
-    return direction>0?(Math.floor(progress/25+.001)+1)*25:(Math.ceil(progress/25-.001)-1)*25;
+    return (activeStage+direction)*25;
   }
   function goTo(value,{animate=false,announce=false}={}){
-    const target=clamp(value,0,100);
+    const target=Math.round(clamp(value,0,100)/25)*25;
+    updateStage(target/25);
+    if(announce)announceStage();
     if(animate&&animation&&animationTarget===target)return;
     stop();
-    if(!animate||reducedMotion.matches||progress===target){setProgress(target);if(announce)announceStage();return;}
+    if(!animate||reducedMotion.matches||document.hidden||progress===target){setProgress(target);return;}
     const start=performance.now(),from=progress;
     animationTarget=target;
     function frame(now){
       const t=clamp((now-start)/180);
       setProgress(t===1?target:mix(from,target,ease(t)));
       if(t<1)animation=requestAnimationFrame(frame);
-      else{animation=0;animationTarget=null;if(announce)announceStage();}
+      else{stop();}
     }
     animation=requestAnimationFrame(frame);
+    // A suspended frame callback must never strand the diagram mid-stage.
+    settleTimer=setTimeout(settle,220);
   }
   function commitRange(){
     pointerActive=false;
-    goTo(Math.round(progress/25)*25,{animate:true,announce:true});
+    announceStage();
+  }
+  function pointerProgress(event){
+    const bounds=range.getBoundingClientRect();
+    return clamp((event.clientX-bounds.left-8)/(bounds.width-16))*100;
   }
   range.addEventListener('pointerdown',event=>{
     if(!event.isPrimary||event.button!==0)return;
+    event.preventDefault();
+    range.focus({preventScroll:true});
     beginManual();pointerActive=true;
+    range.setPointerCapture(event.pointerId);
+    goTo(pointerProgress(event),{animate:true});
+  });
+  range.addEventListener('pointermove',event=>{
+    if(pointerActive)goTo(pointerProgress(event));
   });
   range.addEventListener('input',()=>{beginManual();goTo(Number(range.value));});
-  range.addEventListener('change',()=>{beginManual();commitRange();});
+  range.addEventListener('change',()=>{beginManual();goTo(Number(range.value));commitRange();});
   window.addEventListener('pointerup',()=>{if(pointerActive)commitRange();});
-  window.addEventListener('pointercancel',()=>{if(pointerActive)commitRange();});
+  window.addEventListener('pointercancel',()=>{if(pointerActive){commitRange();settle();}});
+  range.addEventListener('lostpointercapture',()=>{if(pointerActive){commitRange();settle();}});
   range.addEventListener('keydown',event=>{
     let target;
     if(event.key==='Home')target=0;else if(event.key==='End')target=100;
@@ -280,12 +293,14 @@
   window.addEventListener('blur',syncControlFocus);
   window.addEventListener('focus',syncControlFocus);
   reducedMotion.addEventListener('change',()=>{
-    stop();
-    if(reducedMotion.matches)setProgress(Math.round(progress/25)*25);
+    settle();
     updateHint();
   });
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)settle();});
+  window.addEventListener('pagehide',settle);
   new ResizeObserver(calculateLayouts).observe(diagram);
   updateHint();
+  updateStage(0);
   calculateLayouts();
   notifyParent({type:'verification-copy:ready'});
   document.fonts.ready.then(calculateLayouts);

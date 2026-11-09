@@ -12,6 +12,14 @@ The showcase initially loads WebP posters and the small Housing Anywhere image. 
 
 Run the regression checks with `node --test scripts/*.test.mjs` and `python3 scripts/check-interface.py`.
 
+## Case studies and typography
+
+`typography.css` supplies SF Pro Display and the shared heading hierarchy. Product demos retain their own fonts. `work/case-study.css` contains the common reading layout; the verification and payout stylesheets contain their project-specific media treatments.
+
+Mark each contents destination with a unique `id` and `data-case-section="Label"`; optional `data-case-color` selects a palette color. `initCaseToc()` builds the compact menu from these sections in document order. Keep the matching `data-toc-fallback` anchor links usable without JavaScript. Previous/next links follow the six published case studies in Work-page order.
+
+The copy timeline commits one of five stages immediately and animates only the diagram. Scroll messages still use `verification-copy:progress` (0–100), quantized to 25-point intervals. Manual selection takes priority until the figure fully leaves and re-enters the viewport; focused controls retain priority. `scripts/milestone-timeline.test.mjs` covers these interactions and the parent/iframe bridge.
+
 ## Link waves
 
 The drawn-underlined links on Home and About swap to a static sine wave on hover or keyboard focus. Shared wave settings live at the top of `underlined-links.js`. Both resting and hover strokes are 1.3px thick.

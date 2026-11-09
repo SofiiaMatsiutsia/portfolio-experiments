@@ -43,7 +43,7 @@
 
     const progress = Math.round(Math.max(0, Math.min(100,
       (viewportHeight * 0.75 - bounds.top) / (viewportHeight * 0.6) * 100,
-    )) * 1000) / 1000;
+    )) / 25) * 25;
     if (!pendingResume && progress === lastProgress) return;
     post({ type: "verification-copy:progress", progress, resume: pendingResume });
     lastProgress = progress;

@@ -8,8 +8,8 @@
   <title>Onboarding copy changes</title>
   <link rel="preload" href="./fonts/SF-Pro-Display-Regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="./fonts/SF-Pro-Display-Medium.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="./style.css?v=3">
-  <script src="./script.js?v=3" defer></script>
+  <link rel="stylesheet" href="./style.css?v=4">
+  <script src="./script.js?v=4" defer></script>
 </head>
 <body>
   <main class="page">
@@ -35,7 +35,7 @@
       <div class="timeline">
         <div class="range-wrap">
           <div class="range-rail" aria-hidden="true"><span id="range-fill"></span><i style="left:0%"></i><i style="left:25%"></i><i style="left:50%"></i><i style="left:75%"></i><i style="left:100%"></i></div>
-          <input type="range" id="progress" min="0" max="100" step="0.1" value="0" aria-label="Onboarding copy changes" aria-valuetext="Before, change 1 of 5" aria-describedby="timeline-hint slider-help">
+          <input type="range" id="progress" min="0" max="100" step="25" value="0" aria-label="Onboarding copy changes" aria-valuetext="Before, change 1 of 5" aria-describedby="timeline-hint slider-help">
         </div>
         <nav class="checkpoints" aria-label="Copy change checkpoints">
           <button type="button" data-stage="0" aria-current="step">Before</button>
@@ -44,7 +44,7 @@
           <button type="button" data-stage="3">Added mobile</button>
           <button type="button" data-stage="4">Final</button>
         </nav>
-        <p id="timeline-hint" class="timeline-hint">Scroll to explore, or drag the timeline.</p>
+        <p id="timeline-hint" class="timeline-hint">Scroll to explore, select a stage, or drag the timeline.</p>
         <p id="slider-help" class="sr-only">Drag or use the arrow keys to move through the wording changes. Home goes to Before; End goes to Final. You can also select a named checkpoint.</p>
       </div>
       <p class="sr-only" id="stage-announcement" role="status" aria-live="polite" aria-atomic="true"></p>

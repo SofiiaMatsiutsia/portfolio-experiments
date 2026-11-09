@@ -192,7 +192,6 @@
 
   async function waitForFirstScreen() {
     // Font metrics determine which showcase tiles intersect the clipped viewport.
-    await document.fonts?.load('400 32px "Folio Bk BT"').catch(() => {});
     await document.fonts?.ready;
     await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
     const pending = new Map();
@@ -202,10 +201,14 @@
       const logo = document.querySelector(".logo__mark");
       if (logo) media.push(logo);
       const showcase = document.querySelector(".showcase");
-      const viewport = showcase.getBoundingClientRect();
+      const bounds = showcase.getBoundingClientRect();
+      const top = Math.max(0, bounds.top);
+      const bottom = Math.min(window.innerHeight, bounds.bottom);
+      const left = Math.max(0, bounds.left);
+      const right = Math.min(window.innerWidth, bounds.right);
       showcase.querySelectorAll(".showcase__item").forEach((frame) => {
         const rect = frame.getBoundingClientRect();
-        if (rect.right <= viewport.left || rect.left >= viewport.right || rect.bottom <= viewport.top || rect.top >= viewport.bottom) return;
+        if (rect.right <= left || rect.left >= right || rect.bottom <= top || rect.top >= bottom) return;
         const element = frame.querySelector(":scope > video, :scope > img");
         if (element) media.push(element);
       });

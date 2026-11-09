@@ -5,11 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Unified internal panel — Sofiia Matsiutsia</title>
 <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
-<link rel="preload" href="../assets/fonts/FolioBkBT-Book.ttf" as="font" type="font/ttf" crossorigin />
-<link rel="stylesheet" href="../styles.css?v=134" />
+<link rel="preload" href="../assets/fonts/SF-Pro-Display-Regular.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="../styles.css?v=141" />
+<link rel="stylesheet" href="../typography.css?v=1" />
 <link rel="stylesheet" href="../assets/vendor/lenis/lenis.css?v=1.3.26" />
+<link rel="stylesheet" href="case-study.css?v=2" />
 </head>
-<body class="case">
+<body class="case case--study">
   <a class="skip-link" href="#main-content">Skip to content</a>
 
   <header class="header">
@@ -65,114 +67,8 @@
     </button>
   </header>
 
-  <div class="case__layout">
-    <aside class="case__rail">
-      <div class="case__rail-inner">
-        <noscript><nav class="static-toc" aria-label="Page contents"><a href="#role">My role</a><a href="#improvements">Improvements</a><a href="#problems">Problems</a><a href="#solution">Solution</a><a href="#process">The process</a></nav></noscript>
-      <a href="../work" class="case__back" aria-label="Back to work">
-        <img src="../assets/icons/back-chevron.svg" alt="" width="38" height="26" />
-      </a>
-
-      <nav class="case__toc is-visible" aria-label="Page contents" data-toc>
-        <p class="case__toc-title" data-toc-title>content</p>
-
-        <div class="case__toc-rail" data-toc-rail>
-          <span class="case__toc-dot" data-toc-dot aria-hidden="true"></span>
-          <ul class="case__toc-list">
-            <li class="case__toc-item" data-toc-item data-color="rose">
-              <button type="button" data-toc-id="role">
-                <span class="case__toc-spacer" aria-hidden="true"></span>
-                <span class="case__toc-label">My role</span>
-              </button>
-            </li>
-            <li class="case__toc-item" data-toc-item data-color="green">
-              <button type="button" data-toc-id="improvements">
-                <span class="case__toc-spacer" aria-hidden="true"></span>
-                <span class="case__toc-label">Improvements</span>
-              </button>
-            </li>
-            <li class="case__toc-item" data-toc-item data-color="orange">
-              <button type="button" data-toc-id="problems">
-                <span class="case__toc-spacer" aria-hidden="true"></span>
-                <span class="case__toc-label">Problems</span>
-              </button>
-            </li>
-            <li class="case__toc-item" data-toc-item data-color="blue">
-              <button type="button" data-toc-id="solution">
-                <span class="case__toc-spacer" aria-hidden="true"></span>
-                <span class="case__toc-label">Solution</span>
-              </button>
-            </li>
-            <li class="case__toc-item" data-toc-item data-color="rose">
-              <button type="button" data-toc-id="process">
-                <span class="case__toc-spacer" aria-hidden="true"></span>
-                <span class="case__toc-label">The process</span>
-              </button>
-            </li>
-          </ul>
-        </div>
-
-        <div class="case__toc-mobile" data-toc-mobile>
-          <button
-            type="button"
-            class="case__toc-trigger"
-            data-toc-trigger
-            aria-haspopup="menu"
-            aria-expanded="false"
-            aria-controls="case-toc-menu"
-          >
-            <span class="case__toc-trigger-kicker" aria-hidden="true">Contents</span>
-            <span class="case__toc-trigger-label" data-toc-trigger-label>My role</span>
-            <svg class="case__toc-chevron" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
-              <path d="M1 1.5 6 6.5 11 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-          <ul id="case-toc-menu" class="case__toc-menu" role="menu" hidden data-toc-menu>
-            <li role="none">
-              <button type="button" role="menuitem" data-toc-id="role" data-color="rose">
-                <span class="case__toc-menu-dot" aria-hidden="true"></span>
-                <span class="case__toc-menu-label">My role</span>
-              </button>
-            </li>
-            <li role="none">
-              <button type="button" role="menuitem" data-toc-id="improvements" data-color="green">
-                <span class="case__toc-menu-dot" aria-hidden="true"></span>
-                <span class="case__toc-menu-label">Improvements</span>
-              </button>
-            </li>
-            <li role="none">
-              <button type="button" role="menuitem" data-toc-id="problems" data-color="orange">
-                <span class="case__toc-menu-dot" aria-hidden="true"></span>
-                <span class="case__toc-menu-label">Problems</span>
-              </button>
-            </li>
-            <li role="none">
-              <button type="button" role="menuitem" data-toc-id="solution" data-color="blue">
-                <span class="case__toc-menu-dot" aria-hidden="true"></span>
-                <span class="case__toc-menu-label">Solution</span>
-              </button>
-            </li>
-            <li role="none">
-              <button type="button" role="menuitem" data-toc-id="process" data-color="rose">
-                <span class="case__toc-menu-dot" aria-hidden="true"></span>
-                <span class="case__toc-menu-label">The process</span>
-              </button>
-            </li>
-          </ul>
-        </div>
-      </nav>
-      </div>
-    </aside>
-
-    <main id="main-content" tabindex="-1" class="case__main">
-      <div class="case__hero-block">
-                <figure class="case__hero case__hero--static case__hero--frame">
-          <img class="case__hero-media" src="../assets/images/internal-panel.jpg" width="2400" height="1551" alt="Bookings list in the Housing Anywhere internal panel" />
-        </figure>
-
-        <div class="case__heading">
-                    <h1 class="case__title">Improving Internal Panel for Housing Anywhere</h1>
-          <dl class="case__meta">
+  <main id="main-content" tabindex="-1" class="study study--adapted">
+    <div class="study__hero-region"><section class="study__opening study__text" id="overview" data-case-section="Overview"><h1 class="case__title">Improving Internal Panel for Housing Anywhere</h1><dl class="case__meta">
             <div class="case__meta-item">
               <dt>timeline</dt>
               <dd>2022–2025</dd>
@@ -189,37 +85,20 @@
               <dt>site</dt>
               <dd>housinganywhere.com</dd>
             </div>
-          </dl>
-          <p class="case__intro">A global rental platform that connects tenants with landlords for mid- to long-term stays. Behind the scenes, Customer Support, Finance, Trust &amp; Safety, Sales, and Marketing all use an Internal Panel to manage bookings, users, and payments. But it had grown into a mess. Teams were switching between tools and doing things manually that should have been automated.</p>
-        </div>
-      </div>
-
-      <div class="case__body">
-                <section class="case-section" id="role">
-          <h2 class="case-section__title">My role</h2>
-          <ul class="case-section__list">
+          </dl><p class="case__intro">A global rental platform that connects tenants with landlords for mid- to long-term stays. Behind the scenes, Customer Support, Finance, Trust &amp; Safety, Sales, and Marketing all use an Internal Panel to manage bookings, users, and payments. But it had grown into a mess. Teams were switching between tools and doing things manually that should have been automated.</p></section><figure class="case__hero case__hero--static case__hero--frame">
+          <img class="case__hero-media" src="../assets/images/internal-panel.jpg" width="2400" height="1551" alt="Bookings list in the Housing Anywhere internal panel" />
+        </figure></div>
+    <div class="study__body"><section class="study__contribution study__text" id="role" data-case-section="My contribution" data-case-color="rose">
+          <h2 class="study__section-label">My contribution</h2>
+          <ul>
             <li>0→1 Redesign / Product Strategy</li>
             <li>User Research &amp; Workflow Analysis</li>
             <li>Interface Design / Interaction Design</li>
             <li>Design System &amp; UI Patterns</li>
             <li>Translate internal pain points into features for the main product</li>
           </ul>
-        </section>
-
-        <section class="case-section" id="improvements">
-          <h2 class="case-section__title">Improvements</h2>
-          <ul class="case-section__list">
-            <li>41% operational efficiency gain</li>
-            <li>75% reduction in manual work</li>
-            <li>30+ hours saved per week across teams</li>
-          </ul>
-                    <figure class="case-figure">
-            <img src="../assets/images/internal-panel/improvements.jpg" width="2400" height="1551" alt="Settlement detail with landlord, booking, and tenant data in one view" />
-          </figure>
-        </section>
-
-        <section class="case-section" id="problems">
-          <h2 class="case-section__title">Problems</h2>
+        </section><section class="case-section" id="problems" data-case-section="Problem" data-case-color="orange">
+          <div class="case-section__heading"><p class="case-section__eyebrow">Problem</p><h2 class="case-section__title">Fragmented tools made routine operations difficult</h2></div>
           <div class="case-section__copy">
             <p>Teams were manually handling everything. Refunds. Booking changes. Payouts. They’d copy-paste sensitive data between systems, coordinate manually, hope nothing broke. Error-prone. Time-consuming.</p>
             <p>Navigation made no sense. The Admin Panel had grown organically for years. No consistent design. Filters were hard to use. Pagination was broken in some places. No patterns for building new features.</p>
@@ -227,10 +106,44 @@
                     <figure class="case-figure">
             <img src="../assets/images/internal-panel/navigation.png" alt="Legacy admin navigation and unstructured internal screens" width="3801" height="4096" />
           </figure>
-        </section>
+        </section><section class="case-section case-section--process" id="process" data-case-section="Process" data-case-color="rose">
+          <div class="case-section__heading"><p class="case-section__eyebrow">Process</p><h2 class="case-section__title">The design process</h2></div>
 
-        <section class="case-section" id="solution">
-          <h2 class="case-section__title">Solution examples</h2>
+          <article class="case-step">
+            <h3 class="case-step__title"><span class="case-step__num">1.</span> Shadowed teams doing the work</h3>
+            <div class="case-section__copy">
+              <p>I spent time with Finance, Customer Support, Sales, Marketing watching them handle refunds, booking changes, payouts. Saw where they got stuck, and what made them slower.</p>
+            </div>
+                      <figure class="case-figure">
+            <img src="../assets/images/internal-panel/shadowing.png" alt="Research notes from shadowing internal Housing Anywhere teams" width="3014" height="1636" />
+          </figure>
+          </article>
+
+          <article class="case-step">
+            <h3 class="case-step__title"><span class="case-step__num">2.</span> Centralized data views</h3>
+            <div class="case-section__copy">
+              <p>Instead of jumping between 6 tools, I brought relevant data into the Admin Panel. For example, user profiles now show everything in one place: tenant details, landlord info, payment history, actions, next steps.</p>
+            </div>
+                      <figure class="case-figure">
+            <img src="../assets/images/internal-panel/centralized.png" alt="Centralized user profile bringing tenant, landlord, and payment data together" width="3636" height="1626" />
+          </figure>
+          </article>
+
+          <article class="case-step">
+            <h3 class="case-step__title"><span class="case-step__num">3.</span> Designed new flows</h3>
+            <div class="case-section__copy">
+              <p>Refunds used to be manual and risky. I designed tools like Booking Change Request, that automate decisions based on booking data.</p>
+            </div>
+          </article>
+
+          <article class="case-step">
+            <h3 class="case-step__title"><span class="case-step__num">4.</span> Built consistency</h3>
+            <div class="case-section__copy">
+              <p>Created a UI foundation based on Tailwind with reusable patterns. Updated page layouts. Fixed filtering, sorting, pagination. Documented everything so teams could ship new features without starting from scratch.</p>
+            </div>
+          </article>
+        </section><section class="case-section" id="solution" data-case-section="Solution" data-case-color="blue">
+          <div class="case-section__heading"><p class="case-section__eyebrow">Solution</p><h2 class="case-section__title">Solution examples</h2></div>
 
           <article class="case-step">
             <h3 class="case-step__title">Reorganized user page</h3>
@@ -267,119 +180,40 @@
             <img src="../assets/images/internal-panel/bcr-before.png" alt="Manual booking-change process scattered across five tools" width="1967" height="653" />
           </figure>
           </article>
-        </section>
-
-        <section class="case-section case-section--process" id="process">
-          <h2 class="case-section__title">The process</h2>
-
-          <article class="case-step">
-            <h3 class="case-step__title"><span class="case-step__num">1.</span> Shadowed teams doing the work</h3>
-            <div class="case-section__copy">
-              <p>I spent time with Finance, Customer Support, Sales, Marketing watching them handle refunds, booking changes, payouts. Saw where they got stuck, and what made them slower.</p>
-            </div>
-                      <figure class="case-figure">
-            <img src="../assets/images/internal-panel/shadowing.png" alt="Research notes from shadowing internal Housing Anywhere teams" width="3014" height="1636" />
+        </section><section class="case-section" id="improvements" data-case-section="Outcomes" data-case-color="green">
+          <div class="case-section__heading"><h2 class="case-section__title">Outcomes</h2></div>
+          <ul class="case-section__list">
+            <li>41% operational efficiency gain</li>
+            <li>75% reduction in manual work</li>
+            <li>30+ hours saved per week across teams</li>
+          </ul>
+                    <figure class="case-figure">
+            <img src="../assets/images/internal-panel/improvements.jpg" width="2400" height="1551" alt="Settlement detail with landlord, booking, and tenant data in one view" />
           </figure>
-          </article>
-
-          <article class="case-step">
-            <h3 class="case-step__title"><span class="case-step__num">2.</span> Centralized data views</h3>
-            <div class="case-section__copy">
-              <p>Instead of jumping between 6 tools, I brought relevant data into the Admin Panel. For example, user profiles now show everything in one place: tenant details, landlord info, payment history, actions, next steps.</p>
-            </div>
-                      <figure class="case-figure">
-            <img src="../assets/images/internal-panel/centralized.png" alt="Centralized user profile bringing tenant, landlord, and payment data together" width="3636" height="1626" />
-          </figure>
-          </article>
-
-          <article class="case-step">
-            <h3 class="case-step__title"><span class="case-step__num">3.</span> Designed new flows</h3>
-            <div class="case-section__copy">
-              <p>Refunds used to be manual and risky. I designed tools like Booking Change Request, that automate decisions based on booking data.</p>
-            </div>
-          </article>
-
-          <article class="case-step">
-            <h3 class="case-step__title"><span class="case-step__num">4.</span> Built consistency</h3>
-            <div class="case-section__copy">
-              <p>Created a UI foundation based on Tailwind with reusable patterns. Updated page layouts. Fixed filtering, sorting, pagination. Documented everything so teams could ship new features without starting from scratch.</p>
-            </div>
-          </article>
-        </section>
-      </div>
-      <nav class="case-project-nav" aria-label="More projects">
-        <a class="case-project-nav__all" href="../work">All work</a>
-        <div class="case-project-nav__grid">
-          <a class="case-project-link case-project-link--previous" href="voyage-monitor" aria-label="Previous project: Voyage Monitor dashboard">
-            <div class="case-project-link__media">
-              <img src="../assets/images/voyage-monitor-poster.jpg" width="1200" height="900" alt="" loading="lazy" />
-            </div>
-            <span class="case-project-link__direction">Previous project <span aria-hidden="true">←</span></span>
-            <span class="case-project-link__title">Voyage Monitor dashboard</span>
-          </a>
-          <a class="case-project-link case-project-link--next" href="team-lift-ai" aria-label="Next project: AI-powered skills intelligence platform">
-            <div class="case-project-link__media">
-              <img src="../assets/images/team-lift.png" width="2400" height="1547" alt="" loading="lazy" />
-            </div>
-            <span class="case-project-link__direction">Next project <span aria-hidden="true">→</span></span>
-            <span class="case-project-link__title">AI-powered skills intelligence platform</span>
-          </a>
-        </div>
+        </section><nav class="case-project-nav" aria-label="More case studies"><a class="case-project-nav__all" href="../work">All work</a><div class="case-project-nav__grid"><a class="case-project-link case-project-link--previous" href="voyage-monitor" aria-label="Previous case study: Voyage Monitor dashboard">
+              <div class="case-project-link__media"><img src="../assets/images/showcase/90poe-poster.webp" width="1200" height="900" alt="" loading="lazy" /></div>
+              <span class="case-project-link__direction">Previous case study <span aria-hidden="true">←</span></span>
+              <span class="case-project-link__title">Voyage Monitor dashboard</span>
+            </a><a class="case-project-link case-project-link--next" href="team-lift-ai" aria-label="Next case study: AI-powered skills intelligence platform">
+              <div class="case-project-link__media"><img src="../assets/images/team-lift.png" width="2400" height="1547" alt="" loading="lazy" /></div>
+              <span class="case-project-link__direction">Next case study <span aria-hidden="true">→</span></span>
+              <span class="case-project-link__title">AI-powered skills intelligence platform</span>
+            </a></div></nav></div>
+  </main>
+  <aside class="case__rail study__contents">
+    <div class="case__rail-inner">
+      <nav class="case__toc is-visible" aria-label="Page contents" data-toc data-toc-section-labels data-toc-placement="bottom">
+        <div class="static-toc" data-toc-fallback><a href="#overview">Overview</a><a href="#role">My contribution</a><a href="#problems">Problem</a><a href="#process">Process</a><a href="#solution">Solution</a><a href="#improvements">Outcomes</a></div>
       </nav>
-    </main>
-  </div>
+    </div>
+  </aside>
 
   <div class="case-controls" id="case-controls" aria-label="Case study navigation">
-    <button type="button" class="menu-bar" id="menu-open" aria-haspopup="true" aria-controls="menu-overlay" aria-expanded="false">
-    Menu
-  </button>
+    <template data-mobile-menu="../"></template>
   </div>
-
-<div class="menu-overlay" id="menu-overlay" role="dialog" aria-modal="true" aria-label="Site menu" tabindex="-1" hidden>
-  <a href="../" class="menu-overlay__logo" aria-label="Sofiia Matsiutsia — home">
-    <img src="../assets/images/sm-logo.svg" alt="Sofiia Matsiutsia" width="230" height="29" />
-  </a>
-
-  <div class="ring-stage" aria-hidden="true">
-    <div class="ring ring--cover"></div>
-    <div class="ring ring--about"></div>
-    <div class="ring ring--works"></div>
-    <div class="ring ring--writings"></div>
-    <div class="ring ring--talks"></div>
-    <div class="ring ring--core"></div>
-  </div>
-
-  <nav class="menu-overlay__nav" aria-label="Primary">
-    <a href="../about" class="menu-overlay__link menu-overlay__link--about"><span>About</span></a>
-    <a href="../work" class="menu-overlay__link menu-overlay__link--work"><span>Works</span></a>
-    <a class="menu-overlay__link menu-overlay__link--writings" data-cursor="soon" aria-disabled="true" aria-label="Writings — coming soon"><span>Writings</span></a>
-    <a href="../talks" class="menu-overlay__link menu-overlay__link--talks"><span>Talks</span></a>
-  </nav>
-
-  <div class="menu-overlay__contact">
-    <button type="button" class="menu-overlay__contact-link menu-overlay__contact-link--email">
-      <span class="menu-overlay__contact-width" aria-hidden="true">Copy email</span>
-      <span class="menu-overlay__contact-text">Copy email</span>
-    </button>
-    <div class="menu-overlay__contact-row">
-      <a href="https://www.linkedin.com/in/smatsiutsia/" class="menu-overlay__contact-link menu-overlay__contact-link--linkedin" target="_blank" rel="noopener noreferrer">
-        <span>LinkedIn</span>
-        <img src="../assets/icons/new-window-arrow-1.svg" alt="" class="menu-overlay__contact-arrow" aria-hidden="true"  width="16" height="16" />
-      </a>
-      <a href="https://x.com/SMatsiutsia" class="menu-overlay__contact-link menu-overlay__contact-link--twitter" target="_blank" rel="noopener noreferrer">
-        <span>Twitter</span>
-        <img src="../assets/icons/new-window-arrow-2.svg" alt="" class="menu-overlay__contact-arrow" aria-hidden="true"  width="16" height="16" />
-      </a>
-    </div>
-  </div>
-
-  <button type="button" class="menu-bar menu-overlay__close" id="menu-close" aria-controls="menu-overlay">
-    Close
-  </button>
-</div>
 
 <script src="../assets/vendor/lenis/lenis.min.js?v=1.3.26"></script>
-<script src="../script.js?v=65"></script>
+<script src="../script.js?v=71"></script>
 <script type="module" src="../sound.js?v=1"></script>
 </body>
 </html>

@@ -14,12 +14,18 @@ class PageCheck(HTMLParser):
         self.headings = 0
         self.has_main = False
         self.has_skip = False
+        self.has_portfolio_styles = False
+        self.has_typography = False
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
         self.headings += tag == 'h1'
         self.has_main |= tag == 'main'
         self.has_skip |= attrs.get('class') == 'skip-link'
+        if tag == 'link' and attrs.get('rel') == 'stylesheet':
+            name = Path(urlsplit(attrs.get('href', '')).path).name
+            self.has_portfolio_styles |= name == 'styles.css'
+            self.has_typography |= name == 'typography.css'
         if tag == 'img':
             for key in ('alt', 'width', 'height'):
                 if key not in attrs:
@@ -38,6 +44,8 @@ pages = [*ROOT.glob('*.html'), *ROOT.glob('work/*.html'), ROOT / 'one-breath-div
 for path in pages:
     page = PageCheck(path)
     page.feed(path.read_text())
+    if page.has_portfolio_styles and not page.has_typography:
+        errors.append(f'{path.name}: missing shared typography')
     if page.has_main:
         if page.headings != 1:
             errors.append(f'{path.name}: expected one primary heading, found {page.headings}')
@@ -53,7 +61,7 @@ class ProjectFooterCheck(HTMLParser):
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
-        if tag == 'nav' and attrs.get('aria-label') == 'More projects':
+        if tag == 'nav' and attrs.get('aria-label') == 'More case studies':
             self.inside = True
         if not self.inside or tag != 'a':
             return
@@ -66,13 +74,49 @@ class ProjectFooterCheck(HTMLParser):
         if tag == 'nav':
             self.inside = False
 
-sequence = ['voyage-monitor', 'internal-panel', 'team-lift-ai', 'housing-anywhere']
+sequence = ['housinganywhere-landlord-verification', 'payout-automation', 'voyage-monitor', 'internal-panel', 'team-lift-ai', 'housing-anywhere']
 for index, slug in enumerate(sequence):
     footer = ProjectFooterCheck()
     footer.feed((ROOT / 'work' / f'{slug}.html').read_text())
     expected = ([sequence[index - 1]] if index else []) + ([sequence[index + 1]] if index < len(sequence) - 1 else [])
     if footer.destinations != expected or not footer.all_work:
         errors.append(f'{slug}: previous/next projects do not match the approved sequence')
+
+class CaseStudyCheck(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.ids = []
+        self.sections = []
+        self.fallback = False
+        self.links = []
+        self.styles = []
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if 'id' in attrs:
+            self.ids.append(attrs['id'])
+        if 'data-case-section' in attrs:
+            self.sections.append(attrs.get('id'))
+        if 'data-toc-fallback' in attrs:
+            self.fallback = True
+        if self.fallback and tag == 'a':
+            self.links.append(attrs.get('href'))
+        if tag == 'link' and attrs.get('rel') == 'stylesheet':
+            self.styles.append(urlsplit(attrs.get('href', '')).path)
+
+    def handle_endtag(self, tag):
+        if tag == 'div':
+            self.fallback = False
+
+for path in ROOT.glob('work/*.html'):
+    case = CaseStudyCheck()
+    case.feed(path.read_text())
+    if len(case.ids) != len(set(case.ids)):
+        errors.append(f'{path.name}: duplicate anchor IDs')
+    if not case.sections or None in case.sections or case.links != [f'#{id}' for id in case.sections]:
+        errors.append(f'{path.name}: contents fallback does not match real article sections')
+    if not {'../typography.css', 'case-study.css'}.issubset(case.styles):
+        errors.append(f'{path.name}: missing shared typography or case-study layout')
 
 tokens = (ROOT / 'design-tokens.css').read_text()
 colors = re.findall(r'--color-([a-z]+):\s*(#[0-9a-f]+);', tokens)

@@ -5,11 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>AI-assisted filtering for search — Sofiia Matsiutsia</title>
 <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
-<link rel="preload" href="../assets/fonts/FolioBkBT-Book.ttf" as="font" type="font/ttf" crossorigin />
-<link rel="stylesheet" href="../styles.css?v=134" />
+<link rel="preload" href="../assets/fonts/SF-Pro-Display-Regular.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="../styles.css?v=141" />
+<link rel="stylesheet" href="../typography.css?v=1" />
 <link rel="stylesheet" href="../assets/vendor/lenis/lenis.css?v=1.3.26" />
+<link rel="stylesheet" href="case-study.css?v=2" />
 </head>
-<body class="case">
+<body class="case case--study">
   <a class="skip-link" href="#main-content">Skip to content</a>
 
   <header class="header">
@@ -65,36 +67,8 @@
     </button>
   </header>
 
-  <div class="case__layout">
-    <aside class="case__rail">
-      <div class="case__rail-inner">
-      <a href="../work" class="case__back" aria-label="Back to work">
-        <img src="../assets/icons/back-chevron.svg" alt="" width="38" height="26" />
-      </a>
-
-      </div>
-    </aside>
-
-    <main id="main-content" tabindex="-1" class="case__main">
-      <div class="case__hero-block">
-                <figure class="case__hero case__hero--static">
-          <video
-            class="case__hero-media"
-            autoplay
-            muted
-            loop
-            playsinline
-            preload="metadata"
-            poster="../assets/images/ai-assisted-filtering.jpg"
-            aria-label="AI-assisted filtering prototype controlling card properties"
-          >
-            <source src="../assets/videos/malleable-real-estate.mp4" type="video/mp4" />
-          </video>
-        </figure>
-
-        <div class="case__heading">
-                    <h1 class="case__title">AI-assisted filtering for search</h1>
-          <dl class="case__meta">
+  <main id="main-content" tabindex="-1" class="study study--adapted">
+    <div class="study__hero-region"><section class="study__opening study__text" id="overview" data-case-section="Overview"><h1 class="case__title">AI-assisted filtering for search</h1><dl class="case__meta">
             <div class="case__meta-item">
               <dt>type</dt>
               <dd>Vibe project</dd>
@@ -107,65 +81,36 @@
               <dt>concept</dt>
               <dd>Malleable Interfaces</dd>
             </div>
-          </dl>
-          <p class="case__intro">Designed AI-assisted filtering to let user control card properties, inspired by the concept of the “Malleable Interfaces”. Non-conversational search alternative, reduced cognitive load vs. natural language prompts.</p>
-        </div>
-      </div>
-
-    </main>
-  </div>
+          </dl><p class="case__intro">Designed AI-assisted filtering to let user control card properties, inspired by the concept of the “Malleable Interfaces”. Non-conversational search alternative, reduced cognitive load vs. natural language prompts.</p></section><figure class="case__hero case__hero--static" id="demonstration" data-case-section="Demonstration" data-case-color="blue">
+          <video
+            class="case__hero-media"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+            poster="../assets/images/ai-assisted-filtering.jpg"
+            aria-label="AI-assisted filtering prototype controlling card properties"
+          >
+            <source src="../assets/videos/malleable-real-estate.mp4" type="video/mp4" />
+          </video>
+        </figure></div>
+    <div class="study__body"><nav class="case-project-nav" aria-label="More case studies"><a class="case-project-nav__all" href="../work">All work</a></nav></div>
+  </main>
+  <aside class="case__rail study__contents">
+    <div class="case__rail-inner">
+      <nav class="case__toc is-visible" aria-label="Page contents" data-toc data-toc-section-labels data-toc-placement="bottom">
+        <div class="static-toc" data-toc-fallback><a href="#overview">Overview</a><a href="#demonstration">Demonstration</a></div>
+      </nav>
+    </div>
+  </aside>
 
   <div class="case-controls" id="case-controls" aria-label="Case study navigation">
-    <button type="button" class="menu-bar" id="menu-open" aria-haspopup="true" aria-controls="menu-overlay" aria-expanded="false">
-    Menu
-  </button>
+    <template data-mobile-menu="../"></template>
   </div>
-
-<div class="menu-overlay" id="menu-overlay" role="dialog" aria-modal="true" aria-label="Site menu" tabindex="-1" hidden>
-  <a href="../" class="menu-overlay__logo" aria-label="Sofiia Matsiutsia — home">
-    <img src="../assets/images/sm-logo.svg" alt="Sofiia Matsiutsia" width="230" height="29" />
-  </a>
-
-  <div class="ring-stage" aria-hidden="true">
-    <div class="ring ring--cover"></div>
-    <div class="ring ring--about"></div>
-    <div class="ring ring--works"></div>
-    <div class="ring ring--writings"></div>
-    <div class="ring ring--talks"></div>
-    <div class="ring ring--core"></div>
-  </div>
-
-  <nav class="menu-overlay__nav" aria-label="Primary">
-    <a href="../about" class="menu-overlay__link menu-overlay__link--about"><span>About</span></a>
-    <a href="../work" class="menu-overlay__link menu-overlay__link--work"><span>Works</span></a>
-    <a class="menu-overlay__link menu-overlay__link--writings" data-cursor="soon" aria-disabled="true" aria-label="Writings — coming soon"><span>Writings</span></a>
-    <a href="../talks" class="menu-overlay__link menu-overlay__link--talks"><span>Talks</span></a>
-  </nav>
-
-  <div class="menu-overlay__contact">
-    <button type="button" class="menu-overlay__contact-link menu-overlay__contact-link--email">
-      <span class="menu-overlay__contact-width" aria-hidden="true">Copy email</span>
-      <span class="menu-overlay__contact-text">Copy email</span>
-    </button>
-    <div class="menu-overlay__contact-row">
-      <a href="https://www.linkedin.com/in/smatsiutsia/" class="menu-overlay__contact-link menu-overlay__contact-link--linkedin" target="_blank" rel="noopener noreferrer">
-        <span>LinkedIn</span>
-        <img src="../assets/icons/new-window-arrow-1.svg" alt="" class="menu-overlay__contact-arrow" aria-hidden="true"  width="16" height="16" />
-      </a>
-      <a href="https://x.com/SMatsiutsia" class="menu-overlay__contact-link menu-overlay__contact-link--twitter" target="_blank" rel="noopener noreferrer">
-        <span>Twitter</span>
-        <img src="../assets/icons/new-window-arrow-2.svg" alt="" class="menu-overlay__contact-arrow" aria-hidden="true"  width="16" height="16" />
-      </a>
-    </div>
-  </div>
-
-  <button type="button" class="menu-bar menu-overlay__close" id="menu-close" aria-controls="menu-overlay">
-    Close
-  </button>
-</div>
 
 <script src="../assets/vendor/lenis/lenis.min.js?v=1.3.26"></script>
-<script src="../script.js?v=65"></script>
+<script src="../script.js?v=71"></script>
 <script type="module" src="../sound.js?v=1"></script>
 </body>
 </html>

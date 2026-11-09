@@ -31,7 +31,7 @@ function browser({ reduced = false, saveData = false } = {}) {
   }
   const window = { IntersectionObserver, matchMedia: () => preference,
     addEventListener: (name, fn) => events.set(name, fn) };
-  vm.runInNewContext(source, { window, document, navigator: { connection }, IntersectionObserver,
+  vm.runInNewContext(source + '\ninitVideoVisibility();', { window, document, navigator: { connection }, IntersectionObserver,
     queueMicrotask: (fn) => microtasks.push(fn) });
   return { videos, root, document, preference, connection,
     visible(index, value = true) { intersect([{ target: videos[index], isIntersecting: value }]); },

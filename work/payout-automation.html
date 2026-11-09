@@ -6,14 +6,16 @@
 <title>Automating landlord payouts — Sofiia Matsiutsia</title>
 <meta name="description" content="Consolidating six systems and staging payout automation to reduce manual work by 75% and save the finance team 30 hours per week." />
 <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
-<link rel="stylesheet" href="../styles.css?v=134" />
+<link rel="stylesheet" href="../styles.css?v=141" />
+<link rel="stylesheet" href="../typography.css?v=1" />
 <link rel="stylesheet" href="../assets/vendor/lenis/lenis.css?v=1.3.26" />
+<link rel="stylesheet" href="case-study.css?v=2" />
 <link rel="preload" href="../assets/fonts/SF-Pro-Display-Regular.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="../assets/fonts/SF-Pro-Display-Medium.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="stylesheet" href="landlord-verification.css?v=11" />
-<link rel="stylesheet" href="payout-automation.css?v=1" />
+<link rel="stylesheet" href="landlord-verification.css?v=13" />
+<link rel="stylesheet" href="payout-automation.css?v=2" />
 </head>
-<body class="case case--verification case--payouts">
+<body class="case case--study case--verification case--payouts">
   <a class="skip-link" href="#main-content">Skip to case study</a>
 
   <header class="header">
@@ -53,7 +55,7 @@
     </a>
 
     <button type="button" class="sound-toggle" aria-label="Mute sound" aria-pressed="false">
-      <img class="verification__sound-art" src="../assets/images/landlord-verification/mute-sound.svg" alt="" width="260.99" height="32" aria-hidden="true" />
+      <img class="study__sound-art" src="../assets/images/landlord-verification/mute-sound.svg" alt="" width="260.99" height="32" aria-hidden="true" />
       <span class="sound-toggle__swap">
         <svg class="sound-toggle__icon" viewBox="0 0 32 32" fill="none" aria-hidden="true">
           <g transform="scale(1.142857)">
@@ -71,25 +73,25 @@
   </header>
 
   <!-- Visual and copy source: Figma Vr9SkM8NckWkwEtAuLkWxF, frame 925:904. -->
-  <main class="verification" id="main-content" tabindex="-1">
-    <div class="verification__hero-region">
-      <div class="verification__opening verification__text" id="overview">
-        <div class="verification__heading">
-          <div class="verification__brand"><span class="verification__brand-art"><img src="../assets/images/landlord-verification/housinganywhere-logo-updated.svg" alt="HousingAnywhere" width="95.4957" height="24.8456" /></span></div>
-          <div class="verification__title-group">
-            <div class="verification__tags" aria-label="Project focus and platforms">
+  <main class="study" id="main-content" tabindex="-1">
+    <div class="study__hero-region">
+      <div class="study__opening study__text" id="overview" data-case-section="Overview" data-case-color="rose">
+        <div class="study__heading">
+          <div class="study__brand"><span class="study__brand-art"><img src="../assets/images/landlord-verification/housinganywhere-logo-updated.svg" alt="HousingAnywhere" width="95.4957" height="24.8456" /></span></div>
+          <div class="study__title-group">
+            <div class="study__tags" aria-label="Project focus and platforms">
               <span>Internal operations</span><span>Finance</span>
-              <img class="verification__tag-separator" src="../assets/images/landlord-verification/tag-star.svg" alt="" width="8" height="8" />
+              <img class="study__tag-separator" src="../assets/images/landlord-verification/tag-star.svg" alt="" width="8" height="8" />
               <span>B2B</span>
-              <img class="verification__tag-separator" src="../assets/images/landlord-verification/tag-star.svg" alt="" width="8" height="8" />
+              <img class="study__tag-separator" src="../assets/images/landlord-verification/tag-star.svg" alt="" width="8" height="8" />
               <span>Web</span><span>Desktop</span>
-              <img class="verification__tag-separator" src="../assets/images/landlord-verification/tag-star.svg" alt="" width="8" height="8" />
+              <img class="study__tag-separator" src="../assets/images/landlord-verification/tag-star.svg" alt="" width="8" height="8" />
               <span>Design system</span>
             </div>
             <h1 class="case__title">Automating payouts to cut operational costs and reduce errors</h1>
           </div>
         </div>
-        <ul class="verification__highlights">
+        <ul class="study__highlights">
           <li><img src="../assets/images/landlord-verification/summary-star.svg" alt="" width="16" height="16" /><span>Spotted a costly manual process while shadowing the finance team;</span></li>
           <li><img src="../assets/images/landlord-verification/summary-star.svg" alt="" width="16" height="16" /><span>Mapped the checks and decisions;</span></li>
           <li><img src="../assets/images/landlord-verification/summary-star.svg" alt="" width="16" height="16" /><span>Brought fragmented data from six systems into one;</span></li>
@@ -97,28 +99,28 @@
           <li><img src="../assets/images/landlord-verification/summary-star.svg" alt="" width="16" height="16" /><span>Reduced manual work by 75% and saved the finance team 30 hours per week.</span></li>
         </ul>
       </div>
-      <figure class="verification__hero payouts__hero">
+      <figure class="study__hero payouts__hero">
         <img src="../assets/images/payout-automation/hero.png" alt="Payout review dashboard consolidating amount, landlord, booking, KYC, risk, tenant, and pay-in details." width="4096" height="2648" fetchpriority="high" decoding="async" />
       </figure>
     </div>
 
-    <div class="verification__body">
-      <div class="verification__intro-group verification__text">
-        <div class="verification__details">
-          <div class="verification__intro">
-            <h2 class="verification__details-label">Intro</h2>
+    <div class="study__body">
+      <div class="study__intro-group study__text">
+        <div class="study__details">
+          <div class="study__intro">
+            <h2 class="study__details-label">Intro</h2>
             <p>Every two weeks, six members of the finance team paused their other work to process landlord payouts.</p>
             <p>For every payout, they moved between a spreadsheet, internal tools, HousingAnywhere profiles, HubSpot and Stripe. The process required sustained concentration, created significant stress and left room for costly manual errors.</p>
             <p>I initiated a project to consolidate the required information and gradually automate routine payout decisions, allowing the finance team to focus on exceptions.</p>
           </div>
-          <div class="verification__team">
-            <h2 class="verification__details-label">Team</h2>
+          <div class="study__team">
+            <h2 class="study__details-label">Team</h2>
             <ul><li>1 Designer (me)</li><li>1 Product Owner</li><li>2 Developers (front+back)</li><li>6 Finance team members</li></ul>
           </div>
         </div>
 
-        <section class="verification__contribution" id="contribution" aria-labelledby="contribution-title">
-          <h2 class="verification__section-label" id="contribution-title">My contribution</h2>
+        <section class="study__contribution" id="contribution" aria-labelledby="contribution-title" data-case-section="My contribution" data-case-color="rose">
+          <h2 class="study__section-label" id="contribution-title">My contribution</h2>
           <ul>
             <li>Spotted the opportunity through interviews and shadowing;</li>
             <li>Mapped the existing payout workflow and its decision points;</li>
@@ -130,17 +132,17 @@
           </ul>
         </section>
 
-        <aside class="verification__context" aria-labelledby="context-title">
+        <aside class="study__context" aria-labelledby="context-title">
           <img src="../assets/images/landlord-verification/binoculars.png" alt="" width="90" height="54" loading="lazy" decoding="async" />
-          <div class="verification__context-copy">
-            <h2 class="verification__details-label" id="context-title">Context</h2>
+          <div class="study__context-copy">
+            <h2 class="study__details-label" id="context-title">Context</h2>
             <p>One of HousingAnywhere’s 2024 objectives was to reduce the cost of internal operations while preparing the platform to scale in the US. The existing payout process did not scale with the business. Entering another market would increase the number of landlords and bookings, which would require more finance hours if every payout continued to be reviewed manually.</p>
           </div>
         </aside>
       </div>
 
-      <section class="case-section payouts__problem" id="problem" aria-labelledby="problem-title">
-        <div class="verification__section-intro verification__text">
+      <section class="case-section payouts__problem" id="problem" aria-labelledby="problem-title" data-case-section="Problem" data-case-color="orange">
+        <div class="study__section-intro study__text">
           <div class="case-section__heading">
             <p class="case-section__eyebrow">Problem</p>
             <h2 class="case-section__title" id="problem-title">The finance team reviewed EVERY payout across multiple systems</h2>
@@ -169,14 +171,14 @@
         </div>
       </section>
 
-      <section class="case-section verification__process payouts__process" id="process" aria-labelledby="process-title">
-        <div class="case-section__heading verification__text">
+      <section class="case-section study__process payouts__process" id="process" aria-labelledby="process-title" data-case-section="Process" data-case-color="rose">
+        <div class="case-section__heading study__text">
           <p class="case-section__eyebrow">Process</p>
           <h2 class="case-section__title" id="process-title">Finding all the checks behind a payout decision</h2>
         </div>
 
         <article class="case-step">
-          <div class="verification__text verification__article-copy">
+          <div class="study__text study__article-copy">
             <h3 class="case-step__title">Interviewing and shadowing the finance team</h3>
             <div class="case-section__copy">
               <p>I started by observing the process rather than assuming which parts could be automated.</p>
@@ -191,7 +193,7 @@
         </article>
 
         <article class="case-step">
-          <div class="verification__text verification__article-copy">
+          <div class="study__text study__article-copy">
             <h3 class="case-step__title">Documenting the complete workflow</h3>
             <div class="case-section__copy">
               <p>I mapped the process from the moment HousingAnywhere received the tenant’s payment to the moment the landlord’s payout was released.</p>
@@ -219,7 +221,7 @@
         </article>
 
         <article class="case-step">
-          <div class="verification__text verification__article-copy">
+          <div class="study__text study__article-copy">
             <h3 class="case-step__title">Validating the data and decision rules</h3>
             <div class="case-section__copy">
               <p>I iterated on the workflow with the finance team to verify that the checks, data sources and thresholds were correct.</p>
@@ -234,14 +236,14 @@
         </article>
       </section>
 
-      <section class="case-section verification__solution payouts__solution" id="solution" aria-labelledby="solution-title">
-        <div class="case-section__heading verification__text">
+      <section class="case-section study__solution payouts__solution" id="solution" aria-labelledby="solution-title" data-case-section="Solution" data-case-color="blue">
+        <div class="case-section__heading study__text">
           <p class="case-section__eyebrow">Solution</p>
           <h2 class="case-section__title" id="solution-title">One payout overview made checks visible and actionable</h2>
         </div>
 
         <article class="case-step">
-          <div class="verification__text verification__article-copy">
+          <div class="study__text study__article-copy">
             <h3 class="case-step__title">Bringing the full payout context into one place</h3>
             <div class="case-section__copy">
               <p>The first solution was a consolidated payout overview in the Admin Panel.</p>
@@ -286,7 +288,7 @@
         </article>
 
         <article class="case-step">
-          <div class="verification__text verification__article-copy">
+          <div class="study__text study__article-copy">
             <h3 class="case-step__title">Building trust before full automation</h3>
             <div class="case-section__copy">
               <p>The finance team was initially hesitant to let the system make payout decisions automatically. They were responsible for the money and wanted to remain in control. This led us to a staged approach:</p>
@@ -302,8 +304,8 @@
         </article>
       </section>
 
-      <section class="case-section payouts__edge-cases" id="edge-cases" aria-labelledby="edge-cases-title">
-        <div class="verification__section-intro verification__text">
+      <section class="case-section payouts__edge-cases" id="edge-cases" aria-labelledby="edge-cases-title" data-case-section="Edge cases" data-case-color="green">
+        <div class="study__section-intro study__text">
           <div class="case-section__heading">
             <p class="case-section__eyebrow">Edge cases</p>
             <h2 class="case-section__title" id="edge-cases-title">Some payouts still required manual handling</h2>
@@ -315,8 +317,8 @@
         </div>
       </section>
 
-      <section class="case-section verification__impact" id="impact" aria-labelledby="impact-title">
-        <div class="verification__section-intro verification__text">
+      <section class="case-section study__impact" id="impact" aria-labelledby="impact-title" data-case-section="Impact" data-case-color="rose">
+        <div class="study__section-intro study__text">
           <div class="case-section__heading">
             <p class="case-section__eyebrow">Impact</p>
             <h2 class="case-section__title" id="impact-title">Reduced the operational cost and risk</h2>
@@ -324,107 +326,48 @@
           <div class="case-section__copy">
             <p>Staging the rollout let Finance validate automated checks before routine payouts moved through automatically. The result was 75% less manual work and 30 hours saved each week, while blocked, incomplete, and unusual cases remained available for review.</p>
           </div>
-          <div class="verification__metrics">
-            <div class="verification__metric">
-              <p class="verification__metric-number">–75%</p>
-              <p class="verification__metric-label">Reduced manual work</p>
+          <div class="study__metrics">
+            <div class="study__metric">
+              <p class="study__metric-number">–75%</p>
+              <p class="study__metric-label">Reduced manual work</p>
             </div>
-            <div class="verification__metric">
-              <p class="verification__metric-number">–30 hours</p>
-              <p class="verification__metric-label">Saved per week</p>
+            <div class="study__metric">
+              <p class="study__metric-number">–30 hours</p>
+              <p class="study__metric-label">Saved per week</p>
             </div>
           </div>
         </div>
       </section>
 
-      <section class="verification__learnings verification__text" id="learnings" aria-labelledby="learnings-title">
-        <h2 class="verification__section-label" id="learnings-title">Key learnings</h2>
+      <section class="study__learnings study__text" id="learnings" aria-labelledby="learnings-title" data-case-section="Key learnings" data-case-color="orange">
+        <h2 class="study__section-label" id="learnings-title">Key learnings</h2>
         <p>The project reinforced the value of observing internal teams in their real working environment. The automation opportunity only became visible when I saw the number of tools, checks and decisions involved in what initially appeared to be a simple operational task.</p>
         <p>It also showed me that automation depends on trust. Giving finance visibility into the consolidated data and automated checks made the transition safer and helped the team build confidence in the system before handing over routine decisions.</p>
       </section>
-      <nav class="case-project-nav" aria-label="More case studies">
-        <a class="case-project-nav__all" href="../work">All work</a>
-        <div class="case-project-nav__grid">
-          <a class="case-project-link case-project-link--previous" href="housinganywhere-landlord-verification" aria-label="Previous case study: Helping landlords get verified">
-            <div class="case-project-link__media"><img src="../assets/demos/verification-cover/poster.webp" width="1728" height="1117" alt="" loading="lazy" /></div>
-            <span class="case-project-link__direction">Previous case study <span aria-hidden="true">←</span></span>
-            <span class="case-project-link__title">Helping landlords get verified</span>
-          </a>
-          <a class="case-project-link case-project-link--next" href="voyage-monitor" aria-label="Next case study: Voyage Monitor dashboard">
-            <div class="case-project-link__media"><img src="../assets/images/showcase/90poe-poster.webp" width="1200" height="900" alt="" loading="lazy" /></div>
-            <span class="case-project-link__direction">Next case study <span aria-hidden="true">→</span></span>
-            <span class="case-project-link__title">Voyage Monitor dashboard</span>
-          </a>
-        </div>
-      </nav>
+      <nav class="case-project-nav" aria-label="More case studies"><a class="case-project-nav__all" href="../work">All work</a><div class="case-project-nav__grid"><a class="case-project-link case-project-link--previous" href="housinganywhere-landlord-verification" aria-label="Previous case study: Helping landlords get verified">
+              <div class="case-project-link__media"><img src="../assets/demos/verification-cover/poster.webp" width="1728" height="1117" alt="" loading="lazy" /></div>
+              <span class="case-project-link__direction">Previous case study <span aria-hidden="true">←</span></span>
+              <span class="case-project-link__title">Helping landlords get verified</span>
+            </a><a class="case-project-link case-project-link--next" href="voyage-monitor" aria-label="Next case study: Voyage Monitor dashboard">
+              <div class="case-project-link__media"><img src="../assets/images/showcase/90poe-poster.webp" width="1200" height="900" alt="" loading="lazy" /></div>
+              <span class="case-project-link__direction">Next case study <span aria-hidden="true">→</span></span>
+              <span class="case-project-link__title">Voyage Monitor dashboard</span>
+            </a></div></nav>
     </div>
   </main>
 
-  <aside class="case__rail verification__contents">
+  <aside class="case__rail study__contents">
     <div class="case__rail-inner">
       <nav class="case__toc is-visible" aria-label="Page contents" data-toc data-toc-section-labels data-toc-placement="bottom">
-        <div class="case__toc-rail" data-toc-rail hidden>
-          <ul class="case__toc-list">
-            <li class="case__toc-item" data-toc-item data-color="#dca8e8"><button type="button" data-toc-id="overview"><span class="case__toc-spacer" aria-hidden="true"></span><span class="case__toc-label">Overview</span></button></li>
-            <li class="case__toc-item" data-toc-item data-color="#dca8e8"><button type="button" data-toc-id="contribution"><span class="case__toc-spacer" aria-hidden="true"></span><span class="case__toc-label">My contribution</span></button></li>
-            <li class="case__toc-item" data-toc-item data-color="#e8ac88"><button type="button" data-toc-id="problem"><span class="case__toc-spacer" aria-hidden="true"></span><span class="case__toc-label">Problem</span></button></li>
-            <li class="case__toc-item" data-toc-item data-color="#dca8e8"><button type="button" data-toc-id="process"><span class="case__toc-spacer" aria-hidden="true"></span><span class="case__toc-label">Process</span></button></li>
-            <li class="case__toc-item" data-toc-item data-color="#70c8f4"><button type="button" data-toc-id="solution"><span class="case__toc-spacer" aria-hidden="true"></span><span class="case__toc-label">Solution</span></button></li>
-            <li class="case__toc-item" data-toc-item data-color="#94c890"><button type="button" data-toc-id="edge-cases"><span class="case__toc-spacer" aria-hidden="true"></span><span class="case__toc-label">Edge cases</span></button></li>
-            <li class="case__toc-item" data-toc-item data-color="#dca8e8"><button type="button" data-toc-id="impact"><span class="case__toc-spacer" aria-hidden="true"></span><span class="case__toc-label">Impact</span></button></li>
-            <li class="case__toc-item" data-toc-item data-color="#e8ac88"><button type="button" data-toc-id="learnings"><span class="case__toc-spacer" aria-hidden="true"></span><span class="case__toc-label">Key learnings</span></button></li>
-          </ul>
-        </div>
-        <div class="case__toc-mobile" data-toc-mobile>
-          <button type="button" class="case__toc-trigger" data-toc-trigger aria-haspopup="menu" aria-expanded="false" aria-controls="payout-case-toc-menu">
-            <span class="visually-hidden">Page contents: </span>
-            <span class="case__toc-trigger-label" data-toc-trigger-label>Overview</span>
-            <svg class="case__toc-chevron" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true"><path d="M1 1.5 6 6.5 11 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
-          </button>
-          <ul id="payout-case-toc-menu" class="case__toc-menu" role="menu" hidden data-toc-menu>
-            <li role="none"><button type="button" role="menuitem" data-toc-id="overview" data-color="#dca8e8"><span class="case__toc-menu-dot" aria-hidden="true"></span><span class="case__toc-menu-label">Overview</span></button></li>
-            <li role="none"><button type="button" role="menuitem" data-toc-id="contribution" data-color="#dca8e8"><span class="case__toc-menu-dot" aria-hidden="true"></span><span class="case__toc-menu-label">My contribution</span></button></li>
-            <li role="none"><button type="button" role="menuitem" data-toc-id="problem" data-color="#e8ac88"><span class="case__toc-menu-dot" aria-hidden="true"></span><span class="case__toc-menu-label">Problem</span></button></li>
-            <li role="none"><button type="button" role="menuitem" data-toc-id="process" data-color="#dca8e8"><span class="case__toc-menu-dot" aria-hidden="true"></span><span class="case__toc-menu-label">Process</span></button></li>
-            <li role="none"><button type="button" role="menuitem" data-toc-id="solution" data-color="#70c8f4"><span class="case__toc-menu-dot" aria-hidden="true"></span><span class="case__toc-menu-label">Solution</span></button></li>
-            <li role="none"><button type="button" role="menuitem" data-toc-id="edge-cases" data-color="#94c890"><span class="case__toc-menu-dot" aria-hidden="true"></span><span class="case__toc-menu-label">Edge cases</span></button></li>
-            <li role="none"><button type="button" role="menuitem" data-toc-id="impact" data-color="#dca8e8"><span class="case__toc-menu-dot" aria-hidden="true"></span><span class="case__toc-menu-label">Impact</span></button></li>
-            <li role="none"><button type="button" role="menuitem" data-toc-id="learnings" data-color="#e8ac88"><span class="case__toc-menu-dot" aria-hidden="true"></span><span class="case__toc-menu-label">Key learnings</span></button></li>
-          </ul>
-        </div>
+        <div class="static-toc" data-toc-fallback><a href="#overview">Overview</a><a href="#contribution">My contribution</a><a href="#problem">Problem</a><a href="#process">Process</a><a href="#solution">Solution</a><a href="#edge-cases">Edge cases</a><a href="#impact">Impact</a><a href="#learnings">Key learnings</a></div>
       </nav>
     </div>
   </aside>
 
-  <button type="button" class="menu-bar" id="menu-open" aria-haspopup="true" aria-controls="menu-overlay" aria-expanded="false">Menu</button>
-
-  <div class="menu-overlay" id="menu-overlay" role="dialog" aria-modal="true" aria-label="Site menu" tabindex="-1" hidden>
-    <a href="../" class="menu-overlay__logo" aria-label="Sofiia Matsiutsia — home">
-      <img src="../assets/images/sm-logo.svg" alt="Sofiia Matsiutsia" width="230" height="29" />
-    </a>
-    <div class="ring-stage" aria-hidden="true">
-      <div class="ring ring--cover"></div><div class="ring ring--about"></div><div class="ring ring--works"></div><div class="ring ring--writings"></div><div class="ring ring--talks"></div><div class="ring ring--core"></div>
-    </div>
-    <nav class="menu-overlay__nav" aria-label="Primary">
-      <a href="../about" class="menu-overlay__link menu-overlay__link--about"><span>About</span></a>
-      <a href="../work" class="menu-overlay__link menu-overlay__link--work" aria-current="page"><span>Works</span></a>
-      <a class="menu-overlay__link menu-overlay__link--writings" data-cursor="soon" aria-disabled="true" aria-label="Writings — coming soon"><span>Writings</span></a>
-      <a href="../talks" class="menu-overlay__link menu-overlay__link--talks"><span>Talks</span></a>
-    </nav>
-    <div class="menu-overlay__contact">
-      <button type="button" class="menu-overlay__contact-link menu-overlay__contact-link--email">
-        <span class="menu-overlay__contact-width" aria-hidden="true">Copy email</span><span class="menu-overlay__contact-text">Copy email</span>
-      </button>
-      <div class="menu-overlay__contact-row">
-        <a href="https://www.linkedin.com/in/smatsiutsia/" class="menu-overlay__contact-link menu-overlay__contact-link--linkedin" target="_blank" rel="noopener noreferrer"><span>LinkedIn</span><img src="../assets/icons/new-window-arrow-1.svg" alt="" width="16" height="16" class="menu-overlay__contact-arrow" aria-hidden="true" /></a>
-        <a href="https://x.com/SMatsiutsia" class="menu-overlay__contact-link menu-overlay__contact-link--twitter" target="_blank" rel="noopener noreferrer"><span>Twitter</span><img src="../assets/icons/new-window-arrow-2.svg" alt="" width="16" height="16" class="menu-overlay__contact-arrow" aria-hidden="true" /></a>
-      </div>
-    </div>
-    <button type="button" class="menu-bar menu-overlay__close" id="menu-close" aria-controls="menu-overlay">Close</button>
-  </div>
+  <template data-mobile-menu="../"></template>
 
   <script src="../assets/vendor/lenis/lenis.min.js?v=1.3.26"></script>
-  <script src="../script.js?v=65"></script>
+  <script src="../script.js?v=71"></script>
   <script src="payout-automation.js?v=1" defer></script>
   <script type="module" src="../sound.js?v=1"></script>
 </body>

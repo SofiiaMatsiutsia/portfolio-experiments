@@ -23,6 +23,69 @@ function initLocalPreviewLinks() {
   });
 }
 
+// The mount supplies the portfolio root for nested case studies and error URLs.
+function mountMobileMenu() {
+  const mount = document.querySelector("template[data-mobile-menu]");
+  if (!mount) return;
+
+  const root = mount.dataset.mobileMenu;
+  mount.insertAdjacentHTML("beforebegin", '<button type="button" class="menu-bar" id="menu-open" aria-haspopup="dialog" aria-controls="menu-overlay" aria-expanded="false">Menu</button>');
+  mount.remove();
+  document.body.insertAdjacentHTML("beforeend", `
+    <div class="menu-overlay" id="menu-overlay" role="dialog" aria-modal="true" aria-label="Site menu" tabindex="-1" hidden>
+      <a href="${root}" class="menu-overlay__logo" aria-label="Sofiia Matsiutsia — home">
+        <img src="${root}assets/images/sm-logo.svg" alt="Sofiia Matsiutsia" width="230" height="29" />
+      </a>
+
+      <div class="ring-stage" aria-hidden="true">
+        <div class="ring ring--cover"></div>
+        <div class="ring ring--about"></div>
+        <div class="ring ring--works"></div>
+        <div class="ring ring--writings"></div>
+        <div class="ring ring--talks"></div>
+        <div class="ring ring--core"></div>
+      </div>
+
+      <nav class="menu-overlay__nav" aria-label="Primary">
+        <a href="${root}about" class="menu-overlay__link menu-overlay__link--about"><span>About</span></a>
+        <a href="${root}work" class="menu-overlay__link menu-overlay__link--work"><span>Works</span></a>
+        <a class="menu-overlay__link menu-overlay__link--writings" data-cursor="soon" aria-disabled="true" aria-label="Writings — coming soon"><span>Writings</span></a>
+        <a href="${root}talks" class="menu-overlay__link menu-overlay__link--talks"><span>Talks</span></a>
+      </nav>
+
+      <div class="menu-overlay__contact">
+        <button type="button" class="menu-overlay__contact-link menu-overlay__contact-link--email">
+          <span class="menu-overlay__contact-width" aria-hidden="true">Copy email</span>
+          <span class="menu-overlay__contact-text">Copy email</span>
+        </button>
+        <div class="menu-overlay__contact-row">
+          <a href="https://www.linkedin.com/in/smatsiutsia/" class="menu-overlay__contact-link menu-overlay__contact-link--linkedin" target="_blank" rel="noopener noreferrer">
+            <span>LinkedIn</span>
+            <img src="${root}assets/icons/new-window-arrow-1.svg" alt="" class="menu-overlay__contact-arrow" aria-hidden="true" width="16" height="16" />
+          </a>
+          <a href="https://x.com/SMatsiutsia" class="menu-overlay__contact-link menu-overlay__contact-link--twitter" target="_blank" rel="noopener noreferrer">
+            <span>Twitter</span>
+            <img src="${root}assets/icons/new-window-arrow-2.svg" alt="" class="menu-overlay__contact-arrow" aria-hidden="true" width="16" height="16" />
+          </a>
+        </div>
+      </div>
+
+      <button type="button" class="menu-bar menu-overlay__close" id="menu-close" aria-controls="menu-overlay">
+        Close
+      </button>
+    </div>
+  `);
+
+  const current = document.querySelector('.header .nav__link[aria-current="page"]');
+  if (current) {
+    const links = document.querySelectorAll(".menu-overlay__nav a[href]");
+    for (const link of links) {
+      if (link.href === current.href) link.setAttribute("aria-current", "page");
+    }
+  }
+}
+
+mountMobileMenu();
 initLocalPreviewLinks();
 
 let siteLenis = null;
@@ -35,7 +98,7 @@ function initSiteScroll() {
     document.querySelectorAll('a[href="#top"]').forEach((link) => {
       link.addEventListener("click", (event) => {
         event.preventDefault();
-        homeMain.scrollTo({ top: 0, behavior: reducedMotion.matches ? "auto" : "smooth" });
+        window.scrollTo({ top: 0, behavior: reducedMotion.matches ? "auto" : "smooth" });
       });
     });
     return;
@@ -211,7 +274,36 @@ function initShowcase() {
   const group = track?.querySelector(".showcase__group");
   if (!viewport || !track || !group) return;
 
-  const mobileLayout = window.matchMedia("(max-width: 1024px)");
+  const compact = window.matchMedia("(max-width: 1024px)");
+  const label = viewport.getAttribute("aria-label");
+  let stopLoop;
+  const resetCompactLayout = () => {
+    track.style.removeProperty("transform");
+    viewport.scrollLeft = 0;
+    viewport.scrollTop = 0;
+    viewport.classList.remove("is-dragging");
+    viewport.removeAttribute("tabindex");
+    viewport.setAttribute("aria-label", label);
+  };
+  const updateLayout = () => {
+    if (compact.matches) {
+      stopLoop?.();
+      stopLoop = null;
+      resetCompactLayout();
+    } else if (!stopLoop) {
+      stopLoop = startShowcaseLoop(viewport, track, group);
+    }
+  };
+  compact.addEventListener("change", updateLayout);
+  updateLayout();
+}
+
+function startShowcaseLoop(viewport, track, group) {
+  const controller = new AbortController();
+  const { signal } = controller;
+  const label = viewport.getAttribute("aria-label");
+  viewport.setAttribute("aria-label", label + ". Drag, scroll, or use arrow keys to browse.");
+  viewport.tabIndex = 0;
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const duplicate = group.cloneNode(true);
   duplicate.setAttribute("aria-hidden", "true");
@@ -227,8 +319,8 @@ function initShowcase() {
   track.appendChild(duplicate);
   initMediaLoading(duplicate);
 
-  const CRUISE_X = 48;
-  const CRUISE_Y = 56;
+  const stopObservingVideos = observePreviewVideos(duplicate);
+  const CRUISE_SPEED = 56;
   const GLIDE_TAU = 320;
   const VELOCITY_WINDOW = 100;
   const MAX_RELEASE_SPEED = 1800;
@@ -247,6 +339,7 @@ function initShowcase() {
   let draggedDistance = 0;
   let suppressClick = false;
   let resizeFrame = 0;
+  let animationFrame = 0;
   let velocity = 0;
   let glide = false;
   let coasting = false;
@@ -254,9 +347,6 @@ function initShowcase() {
   let notch = null;
   let samples = [];
 
-  const isHorizontal = () => mobileLayout.matches;
-  const cruiseSpeed = () => (isHorizontal() ? CRUISE_X : CRUISE_Y);
-  const pointerPosition = (event) => (isHorizontal() ? event.clientX : event.clientY);
   const capturePointer = (pointer) => {
     try {
       viewport.setPointerCapture(pointer);
@@ -269,16 +359,12 @@ function initShowcase() {
     offset = wrap(offset);
   };
   const render = () => {
-    const wrapped = wrap(offset);
-    const x = isHorizontal() ? -wrapped : 0;
-    const y = isHorizontal() ? 0 : -wrapped;
-    track.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    track.style.transform = `translate3d(0, ${-wrap(offset)}px, 0)`;
   };
   const measure = () => {
     const oldSize = loopSize;
     const progress = oldSize > 1 ? wrap(offset) / oldSize : 0;
-    loopSize = isHorizontal() ? group.getBoundingClientRect().width : group.getBoundingClientRect().height;
-    loopSize = Math.max(1, loopSize);
+    loopSize = Math.max(1, group.getBoundingClientRect().height);
     offset = progress * loopSize;
     notch = null;
     render();
@@ -315,13 +401,12 @@ function initShowcase() {
     render();
   };
   const glideStep = (elapsed) => {
-    const cruise = cruiseSpeed();
     const blend = 1 - Math.exp(-elapsed / GLIDE_TAU);
-    velocity += (cruise - velocity) * blend;
+    velocity += (CRUISE_SPEED - velocity) * blend;
     offset += velocity * (elapsed / 1000);
-    if (Math.abs(velocity - cruise) < 0.5) {
+    if (Math.abs(velocity - CRUISE_SPEED) < 0.5) {
       glide = false;
-      velocity = cruise;
+      velocity = CRUISE_SPEED;
     }
   };
   const animate = (time) => {
@@ -357,11 +442,11 @@ function initShowcase() {
       normalizeOffset();
       render();
     } else if (!reducedMotion.matches) {
-      offset += cruiseSpeed() * (elapsed / 1000);
+      offset += CRUISE_SPEED * (elapsed / 1000);
       normalizeOffset();
       render();
     }
-    requestAnimationFrame(animate);
+    animationFrame = requestAnimationFrame(animate);
   };
 
   viewport.addEventListener(
@@ -369,17 +454,9 @@ function initShowcase() {
     (event) => {
       event.preventDefault();
       if (dragging) return;
-      let distance = isHorizontal()
-        ? Math.abs(event.deltaX) > Math.abs(event.deltaY)
-          ? event.deltaX
-          : event.deltaY
-        : Math.abs(event.deltaY) > Math.abs(event.deltaX)
-          ? event.deltaY
-          : event.deltaX;
+      let distance = Math.abs(event.deltaY) > Math.abs(event.deltaX) ? event.deltaY : event.deltaX;
       if (event.deltaMode === 1) distance *= 100;
-      else if (event.deltaMode === 2) {
-        distance *= isHorizontal() ? viewport.clientWidth : viewport.clientHeight;
-      }
+      else if (event.deltaMode === 2) distance *= viewport.clientHeight;
       pauseUntil = 0;
       const isNotch = !reducedMotion.matches && event.deltaMode !== 0;
       if (!isNotch) {
@@ -403,25 +480,27 @@ function initShowcase() {
       wheelLatch = false;
       samples = [];
     },
-    { passive: false },
+    { passive: false, signal },
   );
 
   viewport.addEventListener("pointerdown", (event) => {
     if (event.button !== 0 || event.target.closest("button")) return;
+    // Keep the browser from taking over the gallery gesture to drag a link.
+    event.preventDefault();
     dragging = true;
     pointerId = event.pointerId;
-    previousPointerPosition = pointerPosition(event);
+    previousPointerPosition = event.clientY;
     pressedLink = document.elementFromPoint(event.clientX, event.clientY)?.closest(".showcase__item[href]") || null;
     draggedDistance = 0;
     stopGesture();
     velocity = 0;
     viewport.classList.add("is-dragging");
     if (!pressedLink) capturePointer(event.pointerId);
-  });
+  }, { signal });
 
   viewport.addEventListener("pointermove", (event) => {
     if (!dragging || event.pointerId !== pointerId) return;
-    const currentPosition = pointerPosition(event);
+    const currentPosition = event.clientY;
     const delta = previousPointerPosition - currentPosition;
     previousPointerPosition = currentPosition;
     draggedDistance += Math.abs(delta);
@@ -430,7 +509,7 @@ function initShowcase() {
     normalizeOffset();
     render();
     pushDelta(delta);
-  });
+  }, { signal });
 
   const endDrag = (event) => {
     if (!dragging || event.pointerId !== pointerId) return;
@@ -455,8 +534,8 @@ function initShowcase() {
     glide = true;
     coasting = false;
   };
-  viewport.addEventListener("pointerup", endDrag);
-  viewport.addEventListener("pointercancel", endDrag);
+  viewport.addEventListener("pointerup", endDrag, { signal });
+  viewport.addEventListener("pointercancel", endDrag, { signal });
   viewport.addEventListener("click", (event) => {
     const link = event.target.closest(".showcase__item[href]");
     if (!link) return;
@@ -466,15 +545,13 @@ function initShowcase() {
       return;
     }
     window.location.assign(link.href);
-  });
+  }, { signal });
 
   viewport.addEventListener("keydown", (event) => {
-    const forwardKey = isHorizontal() ? "ArrowRight" : "ArrowDown";
-    const backwardKey = isHorizontal() ? "ArrowLeft" : "ArrowUp";
-    if (event.key !== forwardKey && event.key !== backwardKey) return;
+    if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
     event.preventDefault();
-    nudge(event.key === forwardKey ? 80 : -80);
-  });
+    nudge(event.key === "ArrowDown" ? 80 : -80);
+  }, { signal });
 
   const queueMeasure = () => {
     if (resizeFrame) cancelAnimationFrame(resizeFrame);
@@ -483,14 +560,28 @@ function initShowcase() {
       measure();
     });
   };
-  window.addEventListener("resize", queueMeasure);
-  mobileLayout.addEventListener("change", measure);
-  document.fonts?.ready.then(measure);
+  window.addEventListener("resize", queueMeasure, { signal });
+  document.fonts?.ready.then(() => { if (!signal.aborted) measure(); });
 
   measure();
-  requestAnimationFrame(animate);
+  animationFrame = requestAnimationFrame(animate);
+
+  return () => {
+    controller.abort();
+    cancelAnimationFrame(animationFrame);
+    cancelAnimationFrame(resizeFrame);
+    if (pointerId !== null && viewport.hasPointerCapture(pointerId)) viewport.releasePointerCapture(pointerId);
+    viewport.classList.remove("is-dragging");
+    viewport.removeAttribute("tabindex");
+    viewport.setAttribute("aria-label", label);
+    track.style.removeProperty("transform");
+    viewport.scrollTop = 0;
+    stopObservingVideos();
+    duplicate.remove();
+  };
 }
 
+const observePreviewVideos = initVideoVisibility();
 initShowcase();
 
 const reducedMotionMedia = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -552,6 +643,35 @@ function initCaseToc() {
   const root = document.querySelector("[data-toc]");
   if (!root) return;
 
+  // The article is the source of truth; every case shares this contents component.
+  const markedSections = Array.from(document.querySelectorAll("[data-case-section][id]"));
+  if (markedSections.length) {
+    const controls = document.createElement("div");
+    controls.className = "case__toc-mobile";
+    controls.setAttribute("data-toc-mobile", "");
+    controls.innerHTML = `<button type="button" class="case__toc-trigger" data-toc-trigger aria-haspopup="menu" aria-expanded="false" aria-controls="case-toc-menu">
+      <span class="visually-hidden">Page contents: </span><span class="case__toc-trigger-label" data-toc-trigger-label></span>
+      <svg class="case__toc-chevron" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true"><path d="M1 1.5 6 6.5 11 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+    </button><ul id="case-toc-menu" class="case__toc-menu" role="menu" hidden data-toc-menu></ul>`;
+    controls.querySelector("[data-toc-trigger-label]").textContent = markedSections[0].dataset.caseSection;
+    const list = controls.querySelector("[data-toc-menu]");
+    markedSections.forEach((section) => {
+      const item = document.createElement("li");
+      item.setAttribute("role", "none");
+      const button = document.createElement("button");
+      button.type = "button";
+      button.setAttribute("role", "menuitem");
+      button.dataset.tocId = section.id;
+      button.dataset.color = section.dataset.caseColor || "rose";
+      button.textContent = section.dataset.caseSection;
+      item.append(button);
+      list.append(item);
+    });
+    root.append(controls);
+    root.querySelector("[data-toc-fallback]").hidden = true;
+    root.dataset.enhanced = "true";
+  }
+
   const titleEl = root.querySelector("[data-toc-title]");
   const railItems = Array.from(root.querySelectorAll("[data-toc-item]"));
   const railButtons = railItems.map((item) => item.querySelector("[data-toc-id]"));
@@ -563,7 +683,9 @@ function initCaseToc() {
   const bottomPlacement = root.getAttribute("data-toc-placement") === "bottom";
   const rail = root.closest(".case__rail");
   const compactToc = window.matchMedia("(max-width: 1299px)");
-  const tocEntries = railButtons
+  const tocEntries = markedSections.length ? markedSections.map((el, i) => ({
+    id: el.id, el, btn: menuButtons[i], label: el.dataset.caseSection,
+  })) : railButtons
     .map((btn) => {
       const id = btn?.getAttribute("data-toc-id");
       return {
@@ -577,11 +699,11 @@ function initCaseToc() {
 
   if (!sections.length || !trigger || !menu) return;
 
-  const labels = tocEntries.map((entry) => entry.btn.querySelector(".case__toc-label")?.textContent.trim() || "");
+  const labels = tocEntries.map((entry) => entry.label || entry.btn.querySelector(".case__toc-label")?.textContent.trim() || "");
   const tocColor = (value) => value?.startsWith("#") ? value : `var(--color-${value || "rose"})`;
   const colors = tocEntries.map((entry) => {
     const item = entry.btn.closest("[data-toc-item]");
-    return tocColor(item?.getAttribute("data-color"));
+    return tocColor(entry.el.dataset.caseColor || item?.getAttribute("data-color"));
   });
   menuButtons.forEach((btn) => {
     btn.style.setProperty("--item-color", tocColor(btn.getAttribute("data-color")));
@@ -748,6 +870,7 @@ function initCaseToc() {
   function mountMenu() {
     window.clearTimeout(closeTimer);
     fitMobileMenu();
+    menu.inert = false;
     menu.hidden = false;
     if (reducedMotion.matches) {
       menu.classList.add("is-entered");
@@ -761,6 +884,7 @@ function initCaseToc() {
   }
 
   function unmountMenu() {
+    menu.inert = true;
     menu.classList.remove("is-entered");
     const delay = reducedMotion.matches ? 0 : EXIT_MS;
     closeTimer = window.setTimeout(() => {
@@ -780,11 +904,14 @@ function initCaseToc() {
   const dock = document.getElementById("case-controls");
   const menuToggle = document.getElementById("menu-open");
   function fitMobileMenu() {
+    if (bottomPlacement) return;
     if (!compactCase.matches || !dock) return;
     const rect = dock.getBoundingClientRect();
     menu.style.maxHeight = Math.max(44, rect.top - 28) + "px";
   }
   function placeContents() {
+    // Bottom placement stays anchored to its own rail at every width.
+    if (bottomPlacement) return;
     if (!mobileContents || !dock) return;
     if (compactCase.matches) {
       dock.insertBefore(mobileContents, menuToggle);
@@ -881,7 +1008,8 @@ function initCaseToc() {
     if (event.key === "Tab") {
       event.preventDefault();
       store.setOpen(false);
-      (event.shiftKey ? trigger : menuToggle)?.focus({ preventScroll: true });
+      const nextControl = !event.shiftKey && menuToggle?.getClientRects().length ? menuToggle : trigger;
+      nextControl.focus({ preventScroll: true });
       return;
     }
     const last = menuButtons.length - 1;
@@ -968,7 +1096,6 @@ const LABEL_OPEN_MS = 160;
 const LABEL_SCALE_FROM = "0.92";
 
 const navLabelSelectors = [
-  ".menu-overlay__logo",
   ".sound-toggle",
   ".menu-overlay__link--about",
   ".menu-overlay__link--work",
@@ -1858,8 +1985,7 @@ initCaseGalleries();
 function initVideoVisibility() {
   const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
   const connection = navigator.connection;
-  // initShowcase has already cloned the track, so both groups are observed.
-  const videos = Array.from(document.querySelectorAll("video[autoplay], video[data-lazy-preview]"));
+  const videos = new Set();
   const visible = new Set();
   const sync = (video) => {
     const lazy = video.hasAttribute("data-lazy-preview");
@@ -1884,14 +2010,26 @@ function initVideoVisibility() {
   };
   const observer = "IntersectionObserver" in window ? new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
+      if (!videos.has(entry.target)) return;
       if (entry.isIntersecting) visible.add(entry.target); else visible.delete(entry.target);
       sync(entry.target);
     });
   }) : null;
-  videos.forEach((video) => {
-    if (observer) observer.observe(video); else visible.add(video);
-    sync(video);
-  });
+  function observeVideos(root) {
+    const media = root.querySelectorAll("video[autoplay], video[data-lazy-preview]");
+    media.forEach((video) => {
+      videos.add(video);
+      if (observer) observer.observe(video); else visible.add(video);
+      sync(video);
+    });
+    return () => media.forEach((video) => {
+      observer?.unobserve(video);
+      videos.delete(video);
+      visible.delete(video);
+      video.pause();
+    });
+  }
+  observeVideos(document);
   // A replay finishes the old controller before starting the new one. Read the
   // final state after that synchronous handoff, rather than fetching in between.
   const syncAll = () => queueMicrotask(() => videos.forEach(sync));
@@ -1901,5 +2039,5 @@ function initVideoVisibility() {
   window.addEventListener("homepageintrochange", syncAll);
   window.addEventListener("pageshow", syncAll);
   window.addEventListener("pagehide", () => videos.forEach((video) => video.pause()));
+  return observeVideos;
 }
-initVideoVisibility();
