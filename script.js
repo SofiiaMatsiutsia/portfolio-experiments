@@ -41,7 +41,7 @@ function mountMobileMenu() {
         <div class="ring ring--cover"></div>
         <div class="ring ring--about"></div>
         <div class="ring ring--works"></div>
-        <div class="ring ring--writings"></div>
+        <div class="ring ring--garden"></div>
         <div class="ring ring--talks"></div>
         <div class="ring ring--core"></div>
       </div>
@@ -49,7 +49,7 @@ function mountMobileMenu() {
       <nav class="menu-overlay__nav" aria-label="Primary">
         <a href="${root}about" class="menu-overlay__link menu-overlay__link--about"><span>About</span></a>
         <a href="${root}work" class="menu-overlay__link menu-overlay__link--work"><span>Works</span></a>
-        <a class="menu-overlay__link menu-overlay__link--writings" data-cursor="soon" aria-disabled="true" aria-label="Writings — coming soon"><span>Writings</span></a>
+        <a href="${root}garden" class="menu-overlay__link menu-overlay__link--garden"><span>Garden</span></a>
         <a href="${root}talks" class="menu-overlay__link menu-overlay__link--talks"><span>Talks</span></a>
       </nav>
 
@@ -1099,7 +1099,7 @@ const navLabelSelectors = [
   ".sound-toggle",
   ".menu-overlay__link--about",
   ".menu-overlay__link--work",
-  ".menu-overlay__link--writings",
+  ".menu-overlay__link--garden",
   ".menu-overlay__link--talks",
 ];
 const contactLabelSelectors = [

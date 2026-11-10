@@ -222,8 +222,8 @@ img {
   --nav-mark-w: 63px;
 }
 
-.nav__link--writings {
-  --nav-mark-w: 99px;
+.nav__link--garden {
+  --nav-mark-w: 85px;
 }
 
 .nav__label {
@@ -274,10 +274,6 @@ img {
 
   .nav__link--talks .nav__mark-img--hover {
     content: url("assets/icons/talks-hover.svg");
-  }
-
-  .nav__link--writings .nav__mark-img--hover {
-    content: url("assets/icons/writings-hover.svg");
   }
 
   .nav__label {
@@ -672,7 +668,7 @@ html.figma-hover a.card.figma-hover-target .card__media {
   --cy: calc(762 * var(--u));
   --r-about: calc(576 * var(--u));
   --r-works: calc(502 * var(--u));
-  --r-writings: calc(425 * var(--u));
+  --r-garden: calc(425 * var(--u));
   --r-talks: calc(343 * var(--u));
   --r-core: calc(277.5 * var(--u));
   position: fixed;
@@ -752,7 +748,7 @@ html.figma-hover a.card.figma-hover-target .card__media {
 .ring--cover { --d: calc(2 * (50vw + var(--cy))); background: var(--bg); }
 .ring--about { --d: calc(2 * var(--r-about)); background: var(--color-rose); }
 .ring--works { --d: calc(2 * var(--r-works)); background: var(--color-blue); }
-.ring--writings { --d: calc(2 * var(--r-writings)); background: var(--color-orange); }
+.ring--garden { --d: calc(2 * var(--r-garden)); background: var(--color-orange); }
 .ring--talks { --d: calc(2 * var(--r-talks)); background: var(--color-green); }
 .ring--core { --d: calc(2 * var(--r-core)); background: var(--bg); }
 
@@ -799,11 +795,11 @@ html.figma-hover a.card.figma-hover-target .card__media {
 
 .menu-overlay__link--work {
   --r-outer: var(--r-works);
-  --r-inner: var(--r-writings);
+  --r-inner: var(--r-garden);
 }
 
-.menu-overlay__link--writings {
-  --r-outer: var(--r-writings);
+.menu-overlay__link--garden {
+  --r-outer: var(--r-garden);
   --r-inner: var(--r-talks);
 }
 
@@ -1050,7 +1046,7 @@ html.figma-hover a.card.figma-hover-target .card__media {
 html:has(body.case),
 html:has(body.work),
 html:has(body.about),
-html:has(body.talks) {
+html:has(body:is(.talks, .garden)) {
   height: auto;
   overflow-x: hidden;
   overflow-y: auto;
@@ -1089,7 +1085,7 @@ body.about {
   scroll-padding-top: var(--space-8);
 }
 
-body.talks {
+body:is(.talks, .garden) {
   --fg: var(--color-black);
   height: auto;
   min-height: 100%;
@@ -2563,8 +2559,8 @@ body.home {
   --nav-mark-w: 63px;
 }
 
-.home .nav__link--writings {
-  --nav-mark-w: 99px;
+.home .nav__link--garden {
+  --nav-mark-w: 85px;
 }
 
 .home .nav__mark {
@@ -3153,7 +3149,7 @@ body.home {
   body.work .header,
   body.case .header,
   body.about .header,
-  body.talks .header {
+  body:is(.talks, .garden) .header {
     position: relative;
     display: grid;
     grid-template-columns: 1fr auto 1fr;
@@ -3167,7 +3163,7 @@ body.home {
   body.work .logo,
   body.case .logo,
   body.about .logo,
-  body.talks .logo {
+  body:is(.talks, .garden) .logo {
     position: static;
     grid-column: 1;
     grid-row: 1;
@@ -3179,7 +3175,7 @@ body.home {
   body.work .logo__mark,
   body.case .logo__mark,
   body.about .logo__mark,
-  body.talks .logo__mark {
+  body:is(.talks, .garden) .logo__mark {
     content: url("assets/images/sm-logo.svg");
     width: 261px;
     height: 34px;
@@ -3189,7 +3185,7 @@ body.home {
   body.work .nav,
   body.case .nav,
   body.about .nav,
-  body.talks .nav {
+  body:is(.talks, .garden) .nav {
     grid-column: 2;
     grid-row: 1;
     justify-self: center;
@@ -3201,7 +3197,7 @@ body.home {
   body.work .sound-toggle,
   body.case .sound-toggle,
   body.about .sound-toggle,
-  body.talks .sound-toggle {
+  body:is(.talks, .garden) .sound-toggle {
     grid-column: 3;
     grid-row: 1;
     justify-self: end;
@@ -3215,8 +3211,8 @@ body.home {
   body.case .sound-toggle__icon,
   body.about .sound-toggle__swap,
   body.about .sound-toggle__icon,
-  body.talks .sound-toggle__swap,
-  body.talks .sound-toggle__icon {
+  body:is(.talks, .garden) .sound-toggle__swap,
+  body:is(.talks, .garden) .sound-toggle__icon {
     width: 32px;
     height: 32px;
   }
@@ -3226,7 +3222,7 @@ body.home {
   body.work .header,
   body.case .header,
   body.about .header,
-  body.talks .header {
+  body:is(.talks, .garden) .header {
     top: 0;
     display: grid;
     grid-template-columns: 1fr auto;
@@ -3238,14 +3234,14 @@ body.home {
   body.work .header__back,
   body.case .header__back,
   body.about .header__back,
-  body.talks .header__back {
+  body:is(.talks, .garden) .header__back {
     display: none;
   }
 
   body.work .logo,
   body.case .logo,
   body.about .logo,
-  body.talks .logo {
+  body:is(.talks, .garden) .logo {
     position: relative;
     top: auto;
     left: auto;
@@ -3259,7 +3255,7 @@ body.home {
   body.work .logo__mark,
   body.case .logo__mark,
   body.about .logo__mark,
-  body.talks .logo__mark {
+  body:is(.talks, .garden) .logo__mark {
     content: url("assets/images/sm-logo.svg");
     width: 230px;
     height: auto;
@@ -3279,7 +3275,7 @@ body.home {
   body.work .logo__mark,
   body.case .logo__mark,
   body.about .logo__mark,
-  body.talks .logo__mark {
+  body:is(.talks, .garden) .logo__mark {
     width: 205px;
   }
 }
@@ -4172,7 +4168,7 @@ body.home {
   }
 
   body.about .header,
-  body.talks .header {
+  body:is(.talks, .garden) .header {
     position: sticky;
     top: 0;
     z-index: 30;
@@ -4185,7 +4181,7 @@ body.home {
   }
 
   body.about .logo,
-  body.talks .logo {
+  body:is(.talks, .garden) .logo {
     position: fixed;
     top: var(--mobile-logo-top, 16px);
     left: 50%;
@@ -4198,7 +4194,7 @@ body.home {
   }
 
   body.about .logo__mark,
-  body.talks .logo__mark {
+  body:is(.talks, .garden) .logo__mark {
     display: block;
     width: min(230px, calc(100vw - (2 * var(--gutter))));
     height: auto;
@@ -5036,7 +5032,7 @@ a:focus-visible, button:focus-visible, [tabindex="0"]:focus-visible {
   outline-offset: 4px;
 }
 .sound-toggle, .home .sound-toggle, .menu-overlay .sound-toggle,
-body:is(.work, .case, .about, .talks) .sound-toggle { width: 44px; height: 44px; }
+body:is(.work, .case, .about, .talks, .garden) .sound-toggle { width: 44px; height: 44px; }
 .nav__link { min-height: 44px; }
 .nav__link[aria-disabled="true"] { color: var(--color-grey); }
 .home .hero { left: var(--gutter); width: calc(50% - 2 * var(--gutter)); }
@@ -5184,7 +5180,7 @@ body.case { --case-pad: var(--gutter); --case-copy: 900px; --case-accent: var(--
 .not-found { overflow: auto !important; }
 .not-found__message { font-size: var(--text-body); text-wrap: balance; }
 @media (min-width: 1025px) {
-  body:is(.work, .case, .about, .talks) .header, .not-found .header {
+  body:is(.work, .case, .about, .talks, .garden) .header, .not-found .header {
     padding: var(--space-6) var(--gutter) 0;
     height: 68px;
     min-height: 68px;
@@ -5223,8 +5219,8 @@ body.case { --case-pad: var(--gutter); --case-copy: 900px; --case-accent: var(--
   .case__toc-mobile { display: none; }
 }
 @media (max-width: 1024px) {
-  body:is(.work, .case, .about, .talks) .header { height: 72px; min-height: 72px; padding: 0; }
-  body:is(.work, .case, .about, .talks) .logo, .home .logo {
+  body:is(.work, .case, .about, .talks, .garden) .header { height: 72px; min-height: 72px; padding: 0; }
+  body:is(.work, .case, .about, .talks, .garden) .logo, .home .logo {
     position: fixed; top: var(--space-4); left: 50%; translate: -50% 0; transform: none;
   }
   .logo__mark { max-width: calc(100vw - 2 * var(--gutter)); }
@@ -5307,7 +5303,7 @@ body.case { --case-pad: var(--gutter); --case-copy: 900px; --case-accent: var(--
 }
 .home .logo, .home .nav, .home .sound-toggle { grid-row: 1; }
 @media (max-width: 1024px) {
-  body:is(.work, .about, .talks) .header {
+  body:is(.work, .about, .talks, .garden) .header {
     position: sticky;
     top: 0;
     z-index: 200;
@@ -5348,7 +5344,7 @@ html:not(.js) .case__toc-mobile, html:not(.js) .case__toc { display: none !impor
   .menu-overlay, .menu-overlay.is-open { background: var(--bg); }
   .menu-overlay .ring-stage { display: none; }
   .menu-overlay__logo img,
-  body:is(.home, .work, .case, .about, .talks) .logo__mark { width: min(180px, calc(100vw - 120px)); height: auto; }
+  body:is(.home, .work, .case, .about, .talks, .garden) .logo__mark { width: min(180px, calc(100vw - 120px)); height: auto; }
   .menu-overlay .sound-toggle { top: var(--space-3); left: auto; right: var(--gutter); translate: none; }
   .menu-overlay__nav {
     position: absolute;
@@ -5370,7 +5366,7 @@ html:not(.js) .case__toc-mobile, html:not(.js) .case__toc { display: none !impor
   }
   .menu-overlay__link--about { background: var(--color-rose); }
   .menu-overlay__link--work { background: var(--color-blue); }
-  .menu-overlay__link--writings { background: var(--color-orange); }
+  .menu-overlay__link--garden { background: var(--color-orange); }
   .menu-overlay__link--talks { background: var(--color-green); }
   .menu-overlay__contact {
     top: auto;
