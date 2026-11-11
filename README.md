@@ -38,3 +38,9 @@ git fetch origin main
 ```
 
 Cursor Origin is not the publishing remote for this project. It rejects pushes from free Cursor accounts and is not connected to this Vercel production project.
+
+## HCI Reading Club presentation
+
+`direct-manipulation/` is the static export of the 32-slide Direct Manipulation presentation. The Talks card opens it in a new tab; its bottom-left link returns to `https://www.matsiutsia.com/`. The card cover preserves the supplied screenshot’s full aspect ratio.
+
+The editable Next.js source is maintained separately in `~/Documents/ChatGPT/presentation Direct Manipulation`. For this publication, a temporary copy was built with `basePath: "/direct-manipulation"`, local image URLs prefixed with the same path, and the return link in the presentation shell. Run its tests, TypeScript check, and production build, then copy the resulting `out/` contents into `direct-manipulation/` when updating the deck.
