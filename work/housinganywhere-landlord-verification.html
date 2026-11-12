@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="case-study.css?v=2" />
 <link rel="preload" href="../assets/fonts/SF-Pro-Display-Regular.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="../assets/fonts/SF-Pro-Display-Medium.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="stylesheet" href="landlord-verification.css?v=13" />
+<link rel="stylesheet" href="landlord-verification.css?v=14" />
 <link rel="stylesheet" href="landlord-verification-player.css?v=5" />
 </head>
 <body class="case case--study case--verification">
@@ -266,6 +266,25 @@
             </button>
             <figcaption class="visually-hidden" id="verification-card-animation-caption">A confirmation card appears to show that the landlord is verified and can publish listings.</figcaption>
           </figure>
+          <div class="study__text verification-compare" data-verification-compare>
+            <div class="verification-compare__stage">
+              <figure class="verification-compare__before">
+                <img src="../assets/images/landlord-verification/dashboard-before.png" alt="Previous landlord dashboard with a percentage-based checklist and a separate identity-verification warning." width="2560" height="1354" loading="lazy" decoding="async" draggable="false" />
+                <figcaption>Before</figcaption>
+              </figure>
+              <figure class="verification-compare__after">
+                <img src="../assets/images/landlord-verification/dashboard-after.png" alt="Redesigned landlord dashboard with named milestones for publishing a listing, getting a booking, and receiving a payout." width="2560" height="1354" loading="lazy" decoding="async" draggable="false" />
+                <figcaption>After</figcaption>
+              </figure>
+              <div class="verification-compare__control" role="slider" tabindex="0" aria-label="Compare landlord dashboard before and after" aria-describedby="verification-compare-instructions" aria-orientation="horizontal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50% before, 50% after" hidden>
+                <span class="verification-compare__divider" aria-hidden="true"></span>
+                <span class="verification-compare__handle" aria-hidden="true">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="m7 6-4 4 4 4m6-8 4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                </span>
+              </div>
+            </div>
+            <p class="visually-hidden" id="verification-compare-instructions" hidden>Drag or click to compare. Use the arrow keys to adjust, Home to show After, or End to show Before.</p>
+          </div>
         </article>
         <article class="case-step">
           <div class="study__text study__article-copy">
@@ -323,6 +342,7 @@
 <script src="../assets/demos/verification-onboarding/onboarding.js?v=4" defer></script>
 <script src="landlord-verification-onboarding.js?v=2" defer></script>
 <script src="landlord-verification-video.js?v=2" defer></script>
+<script src="landlord-verification-compare.js?v=1" defer></script>
 <script src="landlord-verification-milestones.js?v=3" defer></script>
 <script src="landlord-verification-metrics.js?v=1" defer></script>
 <script type="module" src="../sound.js?v=1"></script>
