@@ -219,16 +219,6 @@ function initMediaLoading(root = document) {
 
 initMediaLoading();
 
-document.addEventListener("click", (event) => {
-  const soundToggle = event.target.closest(".sound-toggle");
-  if (!soundToggle) return;
-
-  const muted = soundToggle.getAttribute("aria-pressed") !== "true";
-  soundToggle.classList.toggle("is-muted", muted);
-  soundToggle.setAttribute("aria-pressed", String(muted));
-  soundToggle.setAttribute("aria-label", muted ? "Unmute sound" : "Mute sound");
-});
-
 document.querySelectorAll(".card__media").forEach((media) => {
   media.addEventListener("mouseenter", () => {
     const color = CARD_HOVER_COLORS[Math.floor(Math.random() * CARD_HOVER_COLORS.length)];
@@ -1047,36 +1037,27 @@ const menuOpenBtn = document.getElementById("menu-open");
 const menuCloseBtn = document.getElementById("menu-close");
 const menuLogo = document.querySelector(".menu-overlay__logo");
 const pageLogo = document.querySelector(".header .logo");
-const soundToggleEl = document.querySelector(".header .sound-toggle");
 const mobileMenuQuery = window.matchMedia("(max-width: 1024px)");
 
-function placeMobileChrome() {
+function placePageLogo() {
   const header = document.querySelector(".header");
-  if (!header || !menuOverlay || !pageLogo || !soundToggleEl || !menuLogo) return;
+  if (!header || !pageLogo) return;
 
   const apply = () => {
     if (mobileMenuQuery.matches) {
       if (!document.body.matches(".home, .case") && pageLogo.parentElement !== document.body) document.body.appendChild(pageLogo);
-      if (soundToggleEl.parentElement !== menuOverlay) {
-        menuLogo.insertAdjacentElement("afterend", soundToggleEl);
-      }
       return;
     }
 
     pageLogo.getAnimations().forEach((anim) => anim.cancel());
-    soundToggleEl.getAnimations().forEach((anim) => anim.cancel());
-    soundToggleEl.style.opacity = "";
-    soundToggleEl.style.scale = "";
-    soundToggleEl.style.transform = "";
     if (pageLogo.parentElement !== header) header.appendChild(pageLogo);
-    if (soundToggleEl.parentElement !== header) header.appendChild(soundToggleEl);
   };
 
   apply();
   mobileMenuQuery.addEventListener("change", apply);
 }
 
-placeMobileChrome();
+placePageLogo();
 
 const ringEls = Array.from(document.querySelectorAll(".ring"));
 
@@ -1096,7 +1077,6 @@ const LABEL_OPEN_MS = 160;
 const LABEL_SCALE_FROM = "0.92";
 
 const navLabelSelectors = [
-  ".sound-toggle",
   ".menu-overlay__link--about",
   ".menu-overlay__link--work",
   ".menu-overlay__link--garden",
@@ -1236,7 +1216,6 @@ function openMenu() {
   document.dispatchEvent(new Event("site-menu-opening"));
   document.body.classList.add("is-menu-open");
   const token = ++menuAnimToken;
-  window.cuelume?.play("bloom");
   menuOverlay.hidden = false;
   menuOverlay.classList.add("is-open", "is-animating");
   menuOpenBtn.setAttribute("aria-expanded", "true");
@@ -1254,7 +1233,6 @@ function closeMenu() {
   if (menuOverlay.hidden) return;
   hideMenuSoon();
   const token = ++menuAnimToken;
-  window.cuelume?.play("droplet");
   menuOpenBtn.setAttribute("aria-expanded", "false");
   menuOverlay.classList.add("is-animating");
   menuOverlay.classList.remove("is-open");
@@ -1539,7 +1517,7 @@ function withInstantScroll(fn) {
 
 function initWorkFilters() {
   const root = document.querySelector(".work-filters");
-  if (!root) return;
+  if (!root || root.hidden) return;
 
   const pills = Array.from(root.querySelectorAll(".work-filter"));
   const items = Array.from(document.querySelectorAll(".work-item:not([data-held])"));
@@ -1596,8 +1574,6 @@ function initWorkFilters() {
   root.addEventListener("click", (event) => {
     const pill = event.target.closest(".work-filter");
     if (!pill || !root.contains(pill)) return;
-    // Re-clicking the active pill changes nothing, so it stays silent.
-    if (!pill.classList.contains("is-active")) window.cuelume?.play("toggle");
     applyFilter(pill.getAttribute("data-filter"));
     writeWorkNav({ filter: pill.getAttribute("data-filter"), y: window.scrollY });
   });
@@ -1813,13 +1789,11 @@ function initCopyEmailButtons() {
       busy = false;
       window.clearTimeout(resetTimer);
       if (!copied) {
-        window.cuelume?.play("error");
         label.textContent = "Try again";
         status.className = "contact-status";
         status.textContent = `Couldn’t copy. Email me at ${CONTACT_EMAIL}`;
         button.insertAdjacentElement("afterend", status);
       } else {
-        window.cuelume?.play("success");
         status.className = "visually-hidden";
         status.textContent = "Email address copied";
         label.textContent = "Copied";

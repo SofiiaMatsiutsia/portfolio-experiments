@@ -1,95 +1,75 @@
 (() => {
   const grid = document.querySelector(".garden-grid");
-  const random = document.querySelector(".garden-random");
-  const status = document.getElementById("garden-status");
-  const tiles = Array.from(grid.children);
+  const sentinel = document.querySelector(".garden-loop-sentinel");
+  const header = document.querySelector(".header");
+  const artwork = Array.from(grid.children);
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
   const easing = "cubic-bezier(0.22, 1, 0.36, 1)";
-  let layoutWidth = 0;
+  const batches = new WeakMap();
+  let layout;
 
-  function arrange(keepScroll = false) {
+  function positionTiles(tiles) {
+    const { width, gap, heights } = layout;
+    for (const tile of tiles) {
+      const image = tile.firstElementChild;
+      const column = heights.indexOf(Math.min(...heights));
+      const height = width * Number(image.getAttribute("height")) / Number(image.getAttribute("width"));
+      tile.style.width = width + "px";
+      tile.style.left = column * (width + gap) + "px";
+      tile.style.top = heights[column] + "px";
+      heights[column] += height + gap;
+    }
+    grid.style.height = Math.max(...heights) - gap + "px";
+  }
+
+  function arrange() {
     const style = getComputedStyle(grid);
     const columns = Number(style.getPropertyValue("--columns"));
     const gap = parseFloat(style.columnGap);
-    const bounds = grid.getBoundingClientRect();
-    layoutWidth = bounds.width;
-    const width = (layoutWidth - (columns - 1) * gap) / columns;
-    const heights = Array(columns).fill(0);
-    for (const tile of tiles) {
-      const image = tile.firstElementChild;
-      const col = heights.indexOf(Math.min(...heights));
-      const height = width * Number(image.getAttribute("height")) / Number(image.getAttribute("width"));
-      tile.style.width = width + "px";
-      tile.style.left = col * (width + gap) + "px";
-      tile.style.top = heights[col] + "px";
-      heights[col] += height + gap;
-    }
-    // A shorter last column must not pull the document upward during a shuffle at the bottom.
-    const bottomPadding = parseFloat(getComputedStyle(grid.parentElement).paddingBottom);
-    const minimum = keepScroll ? innerHeight - bounds.top - bottomPadding : 0;
-    grid.style.height = Math.max(Math.max(...heights) - gap, minimum) + "px";
+    const gridWidth = grid.getBoundingClientRect().width;
+    if (layout && gridWidth === layout.gridWidth && columns === layout.heights.length && gap === layout.gap) return;
+    layout = {
+      gridWidth,
+      gap,
+      width: (gridWidth - (columns - 1) * gap) / columns,
+      heights: Array(columns).fill(0),
+    };
+    positionTiles(grid.children);
   }
 
-  // Clip long off-screen journeys at the viewport edge. Visible endpoints stay exact.
-  function travelFraction(from, to) {
-    const dy = to.top - from.top;
-    if (to.top > innerHeight && dy > 0) return Math.max(0, (innerHeight - from.top) / dy);
-    if (to.bottom < 0 && dy < 0) return Math.max(0, -from.bottom / dy);
-    return 1;
+  // Keep the opening order varied and repeat that same sequence for the rest of the visit.
+  for (let i = artwork.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [artwork[i], artwork[j]] = [artwork[j], artwork[i]];
   }
 
-  function animateShuffle(before) {
-    const after = tiles.map(tile => tile.getBoundingClientRect());
-    tiles.forEach((tile, i) => {
-      const start = before.get(tile);
-      const end = after[i];
-      const visible = rect => rect.bottom > 0 && rect.top < innerHeight;
-      if (!visible(start) && !visible(end)) return;
-      if (reducedMotion.matches) {
-        tile.animate([{ opacity: 0.6 }, { opacity: 1 }], { duration: 140 });
-        return;
-      }
-      const dx = start.left - end.left;
-      const dy = start.top - end.top;
-      const offset = fraction => 'translate(' + dx * fraction + 'px, ' + dy * fraction + 'px)';
-      tile.animate([
-        { transform: offset(travelFraction(end, start)) },
-        { transform: offset(1 - travelFraction(start, end)) },
-      ], { duration: 450, easing });
-    });
-  }
-
-  function shuffle(animate) {
-    const before = animate && new Map(tiles.map(tile => [tile, tile.getBoundingClientRect()]));
-    const original = tiles.slice();
-    for (let i = tiles.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [tiles[i], tiles[j]] = [tiles[j], tiles[i]];
-    }
-    if (tiles.every((tile, i) => tile === original[i])) tiles.push(tiles.shift());
-    tiles.forEach(tile => tile.getAnimations().forEach(animation => animation.cancel()));
-    grid.replaceChildren(...tiles);
-    arrange(animate);
-    if (animate) {
-      animateShuffle(before);
-      status.textContent = "Images shuffled. First image: " + tiles[0].firstElementChild.alt;
-    }
+  const repeatTemplate = document.createDocumentFragment();
+  for (const tile of artwork) {
+    repeatTemplate.append(tile.cloneNode(true));
+    batches.set(tile, artwork);
   }
 
   grid.classList.add("is-positioned");
-  shuffle(false);
-  // The first screen changes on every visit. Give those specific thumbnails priority.
-  for (const tile of tiles) {
+  grid.replaceChildren(...artwork);
+  arrange();
+  new ResizeObserver(arrange).observe(grid);
+
+  for (const tile of artwork) {
     if (tile.getBoundingClientRect().top >= innerHeight) break;
     const image = tile.firstElementChild;
     image.fetchPriority = "high";
     image.loading = "eager";
   }
-  random.hidden = false;
-  random.addEventListener("click", () => shuffle(true));
-  new ResizeObserver(() => {
-    if (grid.getBoundingClientRect().width !== layoutWidth) arrange();
-  }).observe(grid);
+
+  new IntersectionObserver(([entry]) => {
+    if (!entry.isIntersecting) return;
+    arrange();
+    const fragment = repeatTemplate.cloneNode(true);
+    const batch = Array.from(fragment.children);
+    batch.forEach(tile => batches.set(tile, batch));
+    positionTiles(batch);
+    grid.append(fragment);
+  }, { rootMargin: "0px 0px 1000px" }).observe(sentinel);
 
   const viewer = document.querySelector(".garden-viewer");
   if (typeof viewer.showModal !== "function") return; // The tiles also link to their images.
@@ -99,6 +79,7 @@
   const previous = viewer.querySelector(".garden-viewer__prev");
   const next = viewer.querySelector(".garden-viewer__next");
   const viewerStatus = document.getElementById("viewer-status");
+  let tiles = artwork;
   let selected = -1;
   let closing = false;
 
@@ -153,6 +134,7 @@
 
   function openViewer(tile) {
     const start = tile.getBoundingClientRect();
+    tiles = batches.get(tile);
     const index = tiles.indexOf(tile);
     const slides = tiles.map(() => {
       const slide = document.createElement("div");
@@ -213,7 +195,7 @@
     track.style.overflowX = "hidden";
     let end = tile.getBoundingClientRect();
     // A swipe can take us to an artwork several screens away from the opening tile.
-    const topInset = parseFloat(getComputedStyle(random).top) + random.offsetHeight;
+    const topInset = Math.max(0, header.getBoundingClientRect().bottom);
     if (end.bottom <= topInset || end.top >= innerHeight) {
       const targetY = scrollY + end.top - Math.max(topInset, (innerHeight - end.height) / 2);
       if (siteLenis) siteLenis.scrollTo(targetY, { immediate: true, force: true });

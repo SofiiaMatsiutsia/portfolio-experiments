@@ -296,23 +296,6 @@ body.case--verification .nav__link--work .nav__mark-img {
   height: auto;
   transform: translate(-50%, -50%);
 }
-body.case--verification .study__sound-art {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  pointer-events: none;
-}
-body.case--verification .header .sound-toggle {
-  position: relative;
-}
-body.case--verification .header .sound-toggle:not(.is-muted) .sound-toggle__swap {
-  opacity: 0;
-}
-body.case--verification .menu-overlay .study__sound-art,
-body.case--verification .sound-toggle.is-muted .study__sound-art {
-  display: none;
-}
 @media (min-width: 1025px) {
   body.case--verification .header {
     padding-top: 28px;
@@ -323,10 +306,6 @@ body.case--verification .sound-toggle.is-muted .study__sound-art {
     font-size: 20px;
     line-height: 28px;
     letter-spacing: 0;
-  }
-  body.case--verification .header .sound-toggle {
-    width: 260.99px;
-    justify-content: center;
   }
 }
 @media (max-width: 1024px) {

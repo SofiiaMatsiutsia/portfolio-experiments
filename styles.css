@@ -343,97 +343,6 @@ img {
   width: auto;
 }
 
-.sound-toggle {
-  --sound-ease: cubic-bezier(0.23, 1, 0.32, 1);
-  --sound-arrive: cubic-bezier(0.19, 1, 0.22, 1);
-  --sound-leave: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  display: grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  border: none;
-  background: transparent;
-  padding: 0;
-  color: var(--fg);
-  cursor: pointer;
-  transition: transform 140ms var(--sound-ease);
-}
-
-.sound-toggle:active {
-  transform: scale(0.97);
-}
-
-.sound-toggle__swap {
-  position: relative;
-  display: block;
-  width: 24px;
-  height: 24px;
-}
-
-.sound-toggle__icon {
-  display: block;
-  width: 24px;
-  height: 24px;
-  overflow: visible;
-}
-
-/* The cone stays put. Only the waves and the slash move, so the mark
-   reads as one speaker changing state rather than two icons swapping. */
-.sound-toggle__waves,
-.sound-toggle__slash {
-  transform-box: fill-box;
-  transform-origin: center;
-}
-
-.sound-toggle__waves {
-  opacity: 1;
-  transform: scale(1);
-  transition:
-    opacity 120ms var(--sound-leave),
-    transform 120ms var(--sound-leave);
-}
-
-.sound-toggle.is-muted .sound-toggle__waves {
-  opacity: 0;
-  transform: scale(0.92);
-}
-
-.sound-toggle__slash {
-  opacity: 0;
-  transform: scale(0.92);
-  transition:
-    opacity 120ms var(--sound-leave),
-    transform 120ms var(--sound-leave);
-}
-
-.sound-toggle.is-muted .sound-toggle__slash {
-  opacity: 1;
-  transform: scale(1);
-  transition:
-    opacity 180ms var(--sound-arrive),
-    transform 180ms var(--sound-arrive);
-}
-
-/* Restoring a muted preference on load must not replay the swap. */
-.sound-toggle.is-instant .sound-toggle__waves,
-.sound-toggle.is-instant .sound-toggle__slash {
-  transition: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .sound-toggle {
-    transition: none;
-  }
-
-  .sound-toggle__waves,
-  .sound-toggle__slash,
-  .sound-toggle.is-muted .sound-toggle__waves,
-  .sound-toggle.is-muted .sound-toggle__slash {
-    transform: none;
-    transition: opacity 160ms linear;
-  }
-}
-
 /* Hero */
 .hero {
   display: flex;
@@ -697,7 +606,6 @@ html.figma-hover a.card.figma-hover-target .card__media {
 }
 
 .menu-overlay.is-animating .ring,
-.menu-overlay.is-animating .sound-toggle,
 .menu-overlay.is-animating .menu-overlay__link,
 .menu-overlay.is-animating .menu-overlay__contact-link,
 .menu-overlay.is-animating .menu-overlay__close {
@@ -912,8 +820,7 @@ html.figma-hover a.card.figma-hover-target .card__media {
     padding: 26px var(--gutter) 0;
   }
 
-  .nav,
-  .header .sound-toggle {
+  .nav {
     display: none;
   }
 
@@ -2120,6 +2027,7 @@ a.card {
   text-decoration: none;
 }
 
+.work-filters[hidden],
 .work-filter[hidden],
 .work-item[hidden] {
   display: none;
@@ -2235,7 +2143,8 @@ a.work-item:active .work-item__media {
   animation: work-housing-phone-final 1.437741s linear infinite;
 }
 
-.work-item__media--voyage {
+.work-item__media--voyage,
+.home .showcase__item--voyage {
   display: grid;
   place-items: center;
 }
@@ -2567,19 +2476,6 @@ body.home {
   height: 28px;
 }
 
-.home .sound-toggle {
-  grid-column: 3;
-  justify-self: end;
-  width: 32px;
-  height: 32px;
-}
-
-.home .sound-toggle__swap,
-.home .sound-toggle__icon {
-  width: 32px;
-  height: 32px;
-}
-
 .home .home-main {
   position: relative;
   display: grid;
@@ -2710,14 +2606,6 @@ body.home {
 .home a.showcase__item {
   color: inherit;
   text-decoration: none;
-}
-
-.home .showcase__row:nth-child(2n) .showcase__item:first-child {
-  background: var(--surface-placeholder);
-}
-
-.home .showcase__row:nth-child(3n) .showcase__item {
-  background: var(--surface-placeholder);
 }
 
 .home .showcase__row .showcase__item.showcase__item--shared-background {
@@ -3115,10 +3003,6 @@ body.home {
     justify-self: center;
   }
 
-  .home .sound-toggle {
-    display: none;
-  }
-
   .home .hero {
     margin-top: 78px;
     font-size: 1.25rem;
@@ -3192,29 +3076,6 @@ body.home {
     gap: var(--space-3);
     font-size: 20px;
     line-height: 1.4;
-  }
-
-  body.work .sound-toggle,
-  body.case .sound-toggle,
-  body.about .sound-toggle,
-  body:is(.talks, .garden) .sound-toggle {
-    grid-column: 3;
-    grid-row: 1;
-    justify-self: end;
-    width: 32px;
-    height: 32px;
-  }
-
-  body.work .sound-toggle__swap,
-  body.work .sound-toggle__icon,
-  body.case .sound-toggle__swap,
-  body.case .sound-toggle__icon,
-  body.about .sound-toggle__swap,
-  body.about .sound-toggle__icon,
-  body:is(.talks, .garden) .sound-toggle__swap,
-  body:is(.talks, .garden) .sound-toggle__icon {
-    width: 32px;
-    height: 32px;
   }
 }
 
@@ -3392,14 +3253,12 @@ body.home {
   }
 }
 
-/* Mobile: one centered logo, in the same spot the open menu uses.
-   The sound control lives in the open menu, under that logo. */
+/* Mobile: one centered logo, in the same spot the open menu uses. */
 @media (max-width: 1024px) {
   :root {
     --mobile-logo-top: 16px;
     --mobile-logo-w: 230px;
     --mobile-logo-h: calc(var(--mobile-logo-w) * 34 / 266);
-    --mobile-sound-gap: var(--space-5);
   }
 
   .logo,
@@ -3433,30 +3292,12 @@ body.home {
     visibility: hidden;
   }
 
-  .menu-overlay .sound-toggle {
-    position: absolute;
-    top: calc(var(--mobile-logo-top) + var(--mobile-logo-h) + var(--mobile-sound-gap));
-    left: 50%;
-    z-index: 10;
-    width: 32px;
-    height: 32px;
-    translate: -50% 0;
-    scale: 0.92;
-    opacity: 0;
-  }
-
-  .menu-overlay .sound-toggle__swap,
-  .menu-overlay .sound-toggle__icon {
-    width: 32px;
-    height: 32px;
-  }
-
   .menu-soon {
     position: absolute;
     left: 50%;
     z-index: 6;
     top: max(
-      calc(var(--mobile-logo-top) + var(--mobile-logo-h) + var(--mobile-sound-gap) + 32px + 28px),
+      calc(var(--mobile-logo-top) + var(--mobile-logo-h) + var(--space-5)),
       calc(var(--cy) - var(--r-about) - 14px)
     );
     margin: 0;
@@ -4436,21 +4277,10 @@ body.home {
 }
 
 .talk-card__title {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--space-4);
   margin: 0;
   font-size: clamp(23px, 2vw, 30px);
   letter-spacing: -0.018em;
   line-height: 1.1;
-}
-
-.talk-card__title img {
-  flex: 0 0 18px;
-  width: 18px;
-  height: 18px;
-  margin-top: 0.08em;
 }
 
 .talk-card__desc {
@@ -4856,8 +4686,6 @@ body.not-found {
   text-transform: uppercase;
 }
 
-.not-found .header .sound-toggle { display: none; }
-
 .not-found__main {
   min-height: calc(100dvh - 58px);
 }
@@ -5031,8 +4859,6 @@ a:focus-visible, button:focus-visible, [tabindex="0"]:focus-visible {
   outline: 2px solid var(--color-black);
   outline-offset: 4px;
 }
-.sound-toggle, .home .sound-toggle, .menu-overlay .sound-toggle,
-body:is(.work, .case, .about, .talks, .garden) .sound-toggle { width: 44px; height: 44px; }
 .nav__link { min-height: 44px; }
 .nav__link[aria-disabled="true"] { color: var(--color-grey); }
 .home .hero { left: var(--gutter); width: calc(50% - 2 * var(--gutter)); }
@@ -5301,7 +5127,7 @@ body.case { --case-pad: var(--gutter); --case-copy: 900px; --case-accent: var(--
   html:not(.js) .menu-bar { display: none; }
   html:not(.js) .home-main { padding-top: var(--space-8); }
 }
-.home .logo, .home .nav, .home .sound-toggle { grid-row: 1; }
+.home .logo, .home .nav { grid-row: 1; }
 @media (max-width: 1024px) {
   body:is(.work, .about, .talks, .garden) .header {
     position: sticky;
@@ -5314,11 +5140,11 @@ body.case { --case-pad: var(--gutter); --case-copy: 900px; --case-accent: var(--
 .case__meta dd { overflow-wrap: anywhere; }
 @media (min-width: 1025px) {
   .home .header { z-index: 30; }
-  .home .nav { padding-inline: var(--space-3); background: var(--bg); border-radius: var(--radius-control); }
+  .home .nav { padding-inline: var(--space-3); }
 }
 .contact-status { overflow-wrap: anywhere; }
 .about-links .contact-status, .actions .contact-status { grid-column: 1 / -1; order: 1; }
-html:not(.js) .menu-bar, html:not(.js) .action-btn--copy, html:not(.js) .sound-toggle,
+html:not(.js) .menu-bar, html:not(.js) .action-btn--copy,
 html:not(.js) .case__toc-mobile, html:not(.js) .case__toc { display: none !important; }
 .static-toc { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); font-size: var(--text-control); }
 .static-toc a { color: var(--fg); text-underline-offset: 3px; }
@@ -5331,7 +5157,6 @@ html:not(.js) .case__toc-mobile, html:not(.js) .case__toc { display: none !impor
 }
 @media (max-width: 1024px) {
   .home .logo { transform: translateZ(0); }
-  .menu-overlay .sound-toggle { display: grid; }
 }
 @media (max-width: 1024px) {
   .home .home-page { isolation: auto; }
@@ -5345,7 +5170,6 @@ html:not(.js) .case__toc-mobile, html:not(.js) .case__toc { display: none !impor
   .menu-overlay .ring-stage { display: none; }
   .menu-overlay__logo img,
   body:is(.home, .work, .case, .about, .talks, .garden) .logo__mark { width: min(180px, calc(100vw - 120px)); height: auto; }
-  .menu-overlay .sound-toggle { top: var(--space-3); left: auto; right: var(--gutter); translate: none; }
   .menu-overlay__nav {
     position: absolute;
     inset: var(--space-20) var(--gutter) auto;
