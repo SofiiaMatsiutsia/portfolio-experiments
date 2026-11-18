@@ -1783,6 +1783,101 @@ function initCopyEmailButtons() {
 
 initCopyEmailButtons();
 
+function initCaseImageViewer() {
+  const viewer = document.createElement("dialog");
+  if (typeof viewer.showModal !== "function") return;
+
+  const images = Array.from(document.querySelectorAll("main.study figure img[alt]")).filter((image) =>
+    image.alt.trim() && !image.closest("a, button, [data-verification-player], [data-verification-compare]"),
+  );
+  if (!images.length) return;
+
+  viewer.className = "case-image-viewer";
+  viewer.setAttribute("aria-label", "Image viewer");
+  viewer.setAttribute("data-lenis-prevent", "");
+  viewer.innerHTML = `
+    <div class="case-image-viewer__toolbar">
+      <button type="button" class="case-image-viewer__button case-image-viewer__zoom" hidden>Zoom in</button>
+      <button type="button" class="case-image-viewer__button case-image-viewer__close" aria-label="Close image" autofocus>
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="case-image-viewer__stage" role="region" aria-label="Image area" tabindex="-1">
+      <img class="case-image-viewer__image" alt="" draggable="false" />
+    </div>
+  `;
+  document.body.append(viewer);
+
+  const zoom = viewer.querySelector(".case-image-viewer__zoom");
+  const close = viewer.querySelector(".case-image-viewer__close");
+  const stage = viewer.querySelector(".case-image-viewer__stage");
+  const enlarged = viewer.querySelector(".case-image-viewer__image");
+  let opener = null;
+
+  function updateZoomAvailability() {
+    if (!viewer.open) return;
+    zoom.hidden = !viewer.classList.contains("is-zoomed") &&
+      enlarged.naturalWidth <= stage.clientWidth && enlarged.naturalHeight <= stage.clientHeight;
+  }
+
+  function openImage(image) {
+    if (viewer.open) return;
+
+    opener = image;
+    viewer.classList.remove("is-zoomed");
+    zoom.textContent = "Zoom in";
+    zoom.hidden = true;
+    stage.tabIndex = -1;
+    enlarged.alt = image.alt;
+    // Use the source image so any inline crop or scaling stays on the page.
+    enlarged.src = image.src || image.currentSrc;
+    viewer.showModal();
+    stage.scrollTo(0, 0);
+    siteLenis?.stop();
+    updateZoomAvailability();
+  }
+
+  zoom.addEventListener("click", () => {
+    const zoomed = viewer.classList.toggle("is-zoomed");
+    zoom.textContent = zoomed ? "Fit to screen" : "Zoom in";
+    stage.tabIndex = zoomed ? 0 : -1;
+    stage.scrollTo(0, 0);
+  });
+  close.addEventListener("click", () => viewer.close());
+  viewer.addEventListener("click", (event) => {
+    if (!event.target.closest("button, .case-image-viewer__image")) viewer.close();
+  });
+  viewer.addEventListener("close", () => {
+    if (viewer.open) return;
+    enlarged.removeAttribute("src");
+    siteLenis?.start();
+    opener?.focus({ preventScroll: true });
+    opener = null;
+  });
+  enlarged.addEventListener("load", updateZoomAvailability);
+  window.addEventListener("resize", updateZoomAvailability);
+
+  images.forEach((image) => {
+    image.classList.add("case-image-trigger");
+    image.draggable = false;
+    image.tabIndex = 0;
+    image.setAttribute("role", "button");
+    image.setAttribute("aria-label", `Enlarge image: ${image.alt}`);
+    image.setAttribute("aria-haspopup", "dialog");
+    image.addEventListener("click", () => openImage(image));
+    image.addEventListener("keydown", (event) => {
+      if (event.key !== " " && event.key !== "Enter") return;
+      event.preventDefault();
+      if (event.key === "Enter" && !event.repeat) openImage(image);
+    });
+    image.addEventListener("keyup", (event) => {
+      if (event.key === " ") openImage(image);
+    });
+  });
+}
+
+initCaseImageViewer();
+
 function initCaseGalleries() {
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
@@ -1826,7 +1921,9 @@ function initCaseGalleries() {
 
     const sync = (announce) => {
       slides.forEach((slide, i) => {
-        slide.setAttribute("aria-hidden", String(i !== index));
+        const inactive = i !== index;
+        slide.inert = inactive;
+        slide.setAttribute("aria-hidden", String(inactive));
       });
       buttons.forEach((button, i) => {
         button.setAttribute("aria-pressed", String(i === index));
