@@ -1,4 +1,4 @@
-@import url("design-tokens.css?v=1");
+@import url("design-tokens.css?v=2");
 
 @font-face {
   font-family: "Garrigos Ornamentos";
@@ -883,11 +883,6 @@ html.figma-hover a.card.figma-hover-target .card__media {
     max-height: none;
     object-fit: contain;
   }
-
-  body.work .work-main {
-    padding-top: 0;
-    gap: 45px;
-  }
 }
 
 .header__back {
@@ -1216,13 +1211,6 @@ body:is(.talks, .garden) {
 
 .case__toc-trigger-label {
   display: inline-block;
-  transition: opacity 180ms var(--ease-float);
-}
-
-.case__toc-trigger-label.is-fading {
-  opacity: 0;
-  transition-duration: 130ms;
-  transition-timing-function: ease-in;
 }
 
 .case__toc-chevron {
@@ -1337,7 +1325,6 @@ body:is(.talks, .garden) {
   .case__toc-item,
   .case__toc-dot,
   .case__toc-spacer,
-  .case__toc-trigger-label,
   .case__toc-chevron,
   .case__toc-menu,
   .case__toc-menu-dot,
@@ -2359,19 +2346,16 @@ html.has-squish-cursor * {
 ::view-transition-old(root),
 ::view-transition-new(root) {
   mix-blend-mode: normal;
-  animation-duration: 0.35s;
-  animation-timing-function: ease-in-out;
-  animation-fill-mode: both;
 }
 
 ::view-transition-old(root) {
   z-index: 2;
-  animation-name: page-crossfade-out;
+  animation: page-crossfade-out 180ms var(--ease-feedback) both;
 }
 
 ::view-transition-new(root) {
   z-index: 1;
-  animation-name: page-crossfade-in;
+  animation: none;
 }
 
 @keyframes page-crossfade-out {
@@ -2384,9 +2368,8 @@ html.has-squish-cursor * {
   to { opacity: 1; }
 }
 
-html.is-page-enter body,
-html.is-page-enter .page {
-  animation: page-crossfade-in 0.35s ease-in-out both;
+html.is-page-enter body {
+  animation: page-crossfade-in 180ms var(--ease-feedback) both;
 }
 
 html.is-restoring-scroll {
@@ -2399,8 +2382,7 @@ html.is-restoring-scroll {
     animation-duration: 0s;
   }
 
-  html.is-page-enter body,
-  html.is-page-enter .page {
+  html.is-page-enter body {
     animation: none;
   }
 }
@@ -2884,6 +2866,14 @@ body.home {
   text-wrap: initial;
 }
 
+.home p.hero__heading {
+  max-width: var(--reading-measure);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--text-reading);
+  text-wrap: pretty;
+}
+
 .home .hero__mark {
   --cap-lines: 3;
   /* Initial drop-cap geometry; hero-drop-cap.js measures the shared font after loading. */
@@ -2966,6 +2956,7 @@ body.home {
     flex: 0 0 auto;
     width: auto;
     margin: 94px var(--home-edge) 0;
+    font-size: var(--text-lead);
   }
 
   .home .actions {
@@ -3005,11 +2996,10 @@ body.home {
 
   .home .hero {
     margin-top: 78px;
-    font-size: 1.25rem;
   }
 
   .home .actions {
-    margin-top: 30px;
+    margin-top: var(--space-4);
   }
 }
 
@@ -4514,7 +4504,7 @@ body.is-holding-review,
   background-repeat: repeat-x;
   background-attachment: fixed;
   background-size: auto 100%;
-  color: var(--color-bg);
+  color: var(--fg);
   outline: none;
   text-decoration: none;
 }
@@ -4868,9 +4858,10 @@ a:focus-visible, button:focus-visible, [tabindex="0"]:focus-visible {
   gap: var(--space-3);
   bottom: var(--space-6);
 }
-/* Decorative lead phrases keep their original colored capitals. */
-.home .hero__accent { color: var(--color-blue); text-decoration: none; }
-.talks-intro__accent { color: var(--color-green); text-decoration: none; }
+/* Keep the illustrated capitals bright and use deeper shades for the words. */
+.home .hero__accent { color: color-mix(in srgb, var(--color-black) 52%, var(--color-blue)); }
+.about .about-intro__rose { color: color-mix(in srgb, var(--color-black) 52%, var(--color-rose)); }
+.talks-intro__accent { color: color-mix(in srgb, var(--color-black) 52%, var(--color-green)); }
 .about-accent {
   color: var(--color-black);
   padding-inline: 0.12em;
@@ -4888,6 +4879,7 @@ a:focus-visible, button:focus-visible, [tabindex="0"]:focus-visible {
 .about-main, .talks-main { padding-top: var(--space-20); padding-bottom: var(--space-30); }
 .work-columns { gap: var(--space-12) var(--space-5); }
 .work-item { gap: var(--space-5); min-width: 0; }
+.work-item__text { gap: var(--space-2); }
 .work-item__title, .talk-card__title {
   font-size: var(--text-title);
   line-height: var(--leading-heading);
@@ -4897,51 +4889,65 @@ a:focus-visible, button:focus-visible, [tabindex="0"]:focus-visible {
 .work-item__copy, .talk-card__desc {
   font-size: var(--text-control);
   line-height: var(--leading-body);
-  color: var(--color-grey);
+  color: var(--text-secondary);
   opacity: 1;
   max-width: var(--reading-measure);
   text-wrap: pretty;
 }
 .work-filter { align-items: center; min-height: 32px; gap: var(--space-1); padding: 6px var(--space-2); }
 .work-filter__label { font-size: 0.75rem; }
-.work-filter__count { font-size: 0.625rem; color: var(--color-grey); opacity: 1; }
+.work-filter__count { font-size: 0.625rem; color: var(--text-secondary); opacity: 1; }
+.work-filter.is-active .work-filter__count { color: var(--text-reading); }
 .work-filter:is(:hover, :focus-visible) .work-filter__count { opacity: 1; color: var(--fg); }
 .about-intro__lead h1 {
   display: flow-root;
   margin: 0;
 }
-.about-intro__lead h1, .about-intro p {
-  font-family: var(--font-body);
+.about-intro__lead h1, .talks-intro p.talks-intro__lead {
+  font-size: var(--text-lead);
   font-weight: 400;
+  line-height: 1.5;
+  text-wrap: pretty;
 }
-.about-intro__lead h1, .about-intro p, .about-role__dates, .about-role__title, .about-role__highlights,
-.about-hobbies p, .talks-intro p, .talks-contact p {
+.about-intro { gap: var(--space-5); }
+.about-intro__copy, .about-hobbies__copy, .talks-intro__copy { gap: var(--space-4); }
+.about-intro__copy p, .about-hobbies p, .talks-intro p, .talks-contact p,
+.about-role__highlights, .review-note .talks-quote p {
+  max-width: var(--reading-measure);
+  color: var(--text-reading);
   font-size: var(--text-body);
   line-height: var(--leading-body);
   text-wrap: pretty;
 }
-.about-role__title { flex-wrap: wrap; white-space: normal; gap: var(--space-2) var(--space-3); }
-.about-role__highlights, .about-role__dates { color: var(--color-grey); }
-.about-role__highlights img { margin-top: calc((1.5em - 12px) / 2); }
-.about-section-heading h2, .about-hobbies h2, .talks-section-title {
-  margin: 0;
-  font-family: var(--font-book);
-  font-size: var(--text-body);
-  font-weight: 400;
-  line-height: 1.4;
-  letter-spacing: 0.01em;
-  text-transform: uppercase;
+.about-intro__copy strong { color: var(--fg); font-weight: 600; }
+.about-role__dates {
+  color: var(--text-secondary);
+  font-size: var(--text-caption);
+  line-height: var(--leading-body);
 }
+.about-role__title {
+  flex-wrap: wrap;
+  white-space: normal;
+  gap: var(--space-1) var(--space-3);
+  font-size: var(--text-body);
+  line-height: var(--leading-heading);
+}
+.about-company { font-weight: 500; }
+.about-role__title > span { color: var(--text-reading); }
+.about-role__highlights img { margin-top: calc((1em * var(--leading-body) - var(--space-3)) / 2); }
 .about-experience, .about-hobbies, .talks-feature, .talks-past, .talks-reviews, .talks-contact {
   margin-top: var(--section-space);
 }
-.about-experience, .about-hobbies { gap: var(--space-10); }
-.about-roles { gap: var(--space-16); }
-.talk-card__body { padding: var(--space-6); gap: var(--space-6); }
+.about-experience, .about-hobbies { gap: var(--space-6); }
+.about-roles { gap: var(--space-12); }
+.talks-feature + .talks-feature { margin-top: var(--space-8); }
+.talk-card__body { padding: var(--space-6); gap: var(--space-3); justify-content: flex-start; }
+.talk-card--text { min-height: 0; }
 .talk-card--feature .talk-card__body { gap: var(--space-8); }
 .talk-card--linked:hover { transform: none; }
 .talk-card--linked:active .talk-card__media { transform: scale(0.99); }
-.review-note .talks-quote p { letter-spacing: 0; line-height: var(--leading-body); }
+.review-note .talks-quote p { letter-spacing: 0; }
+.talks-quote cite { font-size: var(--text-caption); margin-top: var(--space-4); }
 body.case { --case-pad: var(--gutter); --case-copy: 900px; --case-accent: var(--color-blue); --toc-row: 32px; }
 .case__layout { padding-inline: var(--gutter); }
 .case__main { gap: var(--section-space); }
@@ -5012,6 +5018,58 @@ body.case { --case-pad: var(--gutter); --case-copy: 900px; --case-accent: var(--
     min-height: 68px;
   }
   .home .header { top: var(--space-6); left: var(--gutter); right: var(--gutter); }
+  .home .home-main__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    min-width: 0;
+    min-height: 0;
+    margin-top: var(--space-20);
+    padding: clamp(var(--space-6), 12dvh - var(--space-20), var(--space-12)) var(--gutter) var(--space-6);
+    overflow-y: auto;
+    scroll-padding-block: var(--space-2);
+  }
+  .home .hero, .home .actions {
+    position: static;
+    flex: none;
+    width: 100%;
+  }
+  .home .hero {
+    max-width: 39rem;
+    font-size: clamp(1.375rem, 1.125rem + 0.4vw, 1.55rem);
+  }
+  .work-main, .about-main, .talks-main {
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-24);
+  }
+  .work-main { gap: var(--space-6); }
+  .work-item { gap: var(--space-4); }
+  .work-main, .talks-main {
+    --text-title: clamp(1.25rem, 1rem + 0.4vw, 1.375rem);
+  }
+  .about-main, .talks-main {
+    --text-lead: clamp(1.25rem, 1.065rem + 0.3vw, 1.375rem);
+    --text-section: clamp(1.5rem, 1.25rem + 0.4vw, 1.75rem);
+    --reading-measure: 58ch;
+    --section-space: clamp(var(--space-16), 4.5vw, var(--space-20));
+  }
+  .about-column, .talks-column {
+    width: min(calc(100% - 2 * var(--gutter)), clamp(37.5rem, 17rem + 32vw, 46rem));
+    margin-inline: auto;
+  }
+  .about-intro__lead h1, .talks-intro__lead { max-width: var(--reading-measure); }
+  .talks-feature { margin-top: var(--space-12); }
+  .talks-feature + .talks-feature { margin-top: var(--space-6); }
+  .talk-card--feature {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    align-items: center;
+  }
+  .talk-card--feature .talk-card__body {
+    display: flex;
+    align-items: stretch;
+    gap: var(--space-3);
+  }
   .case__rail-inner { top: var(--space-6); }
   .home .actions, .about-links, .talks-contact__buttons {
     display: flex;
@@ -5050,9 +5108,10 @@ body.case { --case-pad: var(--gutter); --case-copy: 900px; --case-accent: var(--
     position: fixed; top: var(--space-4); left: 50%; translate: -50% 0; transform: none;
   }
   .logo__mark { max-width: calc(100vw - 2 * var(--gutter)); }
-  .work-main, .about-main, .talks-main { padding: var(--space-10) var(--gutter) var(--space-24); }
+  .work-main, .about-main, .talks-main { padding: var(--space-8) var(--gutter) var(--space-20); }
+  .work-main { gap: var(--space-8); }
   .home .hero { left: auto; width: auto; }
-  .home .actions { left: auto; width: auto; gap: var(--space-3); }
+  .home .actions { left: auto; bottom: auto; width: auto; gap: var(--space-3); }
   .home .actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .home .action-btn { font-size: var(--text-caption); }
   .case__layout { row-gap: var(--space-8); padding-top: var(--space-6); padding-bottom: var(--space-24); }
@@ -5062,6 +5121,8 @@ body.case { --case-pad: var(--gutter); --case-copy: 900px; --case-accent: var(--
   .case__body { gap: var(--section-space); }
 }
 @media (max-width: 640px) {
+  .work-main, .about-main, .talks-main { padding-top: var(--space-6); }
+  .work-main { gap: var(--space-6); }
   /* A 32px painted surface inside each 44px mobile tap target. */
   .home .actions {
     display: flex;
@@ -5097,12 +5158,17 @@ body.case { --case-pad: var(--gutter); --case-copy: 900px; --case-accent: var(--
     line-height: 1.25;
     gap: var(--space-1);
   }
-  .work-columns { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-12); }
-  .about-experience, .about-hobbies { gap: var(--space-8); }
-  .about-roles { gap: var(--space-12); }
-  .about-intro__rose { white-space: normal; }
+  .work-columns { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-8); }
+  .work-item { gap: var(--space-3); }
+  .about-intro__copy, .about-hobbies__copy, .talks-intro__copy { gap: var(--space-3); }
+  .about-roles { gap: var(--space-8); }
+  .about-role__highlights { gap: var(--space-2); }
   .about-section-heading { flex-wrap: wrap; }
-  .talk-card__body { padding: var(--space-5); }
+  .talks-feature { margin-top: var(--space-10); }
+  .talks-feature + .talks-feature { margin-top: var(--space-5); }
+  .talk-card__body { padding: var(--space-4); }
+  .talk-card--feature .talk-card__body { align-items: stretch; gap: var(--space-3); }
+  .talks-grid { margin-top: var(--space-5); }
   .case__hero-block { gap: var(--space-12); }
   .case__heading { gap: var(--space-8); }
   .case__title { font-size: 1.75rem; }
@@ -5121,7 +5187,6 @@ body.case { --case-pad: var(--gutter); --case-copy: 900px; --case-accent: var(--
   .showcase:focus-within { overflow: auto; }
 }
 @media (max-width: 1024px) {
-  body.work .work-main { padding-top: var(--space-10); gap: var(--space-10); }
   html:not(.js) .nav { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-3); font-size: var(--text-control); }
   html:not(.js) .header { padding-top: 64px; height: auto !important; min-height: 108px !important; }
   html:not(.js) .menu-bar { display: none; }

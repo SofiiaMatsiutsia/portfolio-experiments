@@ -702,7 +702,6 @@ function initCaseToc() {
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const OPTIMISTIC_MS = 1200;
   const EXIT_MS = 120;
-  const TITLE_OUT_MS = 130;
   const compactCase = window.matchMedia("(max-width: 1024px)");
   const scrollOffset = () => compactCase.matches ? 24 : 80;
   const spyLine = () => compactCase.matches ? 40 : 96;
@@ -711,8 +710,7 @@ function initCaseToc() {
   let optimisticUntil = 0;
   let menuOpen = false;
   let closeTimer = 0;
-  let displayedIndex = 0;
-  let titlePending = null;
+  let displayedIndex = -1;
   let openedByPointer = false;
 
   const listeners = new Set();
@@ -802,33 +800,9 @@ function initCaseToc() {
 
   function syncTriggerTitle() {
     if (!triggerLabel || displayedIndex === activeIndex) return;
-    const nextIndex = activeIndex;
-    const apply = () => {
-      displayedIndex = nextIndex;
-      triggerLabel.textContent = labels[nextIndex];
-      trigger.setAttribute("aria-label", "Contents: " + labels[nextIndex]);
-      triggerLabel.classList.remove("is-fading");
-    };
-
-    if (reducedMotion.matches) {
-      apply();
-      return;
-    }
-
-    titlePending = nextIndex;
-    triggerLabel.classList.add("is-fading");
-    const onEnd = (event) => {
-      if (event.propertyName !== "opacity") return;
-      triggerLabel.removeEventListener("transitionend", onEnd);
-      if (titlePending !== nextIndex) return;
-      apply();
-    };
-    triggerLabel.addEventListener("transitionend", onEnd);
-    window.setTimeout(() => {
-      if (titlePending !== nextIndex) return;
-      triggerLabel.removeEventListener("transitionend", onEnd);
-      apply();
-    }, TITLE_OUT_MS + 40);
+    displayedIndex = activeIndex;
+    triggerLabel.textContent = labels[activeIndex];
+    trigger.setAttribute("aria-label", "Contents: " + labels[activeIndex]);
   }
 
   function paint() {

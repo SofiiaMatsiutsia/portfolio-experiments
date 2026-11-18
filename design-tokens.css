@@ -8,6 +8,8 @@
   --color-grey: #707070;
   --color-white: #ffffff;
   --color-black: #171615;
+  --text-reading: color-mix(in srgb, var(--color-black) 54%, var(--color-grey));
+  --text-secondary: color-mix(in srgb, var(--color-black) 12%, var(--color-grey));
   --surface-canvas: color-mix(in srgb, var(--color-black) 5%, var(--color-white));
   --surface-placeholder: color-mix(in srgb, var(--color-black) 9%, var(--color-white));
   --border-subtle: color-mix(in srgb, var(--color-black) 12%, transparent);
@@ -26,11 +28,12 @@
   --space-30: 120px;
   --text-caption: 0.875rem;
   --text-control: 1rem;
-  --text-body: 1.25rem;
+  --text-body: 1.0625rem;
+  --text-lead: clamp(1.125rem, 1.03rem + 0.48vw, 1.375rem);
   --text-title: 1.5rem;
   --text-section: 2rem;
   --text-display: clamp(2rem, 4vw, 3rem);
-  --leading-body: 1.5;
+  --leading-body: 1.55;
   --leading-heading: 1.2;
   --tracking-heading: -0.02em;
   --reading-measure: 65ch;
@@ -47,5 +50,5 @@
   :root { --gutter: var(--space-4); --section-space: var(--space-20); }
 }
 @media (max-width: 640px) {
-  :root { --text-body: 1.125rem; --text-section: 1.5rem; --section-space: var(--space-16); }
+  :root { --text-body: 1rem; --text-section: 1.5rem; --section-space: var(--space-16); }
 }

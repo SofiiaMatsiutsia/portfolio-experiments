@@ -20,11 +20,11 @@ body.case--verification .study__research > img:nth-of-type(3) {
   object-fit: cover;
 }
 body.case--verification .study__research figcaption {
-  margin: 0;
-  font-size: 18px;
+  margin: var(--space-2) 0 0;
+  color: var(--study-muted);
+  font-size: var(--text-caption);
   line-height: 1.5;
   text-align: center;
-  opacity: 0.4;
 }
 body.case--verification .study__dashboard {
   position: relative;
@@ -197,13 +197,12 @@ body.case--verification .verification-compare__control:focus-visible .verificati
   outline-offset: 3px;
   box-shadow: 0 0 0 6px var(--fg);
 }
-body.case--verification .study__impact { min-height: 605px; }
 body.case--verification .study__metrics {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
   width: 100%;
-  max-width: 750px;
+  max-width: var(--study-measure);
 }
 body.case--verification .study__metric {
   display: flex;
@@ -236,29 +235,20 @@ body.case--verification .study__metric-digits {
 }
 body.case--verification .study__metric-label {
   margin: 0;
-  font-size: 20px;
-  line-height: 1.5;
-  opacity: 0.6;
-}
-body.case--verification .study__learnings p {
-  margin: 0;
-  font-size: 24px;
-  line-height: 1.5;
+  color: var(--text-reading);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
 }
 
 @media (max-width: 680px) {
-  body.case--verification .study__details { grid-template-columns: 1fr; }
-  body.case--verification .study__context {
-    flex-direction: column;
-    gap: 20px;
-    padding: 24px;
-  }
-  body.case--verification .study__context > img { flex-basis: auto; }
   body.case--verification .study__metrics { grid-template-columns: 1fr; }
   body.case--verification .study__metric {
-    height: 280px;
-    padding: 24px;
+    height: auto;
+    min-height: 150px;
+    gap: var(--space-5);
+    padding: var(--space-5);
   }
+  body.case--verification .study__metric-number { font-size: clamp(2rem, 6vw, 2.5rem); }
   body.case--verification .verification-onboarding-demo {
     height: auto;
     min-height: 810px;
@@ -268,7 +258,6 @@ body.case--verification .study__learnings p {
     right: 6px;
     bottom: 6px;
   }
-  body.case--verification .study__impact { min-height: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -306,6 +295,15 @@ body.case--verification .nav__link--work .nav__mark-img {
     font-size: 20px;
     line-height: 28px;
     letter-spacing: 0;
+  }
+  body.case--verification .study__metric {
+    height: auto;
+    gap: var(--space-4);
+    padding: var(--space-6);
+  }
+  body.case--verification .study__metric-number {
+    font-size: clamp(2.375rem, 3vw, 2.75rem);
+    line-height: 1.15;
   }
 }
 @media (max-width: 1024px) {
