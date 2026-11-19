@@ -1797,65 +1797,216 @@ function initCaseImageViewer() {
   viewer.setAttribute("data-lenis-prevent", "");
   viewer.innerHTML = `
     <div class="case-image-viewer__toolbar">
-      <button type="button" class="case-image-viewer__button case-image-viewer__zoom" hidden>Zoom in</button>
-      <button type="button" class="case-image-viewer__button case-image-viewer__close" aria-label="Close image" autofocus>
+      <button type="button" class="case-image-viewer__close" aria-label="Close image">
         <span aria-hidden="true">×</span>
       </button>
     </div>
     <div class="case-image-viewer__stage" role="region" aria-label="Image area" tabindex="-1">
-      <img class="case-image-viewer__image" alt="" draggable="false" />
+      <button type="button" class="case-image-viewer__target" autofocus>
+        <img class="case-image-viewer__image" alt="" draggable="false" />
+      </button>
     </div>
   `;
   document.body.append(viewer);
 
-  const zoom = viewer.querySelector(".case-image-viewer__zoom");
   const close = viewer.querySelector(".case-image-viewer__close");
   const stage = viewer.querySelector(".case-image-viewer__stage");
+  const target = viewer.querySelector(".case-image-viewer__target");
   const enlarged = viewer.querySelector(".case-image-viewer__image");
+  const zoomLevels = [1, 1.5, 2, 3];
+  const fullImage = "inset(0%)";
+  const easing = "cubic-bezier(0.22, 1, 0.36, 1)";
   let opener = null;
+  let zoomIndex = 0;
+  let closing = false;
+  let motion = null;
 
-  function updateZoomAvailability() {
-    if (!viewer.open) return;
-    zoom.hidden = !viewer.classList.contains("is-zoomed") &&
-      enlarged.naturalWidth <= stage.clientWidth && enlarged.naturalHeight <= stage.clientHeight;
+  function imageFrame() {
+    const style = getComputedStyle(target);
+    return {
+      bounds: target.getBoundingClientRect(),
+      clip: style.clipPath === "none" ? fullImage : style.clipPath,
+      opacity: style.opacity,
+    };
   }
 
-  function openImage(image) {
+  function previewFrame(image) {
+    const box = image.getBoundingClientRect();
+    const style = getComputedStyle(image);
+    let bounds = box;
+    if (image.naturalWidth && (style.objectFit === "cover" || style.objectFit === "contain")) {
+      const fit = style.objectFit === "cover" ? Math.max : Math.min;
+      const scale = fit(box.width / image.naturalWidth, box.height / image.naturalHeight);
+      const width = image.naturalWidth * scale;
+      const height = image.naturalHeight * scale;
+      bounds = new DOMRect(box.left + (box.width - width) / 2, box.top + (box.height - height) / 2, width, height);
+    }
+    const stageBox = stage.getBoundingClientRect();
+    let left = Math.max(box.left, bounds.left, stageBox.left);
+    let top = Math.max(box.top, bounds.top, stageBox.top);
+    let right = Math.min(box.right, bounds.right, stageBox.right);
+    let bottom = Math.min(box.bottom, bounds.bottom, stageBox.bottom);
+
+    for (let parent = image.parentElement; parent && parent !== document.body; parent = parent.parentElement) {
+      const overflow = getComputedStyle(parent);
+      if (overflow.overflowX === "visible" && overflow.overflowY === "visible") continue;
+      const crop = parent.getBoundingClientRect();
+      if (overflow.overflowX !== "visible") {
+        left = Math.max(left, crop.left);
+        right = Math.min(right, crop.right);
+      }
+      if (overflow.overflowY !== "visible") {
+        top = Math.max(top, crop.top);
+        bottom = Math.min(bottom, crop.bottom);
+      }
+    }
+    if (right <= left || bottom <= top) return null;
+
+    const insets = [
+      (top - bounds.top) / bounds.height,
+      (bounds.right - right) / bounds.width,
+      (bounds.bottom - bottom) / bounds.height,
+      (left - bounds.left) / bounds.width,
+    ];
+    const clip = insets.some((inset) => inset > 0)
+      ? `inset(${insets.map((inset) => `${inset * 100}%`).join(" ")})`
+      : fullImage;
+    return { bounds, clip, opacity: "1" };
+  }
+
+  function animateImage(from, to, duration) {
+    const base = target.getBoundingClientRect();
+    const keyframe = ({ bounds, clip, opacity }) => {
+      const frame = {};
+      if (bounds && base.width && base.height) {
+        const x = bounds.left - base.left;
+        const y = bounds.top - base.top;
+        frame.transform = `translate(${x}px, ${y}px) scale(${bounds.width / base.width}, ${bounds.height / base.height})`;
+      }
+      if (from.clip !== fullImage || to.clip !== fullImage) frame.clipPath = clip;
+      if (from.opacity !== to.opacity) frame.opacity = opacity;
+      return frame;
+    };
+    motion = target.animate([keyframe(from), keyframe(to)], { duration, easing });
+    return motion;
+  }
+
+  function layoutImage(point, previous) {
+    const width = enlarged.naturalWidth || opener.naturalWidth || Number(opener.getAttribute("width"));
+    const height = enlarged.naturalHeight || opener.naturalHeight || Number(opener.getAttribute("height"));
+    if (!width || !height) return;
+
+    const stagePadding = parseFloat(getComputedStyle(stage).paddingTop);
+    const fitWidth = Math.min(width, stage.offsetWidth, (stage.offsetHeight - stagePadding) * width / height);
+    const scale = zoomLevels[zoomIndex];
+    target.style.width = `${fitWidth * scale}px`;
+    target.style.height = `${fitWidth * scale * height / width}px`;
+    if (!zoomIndex || !previous?.bounds.width || !previous.bounds.height) {
+      stage.scrollTo(0, 0);
+      return;
+    }
+
+    // Keep the same part of the image under the pointer as the scrollable area grows.
+    const bounds = target.getBoundingClientRect();
+    const x = Math.min(1, Math.max(0, (point.x - previous.bounds.left) / previous.bounds.width));
+    const y = Math.min(1, Math.max(0, (point.y - previous.bounds.top) / previous.bounds.height));
+    stage.scrollBy(bounds.left + bounds.width * x - point.x, bounds.top + bounds.height * y - point.y);
+  }
+
+  function stageCenter() {
+    const bounds = stage.getBoundingClientRect();
+    return { x: bounds.left + bounds.width / 2, y: bounds.top + bounds.height / 2 };
+  }
+
+  function syncZoomControls() {
+    const atMax = zoomIndex === zoomLevels.length - 1;
+    target.classList.toggle("is-max-zoom", atMax);
+    target.setAttribute("aria-label", `${atMax ? "Fit image to screen" : "Zoom in"}: ${opener.alt}`);
+    stage.tabIndex = zoomIndex ? 0 : -1;
+  }
+
+  function openImage(image, withMotion) {
     if (viewer.open) return;
 
     opener = image;
-    viewer.classList.remove("is-zoomed");
-    zoom.textContent = "Zoom in";
-    zoom.hidden = true;
-    stage.tabIndex = -1;
+    zoomIndex = 0;
+    closing = false;
     enlarged.alt = image.alt;
-    // Use the source image so any inline crop or scaling stays on the page.
     enlarged.src = image.src || image.currentSrc;
+    syncZoomControls();
     viewer.showModal();
-    stage.scrollTo(0, 0);
     siteLenis?.stop();
-    updateZoomAvailability();
+    layoutImage();
+
+    const preview = withMotion && !reducedMotionMedia.matches && previewFrame(image);
+    const fit = imageFrame();
+    viewer.classList.add("is-visible");
+    if (preview) {
+      animateImage(preview, fit, 320);
+    } else {
+      const visible = { clip: fullImage, opacity: "1" };
+      animateImage({ ...visible, opacity: "0" }, visible, 150);
+    }
   }
 
-  zoom.addEventListener("click", () => {
-    const zoomed = viewer.classList.toggle("is-zoomed");
-    zoom.textContent = zoomed ? "Fit to screen" : "Zoom in";
-    stage.tabIndex = zoomed ? 0 : -1;
-    stage.scrollTo(0, 0);
+  function closeImage(withMotion) {
+    if (closing) return;
+    closing = true;
+    const current = imageFrame();
+    const preview = withMotion && !reducedMotionMedia.matches && previewFrame(opener);
+    motion?.cancel();
+    viewer.classList.remove("is-visible");
+    const end = preview
+      ? animateImage(current, preview, 240)
+      : animateImage(current, { ...current, opacity: "0" }, 150);
+    end.onfinish = () => viewer.close();
+  }
+
+  target.addEventListener("click", (event) => {
+    if (closing) return;
+    const current = imageFrame();
+    const point = event.detail ? { x: event.clientX, y: event.clientY } : stageCenter();
+    motion?.cancel();
+    zoomIndex = (zoomIndex + 1) % zoomLevels.length;
+    layoutImage(point, current);
+    syncZoomControls();
+    if (event.detail && !reducedMotionMedia.matches) animateImage(current, imageFrame(), 250);
   });
-  close.addEventListener("click", () => viewer.close());
+  close.addEventListener("click", (event) => closeImage(event.detail > 0));
   viewer.addEventListener("click", (event) => {
-    if (!event.target.closest("button, .case-image-viewer__image")) viewer.close();
+    if (!event.target.closest("button")) closeImage(event.detail > 0);
+  });
+  viewer.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    closeImage(false);
   });
   viewer.addEventListener("close", () => {
     if (viewer.open) return;
+    motion?.cancel();
+    viewer.classList.remove("is-visible");
     enlarged.removeAttribute("src");
     siteLenis?.start();
     opener?.focus({ preventScroll: true });
     opener = null;
   });
-  enlarged.addEventListener("load", updateZoomAvailability);
-  window.addEventListener("resize", updateZoomAvailability);
+  function resizeImage() {
+    if (!viewer.open || closing) return;
+    const current = imageFrame();
+    motion?.cancel();
+    layoutImage(stageCenter(), current);
+  }
+  window.addEventListener("resize", resizeImage);
+  enlarged.addEventListener("load", () => {
+    if (!opener || closing) return;
+    const width = opener.naturalWidth || Number(opener.getAttribute("width"));
+    const height = opener.naturalHeight || Number(opener.getAttribute("height"));
+    if (enlarged.naturalWidth !== width || enlarged.naturalHeight !== height) resizeImage();
+  });
+  reducedMotionMedia.addEventListener("change", () => {
+    if (!viewer.open || !reducedMotionMedia.matches) return;
+    if (closing) viewer.close();
+    motion?.cancel();
+  });
 
   images.forEach((image) => {
     image.classList.add("case-image-trigger");
@@ -1864,14 +2015,14 @@ function initCaseImageViewer() {
     image.setAttribute("role", "button");
     image.setAttribute("aria-label", `Enlarge image: ${image.alt}`);
     image.setAttribute("aria-haspopup", "dialog");
-    image.addEventListener("click", () => openImage(image));
+    image.addEventListener("click", (event) => openImage(image, event.detail > 0));
     image.addEventListener("keydown", (event) => {
       if (event.key !== " " && event.key !== "Enter") return;
       event.preventDefault();
-      if (event.key === "Enter" && !event.repeat) openImage(image);
+      if (event.key === "Enter" && !event.repeat) openImage(image, false);
     });
     image.addEventListener("keyup", (event) => {
-      if (event.key === " ") openImage(image);
+      if (event.key === " ") openImage(image, false);
     });
   });
 }
