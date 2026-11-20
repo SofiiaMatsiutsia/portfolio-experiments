@@ -1315,10 +1315,15 @@ initMenuSoon();
 function initSquishCursor() {
   const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const frameSelector = "iframe[data-portfolio-cursor-frame]";
+  const frames = document.querySelectorAll(frameSelector);
+  const frameBindings = new Map();
+  const passiveCapture = { passive: true, capture: true };
   const EASE = 0.38;
   let el = null;
   let label = null;
   let rafId = 0;
+  let leaveFrameId = 0;
   let mx = 0;
   let my = 0;
   let x = 0;
@@ -1327,6 +1332,7 @@ function initSquishCursor() {
   let sy = 1;
   let rot = 0;
   let seeded = false;
+  let pointerDocument = null;
   let soon = false;
   let interactive = false;
   let pointerDown = false;
@@ -1350,7 +1356,8 @@ function initSquishCursor() {
     const dragging = isDragging();
     setSoon(!dragging && Boolean(target?.closest?.('[data-cursor="soon"]')));
     const control = target?.closest?.("a[href], button, [role=button], [role=menuitem]");
-    interactive = Boolean(control && !control.matches(":disabled, [aria-disabled=true]"));
+    const prototypeControl = target?.ownerDocument !== document && target?.closest?.(".voyage-chart-hit, .chart-resizer");
+    interactive = Boolean(prototypeControl || (control && !control.matches(":disabled, [aria-disabled=true]")));
     el.classList.toggle("is-link", interactive && !soon && !dragging);
   }
   const loop = () => {
@@ -1375,20 +1382,42 @@ function initSquishCursor() {
     el.style.transform = "translate3d(" + (x - 8) + "px," + (y - 8) + "px,0) rotate(" + rot + "deg) scale(" + sx + "," + sy + ")";
     rafId = requestAnimationFrame(loop);
   };
-  const onMove = (event) => {
+  const showPointer = (clientX, clientY, target) => {
     sync();
     if (!el) return;
-    mx = event.clientX;
-    my = event.clientY;
-    paintTarget(event.target);
+    cancelAnimationFrame(leaveFrameId);
+    if (target?.matches?.(frameSelector) && !frameBindings.has(target)) {
+      onLeave();
+      return;
+    }
+    mx = clientX;
+    my = clientY;
+    pointerDocument = target?.ownerDocument ?? document;
+    paintTarget(target);
     if (!seeded) { x = mx; y = my; seeded = true; }
     el.classList.add("is-visible");
+  };
+  const onMove = (event) => {
+    if (event.pointerType === "touch") return;
+    showPointer(event.clientX, event.clientY, targetAtPoint(event.clientX, event.clientY, event.target));
   };
   const onLeave = () => {
     el?.classList.remove("is-visible", "is-link");
     setSoon(false);
     seeded = false;
+    pointerDocument = null;
     interactive = false;
+  };
+  const deferLeave = (source) => {
+    // The other document can receive the same crossing before the next paint.
+    cancelAnimationFrame(leaveFrameId);
+    leaveFrameId = requestAnimationFrame(() => {
+      if (pointerDocument === source) onLeave();
+    });
+  };
+  const onBlur = () => {
+    // Focusing a control in the embedded document still counts as page focus.
+    window.setTimeout(() => { if (!document.hasFocus()) onLeave(); }, 0);
   };
   const teardown = () => {
     cancelAnimationFrame(rafId);
@@ -1396,9 +1425,11 @@ function initSquishCursor() {
     el = null;
     label = null;
     seeded = false;
+    pointerDocument = null;
     soon = false;
     interactive = false;
     document.documentElement.classList.remove("has-squish-cursor");
+    for (const { root } of frameBindings.values()) root.classList.remove("has-portfolio-cursor");
   };
   const setup = () => {
     if (el) return;
@@ -1422,21 +1453,96 @@ function initSquishCursor() {
     el.append(dot, triangle);
     document.body.append(el);
     document.documentElement.classList.add("has-squish-cursor");
+    for (const { root } of frameBindings.values()) root.classList.add("has-portfolio-cursor");
     rafId = requestAnimationFrame(loop);
   };
   const sync = () => canUseCursor() ? setup() : teardown();
+
+  function targetAtPoint(clientX, clientY, target = document.elementFromPoint(clientX, clientY)) {
+    const binding = frameBindings.get(target);
+    if (!binding) return target;
+    const rect = target.getBoundingClientRect();
+    if (!rect.width || !rect.height) return target;
+    return binding.document.elementFromPoint(
+      (clientX - rect.left) * target.clientWidth / rect.width,
+      (clientY - rect.top) * target.clientHeight / rect.height,
+    );
+  }
+
+  const refreshTarget = () => {
+    if (!seeded) return;
+    const target = targetAtPoint(mx, my);
+    if (target?.matches?.(frameSelector) && !frameBindings.has(target)) onLeave();
+    else paintTarget(target);
+  };
+
+  function connectFrame(frame) {
+    const previous = frameBindings.get(frame);
+    if (previous) {
+      previous.controller.abort();
+      previous.root.classList.remove("has-portfolio-cursor");
+      frameBindings.delete(frame);
+    }
+
+    const child = frame.contentDocument;
+    const root = child?.documentElement;
+    if (!root || child.URL === "about:blank") {
+      refreshTarget();
+      return;
+    }
+
+    const controller = new AbortController();
+    const options = { ...passiveCapture, signal: controller.signal };
+    const forwardPointer = (event) => {
+      if (event.pointerType === "touch") {
+        if (event.type === "pointerdown") onLeave();
+        return;
+      }
+      if (event.type === "pointerdown") pointerDown = true;
+      if (event.type === "pointerup" || event.type === "pointercancel") pointerDown = false;
+      if (event.type === "pointercancel") {
+        deferLeave(child);
+        return;
+      }
+
+      // Iframe events use the unscaled dashboard coordinates even during a drag.
+      const rect = frame.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      const clientX = rect.left + event.clientX * rect.width / frame.clientWidth;
+      const clientY = rect.top + event.clientY * rect.height / frame.clientHeight;
+      const hit = document.elementFromPoint(clientX, clientY);
+      const target = hit === frame ? child.elementFromPoint(event.clientX, event.clientY) : targetAtPoint(clientX, clientY, hit);
+      if (target) showPointer(clientX, clientY, target);
+      else deferLeave(pointerDocument);
+    };
+
+    for (const type of ["pointerover", "pointermove", "pointerdown", "pointerup", "pointercancel"]) {
+      child.addEventListener(type, forwardPointer, options);
+    }
+    child.addEventListener("scroll", refreshTarget, options);
+    root.addEventListener("pointerleave", () => deferLeave(child), { passive: true, signal: controller.signal });
+    child.defaultView?.addEventListener("blur", onBlur, { signal: controller.signal });
+    frameBindings.set(frame, { document: child, root, controller });
+    root.classList.toggle("has-portfolio-cursor", Boolean(el));
+    refreshTarget();
+  }
+
+  for (const frame of frames) {
+    frame.addEventListener("load", () => connectFrame(frame));
+    connectFrame(frame);
+  }
   window.addEventListener("pointermove", onMove, { passive: true });
-  document.documentElement.addEventListener("pointerleave", onLeave);
+  document.documentElement.addEventListener("pointerleave", frames.length ? () => deferLeave(document) : onLeave);
   document.documentElement.addEventListener("pointerenter", onMove);
   window.addEventListener("pointerdown", (event) => { pointerDown = true; paintTarget(event.target); }, { passive: true });
   const release = () => {
     pointerDown = false;
-    paintTarget(document.elementFromPoint(mx, my));
+    refreshTarget();
   };
   window.addEventListener("pointerup", release, { passive: true });
   window.addEventListener("pointercancel", release, { passive: true });
-  window.addEventListener("scroll", () => paintTarget(document.elementFromPoint(mx, my)), { passive: true, capture: true });
-  window.addEventListener("blur", onLeave);
+  window.addEventListener("scroll", refreshTarget, passiveCapture);
+  window.addEventListener("blur", frames.length ? onBlur : onLeave);
   finePointer.addEventListener("change", sync);
   reducedMotion.addEventListener("change", sync);
   sync();
@@ -1806,6 +1912,7 @@ function initCaseImageViewer() {
         <img class="case-image-viewer__image" alt="" draggable="false" />
       </button>
     </div>
+    <img class="case-image-viewer__transition" alt="" aria-hidden="true" draggable="false" hidden />
   `;
   document.body.append(viewer);
 
@@ -1813,21 +1920,55 @@ function initCaseImageViewer() {
   const stage = viewer.querySelector(".case-image-viewer__stage");
   const target = viewer.querySelector(".case-image-viewer__target");
   const enlarged = viewer.querySelector(".case-image-viewer__image");
+  const transitionImage = viewer.querySelector(".case-image-viewer__transition");
   const zoomLevels = [1, 1.5, 2, 3];
   const fullImage = "inset(0%)";
-  const easing = "cubic-bezier(0.22, 1, 0.36, 1)";
+  const easing = "cubic-bezier(0.25, 0.6, 0.35, 1)";
   let opener = null;
   let zoomIndex = 0;
   let closing = false;
   let motion = null;
+  let motionScrollLeft = 0;
+  let motionScrollTop = 0;
+
+  function clippedFrame(bounds, left, top, right, bottom) {
+    if (!bounds.width || !bounds.height || right <= left || bottom <= top) return null;
+    const insets = [
+      (top - bounds.top) / bounds.height,
+      (bounds.right - right) / bounds.width,
+      (bounds.bottom - bottom) / bounds.height,
+      (left - bounds.left) / bounds.width,
+    ];
+    const clip = insets.some((inset) => inset > 0)
+      ? `inset(${insets.map((inset) => `${Math.max(0, inset) * 100}%`).join(" ")})`
+      : fullImage;
+    return { bounds, clip, opacity: "1" };
+  }
 
   function imageFrame() {
-    const style = getComputedStyle(target);
+    const bounds = target.getBoundingClientRect();
+    const stageBox = stage.getBoundingClientRect();
+    const left = stageBox.left + stage.clientLeft;
+    const top = stageBox.top + stage.clientTop;
+    return clippedFrame(bounds, Math.max(bounds.left, left), Math.max(bounds.top, top),
+      Math.min(bounds.right, left + stage.clientWidth), Math.min(bounds.bottom, top + stage.clientHeight));
+  }
+
+  function visibleFrame() {
+    if (!motion) return imageFrame();
+    const style = getComputedStyle(transitionImage);
     return {
-      bounds: target.getBoundingClientRect(),
+      bounds: transitionImage.getBoundingClientRect(),
       clip: style.clipPath === "none" ? fullImage : style.clipPath,
       opacity: style.opacity,
     };
+  }
+
+  function visibleFrameContains({ bounds, clip }, { clientX, clientY }) {
+    const [top, right = top, bottom = top, left = right] = clip.match(/[\d.]+(?=%)/g)?.map(Number) ?? [0];
+    const x = (clientX - bounds.left) / bounds.width * 100;
+    const y = (clientY - bounds.top) / bounds.height * 100;
+    return x >= left && x <= 100 - right && y >= top && y <= 100 - bottom;
   }
 
   function previewFrame(image) {
@@ -1860,44 +2001,53 @@ function initCaseImageViewer() {
         bottom = Math.min(bottom, crop.bottom);
       }
     }
-    if (right <= left || bottom <= top) return null;
-
-    const insets = [
-      (top - bounds.top) / bounds.height,
-      (bounds.right - right) / bounds.width,
-      (bounds.bottom - bottom) / bounds.height,
-      (left - bounds.left) / bounds.width,
-    ];
-    const clip = insets.some((inset) => inset > 0)
-      ? `inset(${insets.map((inset) => `${inset * 100}%`).join(" ")})`
-      : fullImage;
-    return { bounds, clip, opacity: "1" };
+    return clippedFrame(bounds, left, top, right, bottom);
   }
 
-  function animateImage(from, to, duration) {
-    const base = target.getBoundingClientRect();
-    const keyframe = ({ bounds, clip, opacity }) => {
-      const frame = {};
-      if (bounds && base.width && base.height) {
-        const x = bounds.left - base.left;
-        const y = bounds.top - base.top;
-        frame.transform = `translate(${x}px, ${y}px) scale(${bounds.width / base.width}, ${bounds.height / base.height})`;
-      }
-      if (from.clip !== fullImage || to.clip !== fullImage) frame.clipPath = clip;
-      if (from.opacity !== to.opacity) frame.opacity = opacity;
-      return frame;
+  function clearMotion() {
+    motion?.cancel();
+    motion = null;
+    transitionImage.hidden = true;
+    viewer.classList.remove("is-animating-image");
+  }
+
+  function animateImage(from, to, duration, onFinish) {
+    if (!from || !to || typeof transitionImage.animate !== "function") {
+      onFinish?.();
+      return;
+    }
+    // The real image already has its final size and scroll position. Paint the
+    // transition outside the scroll pane to keep scrollbars out of the tween.
+    const base = to.bounds;
+    transitionImage.style.width = `${base.width}px`;
+    transitionImage.style.height = `${base.height}px`;
+    transitionImage.hidden = false;
+    motionScrollLeft = stage.scrollLeft;
+    motionScrollTop = stage.scrollTop;
+    const hasClip = from.clip !== fullImage || to.clip !== fullImage;
+    const keyframe = ({ bounds, clip, opacity }) => ({
+      transform: `translate(${bounds.left}px, ${bounds.top}px) scale(${bounds.width / base.width}, ${bounds.height / base.height})`,
+      ...(hasClip && { clipPath: clip }),
+      opacity,
+    });
+    const animation = transitionImage.animate([keyframe(from), keyframe(to)], { duration, easing, fill: "both" });
+    motion = animation;
+    viewer.classList.add("is-animating-image");
+    animation.onfinish = () => {
+      if (motion !== animation) return;
+      clearMotion();
+      onFinish?.();
     };
-    motion = target.animate([keyframe(from), keyframe(to)], { duration, easing });
-    return motion;
   }
 
   function layoutImage(point, previous) {
-    const width = enlarged.naturalWidth || opener.naturalWidth || Number(opener.getAttribute("width"));
-    const height = enlarged.naturalHeight || opener.naturalHeight || Number(opener.getAttribute("height"));
+    const width = opener.naturalWidth || enlarged.naturalWidth || Number(opener.getAttribute("width"));
+    const height = opener.naturalHeight || enlarged.naturalHeight || Number(opener.getAttribute("height"));
     if (!width || !height) return;
 
-    const stagePadding = parseFloat(getComputedStyle(stage).paddingTop);
-    const fitWidth = Math.min(width, stage.offsetWidth, (stage.offsetHeight - stagePadding) * width / height);
+    // The grid cell keeps its size when the scroller shows native scrollbars.
+    const stageBox = stage.getBoundingClientRect();
+    const fitWidth = Math.min(width, stageBox.width, stageBox.height * width / height);
     const scale = zoomLevels[zoomIndex];
     target.style.width = `${fitWidth * scale}px`;
     target.style.height = `${fitWidth * scale * height / width}px`;
@@ -1918,6 +2068,11 @@ function initCaseImageViewer() {
     return { x: bounds.left + bounds.width / 2, y: bounds.top + bounds.height / 2 };
   }
 
+  function sizeViewer() {
+    // The dialog covers the viewport, including the gutter reserved behind it.
+    viewer.style.width = `${window.innerWidth}px`;
+  }
+
   function syncZoomControls() {
     const atMax = zoomIndex === zoomLevels.length - 1;
     target.classList.toggle("is-max-zoom", atMax);
@@ -1932,8 +2087,11 @@ function initCaseImageViewer() {
     zoomIndex = 0;
     closing = false;
     enlarged.alt = image.alt;
-    enlarged.src = image.src || image.currentSrc;
+    const source = image.currentSrc || image.src;
+    enlarged.src = source;
+    transitionImage.src = source;
     syncZoomControls();
+    sizeViewer();
     viewer.showModal();
     siteLenis?.stop();
     layoutImage();
@@ -1942,57 +2100,71 @@ function initCaseImageViewer() {
     const fit = imageFrame();
     viewer.classList.add("is-visible");
     if (preview) {
-      animateImage(preview, fit, 320);
-    } else {
-      const visible = { clip: fullImage, opacity: "1" };
-      animateImage({ ...visible, opacity: "0" }, visible, 150);
+      animateImage(preview, fit, 280);
+    } else if (fit) {
+      animateImage({ ...fit, opacity: "0" }, fit, 120);
     }
   }
 
   function closeImage(withMotion) {
     if (closing) return;
     closing = true;
-    const current = imageFrame();
+    const current = visibleFrame();
     const preview = withMotion && !reducedMotionMedia.matches && previewFrame(opener);
-    motion?.cancel();
+    clearMotion();
     viewer.classList.remove("is-visible");
-    const end = preview
-      ? animateImage(current, preview, 240)
-      : animateImage(current, { ...current, opacity: "0" }, 150);
-    end.onfinish = () => viewer.close();
+    const finish = () => viewer.close();
+    if (preview) animateImage(current, preview, 220, finish);
+    else animateImage(current, current && { ...current, opacity: "0" }, 120, finish);
   }
 
-  target.addEventListener("click", (event) => {
-    if (closing) return;
-    const current = imageFrame();
+  function zoomImage(event, current) {
     const point = event.detail ? { x: event.clientX, y: event.clientY } : stageCenter();
-    motion?.cancel();
+    clearMotion();
     zoomIndex = (zoomIndex + 1) % zoomLevels.length;
     layoutImage(point, current);
     syncZoomControls();
-    if (event.detail && !reducedMotionMedia.matches) animateImage(current, imageFrame(), 250);
-  });
+    if (event.detail && !reducedMotionMedia.matches) animateImage(current, imageFrame(), 220);
+  }
+
   close.addEventListener("click", (event) => closeImage(event.detail > 0));
   viewer.addEventListener("click", (event) => {
-    if (!event.target.closest("button")) closeImage(event.detail > 0);
+    if (closing || close.contains(event.target)) return;
+    const current = visibleFrame();
+    // An interrupted zoom can still paint outside the settled button bounds.
+    const onImage = motion && event.detail
+      ? stage.contains(event.target) && visibleFrameContains(current, event)
+      : target.contains(event.target);
+    if (onImage) zoomImage(event, current);
+    else closeImage(event.detail > 0);
   });
+  stage.addEventListener("scroll", () => {
+    if (!motion || closing) return;
+    if (stage.scrollLeft !== motionScrollLeft || stage.scrollTop !== motionScrollTop) clearMotion();
+  }, { passive: true });
   viewer.addEventListener("cancel", (event) => {
     event.preventDefault();
     closeImage(false);
   });
   viewer.addEventListener("close", () => {
     if (viewer.open) return;
-    motion?.cancel();
+    clearMotion();
     viewer.classList.remove("is-visible");
     enlarged.removeAttribute("src");
+    transitionImage.removeAttribute("src");
     siteLenis?.start();
     opener?.focus({ preventScroll: true });
     opener = null;
   });
   function resizeImage() {
-    if (!viewer.open || closing) return;
-    const current = imageFrame();
-    motion?.cancel();
+    if (!viewer.open) return;
+    if (closing) {
+      viewer.close();
+      return;
+    }
+    const current = visibleFrame();
+    clearMotion();
+    sizeViewer();
     layoutImage(stageCenter(), current);
   }
   window.addEventListener("resize", resizeImage);
@@ -2005,7 +2177,7 @@ function initCaseImageViewer() {
   reducedMotionMedia.addEventListener("change", () => {
     if (!viewer.open || !reducedMotionMedia.matches) return;
     if (closing) viewer.close();
-    motion?.cancel();
+    clearMotion();
   });
 
   images.forEach((image) => {

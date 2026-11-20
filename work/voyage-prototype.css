@@ -1,0 +1,49 @@
+body.case--voyage {
+  --voyage-media-width: 1200px;
+}
+
+/* The final dashboard uses the hero width. The article and other figures
+   retain the reading and media widths set in the case study stylesheet. */
+body.case--study.case--voyage .study__body,
+body.case--study.case--voyage .study--adapted .voyage-final-figure {
+  max-width: var(--voyage-media-width);
+}
+
+/* Keep the dashboard's original desktop composition at every viewport size. */
+.voyage-prototype {
+  position: relative;
+  width: 100%;
+  max-width: var(--voyage-media-width);
+  margin: 0;
+}
+
+.voyage-prototype__viewport {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 8 / 5;
+  overflow: hidden;
+}
+
+.voyage-prototype__viewport,
+.case-figure.voyage-final-figure {
+  background: #f0f2f5;
+  border-radius: 3px;
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.14);
+}
+
+.voyage-final-figure > img {
+  border-radius: inherit;
+}
+
+.voyage-prototype__frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 1440px;
+  height: 900px;
+  max-width: none;
+  border: 0;
+  transform: scale(var(--voyage-prototype-scale, 1));
+  transform-origin: top left;
+}

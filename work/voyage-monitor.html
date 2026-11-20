@@ -9,9 +9,11 @@
 <link rel="stylesheet" href="../styles.css?v=145" />
 <link rel="stylesheet" href="../typography.css?v=3" />
 <link rel="stylesheet" href="../assets/vendor/lenis/lenis.css?v=1.3.26" />
-<link rel="stylesheet" href="case-study.css?v=7" />
+<link rel="stylesheet" href="case-study.css?v=9" />
+<link rel="stylesheet" href="voyage-prototype.css?v=2" />
+<link rel="stylesheet" href="voyage-cue.css?v=2" />
 </head>
-<body class="case case--study">
+<body class="case case--study case--voyage">
   <a class="skip-link" href="#main-content">Skip to content</a>
 
   <header class="header">
@@ -69,28 +71,11 @@
               <dt>tools</dt>
               <dd>Sketch, Principle, HTML/CSS</dd>
             </div>
-          </dl></section><figure class="case__hero">
-          <video
-            class="case__hero-media"
-            autoplay
-            muted
-            loop
-            playsinline
-            preload="auto"
-            poster="../assets/images/voyage/hero.png"
-            aria-label="Voyage Monitor dashboard animation showing a fleet map, vessel list, and KPI status bars"
-          >
-            <source src="../assets/images/voyage/hero.webm" type="video/webm" />
-          </video>
-          <div class="case__hero-hover" aria-hidden="true">
-            <img
-              class="case__hero-still"
-              src="../assets/images/voyage/hero-static.png"
-              alt=""
-              width="5120"
-              height="3328"
-            />
+          </dl></section><figure class="voyage-prototype">
+          <div class="voyage-prototype__viewport" data-voyage-prototype>
+            <iframe class="voyage-prototype__frame" src="90poe/index.html?v=2" title="Interactive Voyage Monitor dashboard" data-portfolio-cursor-frame></iframe>
           </div>
+          <span class="voyage-cue" data-voyage-cue aria-hidden="true"></span>
         </figure></div>
     <div class="study__body"><section class="study__contribution study__text" id="role" data-case-section="My contribution" data-case-color="rose">
           <h2 class="study__section-label">My contribution</h2>
@@ -196,8 +181,8 @@
                 <li>Core infrastructure: What started as one dashboard became the foundation of the entire OpenOcean platform.</li>
               </ol>
             </div>
-            <figure class="case-figure">
-              <img src="../assets/images/voyage/final.png" alt="Final Voyage Monitor map view with vessel routes and event context" width="3200" height="2330" />
+            <figure class="case-figure voyage-final-figure">
+              <img src="../assets/images/voyage/final-trimmed.png" alt="Final Voyage Monitor map view with vessel routes and event context" width="3126" height="2032" />
             </figure>
           </article>
         </section><section class="case-section" id="solution" data-case-section="Solution" data-case-color="blue">
@@ -250,6 +235,8 @@
   </div>
 
 <script src="../assets/vendor/lenis/lenis.min.js?v=1.3.26"></script>
-<script src="../script.js?v=76"></script>
+<script src="../script.js?v=82"></script>
+<script src="voyage-prototype.js"></script>
+<script src="voyage-cue.js"></script>
 </body>
 </html>
