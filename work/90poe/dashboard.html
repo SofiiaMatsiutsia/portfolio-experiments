@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <title>Voyage Monitor · PETRA SANDS</title>
+    <link rel="stylesheet" href="styles.css?v=2">
+    <link rel="stylesheet" href="charts.css">
+    <link rel="stylesheet" href="map.css">
+    <script defer src="voyage.js"></script>
+    <script defer src="compliance.js"></script>
+    <script defer src="charts.js"></script>
+    <script defer src="map.js"></script>
+    <script defer src="app.js"></script>
+  </head>
+  <body>
+    <main class="dashboard">
+      <h1 class="sr-only">Voyage Monitor</h1>
+      <section class="voyage-summary" aria-label="Voyage summary">
+        <div class="vessel-summary">
+          <img src="assets/shell-vessel.svg" alt="">
+          <div class="vessel-info">
+            <div class="vessel-name"><strong>PETRA SANDS</strong><img src="assets/shell-external.svg" alt=""></div>
+            <div class="vessel-meta"><span>EN</span><span>9785232</span><span>Oil Crude</span></div>
+          </div>
+        </div>
+        <div class="port-summary">
+          <div><strong><span>US</span> OYH</strong><small>14 Jun 2020, 11:00</small></div>
+          <img src="assets/shell-arrow.svg" alt="to">
+          <div><strong><span>GB</span> SOU</strong><small>24 Jun 2020, 11:00</small></div>
+        </div>
+        <dl class="voyage-readings">
+          <div><dt>RPM</dt><dd>110.2</dd><dd class="reading-average">110.8</dd></div>
+          <div><dt>STW</dt><dd>13.9 kn</dd><dd class="reading-average">14.1 kn</dd></div>
+          <div><dt>SOG</dt><dd>10.6 kn</dd><dd class="reading-average">12.7 kn</dd></div>
+          <div><dt>Slip</dt><dd>27.7%</dd><dd class="reading-average">7.2%</dd></div>
+          <div><dt>DFOC</dt><dd>17.5 t</dd><dd class="reading-average">16.8 t</dd></div>
+        </dl>
+        <div class="reporting-source">
+          <img src="assets/shell-oktopus.svg" alt="">
+          <div>Oktopus.One<br><small>Last upd: 26 Mar 2020, 13:57</small></div>
+        </div>
+      </section>
+
+      <div class="kpi-frame">
+      <section class="kpi-row" aria-label="Voyage KPIs">
+        <button class="kpi-tile" type="button" data-kpi="cp-risk" aria-pressed="false" aria-controls="voyage-charts">
+          <span class="kpi-title">C/P Risk</span>
+          <span class="kpi-values">
+            <span><span class="kpi-metrics"><span class="risk risk-none">No risk</span><strong>10min</strong></span><span class="kpi-period">Last 24h</span></span>
+            <span><span class="kpi-metrics"><span class="risk risk-medium">Medium</span><small>18h 30min</small></span><span class="kpi-period">Voyage</span></span>
+          </span>
+        </button>
+        <button class="kpi-tile" type="button" data-kpi="emissions" aria-pressed="false" aria-controls="voyage-charts">
+          <span class="kpi-title">Emissions Risk</span>
+          <span class="kpi-values">
+            <span><span class="kpi-metrics"><span class="risk risk-high">Risk</span><strong>10.4 nm</strong></span><span class="kpi-period">Last 24h</span></span>
+            <span><span class="kpi-metrics"><span class="risk risk-high">Risk</span><small>57.8 nm</small></span><span class="kpi-period">Voyage</span></span>
+          </span>
+        </button>
+        <button class="kpi-tile" type="button" data-kpi="instructions" aria-pressed="false" aria-controls="voyage-charts">
+          <span class="kpi-title">Voyage Instructions</span>
+          <span class="kpi-values kpi-instructions">
+            <span><span class="kpi-metrics"><strong class="kpi-main">100%</strong> time</span><span class="kpi-period">Last 24h</span></span>
+            <span><span class="kpi-metrics">92% time</span><span class="kpi-period">Voyage</span></span>
+          </span>
+        </button>
+        <button class="kpi-tile" type="button" data-kpi="performance" aria-pressed="true" aria-controls="voyage-charts">
+          <span class="kpi-title">Modelled Perf. Deviat.</span>
+          <span class="kpi-values">
+            <span><span class="kpi-metrics"><strong>+7.8%</strong><strong class="kpi-main">+1.5 mt</strong></span><span class="kpi-period">Last 24h</span></span>
+            <span><span class="kpi-metrics kpi-over"><small>+11.3%</small><small>+22.1 mt</small></span><span class="kpi-period">Voyage</span></span>
+          </span>
+        </button>
+        <button class="kpi-tile" type="button" data-kpi="engine" aria-pressed="false" aria-controls="voyage-charts">
+          <span class="kpi-title">Engine (SFOC)</span>
+          <span class="kpi-values">
+            <span><span class="kpi-metrics"><strong>+7.8%</strong><strong class="kpi-main">+1.5 mt</strong></span><span class="kpi-period">Last 24h</span></span>
+            <span><span class="kpi-metrics kpi-over"><small>+11.3%</small><small>+22.1 mt</small></span><span class="kpi-period">Voyage</span></span>
+          </span>
+        </button>
+        <button class="kpi-tile" type="button" data-kpi="weather" aria-pressed="false" aria-controls="voyage-charts">
+          <span class="kpi-title">Weather &amp; Sea Impact</span>
+          <span class="kpi-values">
+            <span><span class="kpi-metrics"><strong>+7.8%</strong><strong class="kpi-main">+1.5 mt</strong></span><span class="kpi-period">Last 24h</span></span>
+            <span><span class="kpi-metrics kpi-over"><small>+11.3%</small><small>+22.1 mt</small></span><span class="kpi-period">Voyage</span></span>
+          </span>
+        </button>
+        <button class="kpi-tile" type="button" data-kpi="hull-propeller" aria-pressed="false" aria-controls="voyage-charts">
+          <span class="kpi-title">Hull&amp;Propeller Impact</span>
+          <span class="kpi-values">
+            <span><span class="kpi-metrics"><strong>+7.8%</strong><strong class="kpi-main">+1.5 mt</strong></span><span class="kpi-period">Last 24h</span></span>
+            <span><span class="kpi-metrics kpi-over"><small>+11.3%</small><small>+22.1 mt</small></span><span class="kpi-period">Voyage</span></span>
+          </span>
+        </button>
+      </section>
+      <div class="kpi-scrollbar" aria-label="Scroll voyage KPIs" tabindex="0"><div></div></div>
+      </div>
+
+      <div class="workbench">
+        <section id="voyage-charts" class="voyage-charts" aria-label="Voyage charts"></section>
+        <div class="chart-resizer" role="separator" aria-label="Resize chart panel" aria-orientation="vertical" aria-controls="voyage-charts" tabindex="0"></div>
+        <section id="voyage-map" class="voyage-map" aria-label="Vessel route map"></section>
+        <section id="voyage-compass" class="voyage-compass" aria-label="Vessel and weather readings"></section>
+      </div>
+      <p class="sr-only" id="voyage-status" role="status"></p>
+    </main>
+  </body>
+</html>

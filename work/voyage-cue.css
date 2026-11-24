@@ -1,0 +1,23 @@
+/* A small handwritten invitation sits outside the interactive surface. */
+.voyage-prototype [data-voyage-cue] {
+  position: absolute;
+  z-index: 2;
+  top: 17%;
+  right: calc(100% + 14px);
+  width: clamp(32px, 3.5vw, 56px);
+  pointer-events: none;
+}
+
+.voyage-prototype [data-voyage-cue] svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* Leave room for the cue, its gap and the page edge on either side. */
+@media (width < 1370px) {
+  .voyage-prototype [data-voyage-cue] {
+    display: none;
+  }
+}

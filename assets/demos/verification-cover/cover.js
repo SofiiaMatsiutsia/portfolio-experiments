@@ -111,6 +111,7 @@
       this.render();
       this.events = new AbortController();
       const options = {signal:this.events.signal};
+      this.showcase?.addEventListener('showcaseinspectionchange', () => this.syncPlayback(), options);
       document.addEventListener('visibilitychange', () => this.syncPlayback(), options);
       window.addEventListener('homepageintrochange', () => {
         queueMicrotask(() => this.syncPlayback());
@@ -118,15 +119,7 @@
       window.addEventListener('pagehide', () => { this.suspended = true; this.syncPlayback(); }, options);
       window.addEventListener('pageshow', () => { this.suspended = false; this.syncPlayback(); }, options);
       this.motion.addEventListener('change', () => {
-        if (this.motion.matches) {
-          this.pauseTracks();
-          for (const animation of this.animations) animation.currentTime = 0;
-          if (this.sharedClock) {
-            this.sharedClock.elapsed = 0;
-            this.sharedClock.origin = null;
-          }
-          this.setPhase(0);
-        }
+        if (this.motion.matches) this.pauseTracks(true);
         this.syncPlayback();
       }, options);
 
@@ -296,10 +289,11 @@
       }
     }
 
-    pauseTracks() {
+    pauseTracks(reset = false) {
       cancelAnimationFrame(this.phaseFrame);
-      const time = Number(this.clock?.currentTime)||0;
-      if (this.sharedClock?.active.delete(this) && this.sharedClock.active.size===0) {
+      const time = reset ? 0 : Number(this.clock?.currentTime)||0;
+      const wasActive = this.sharedClock?.active.delete(this);
+      if (this.sharedClock && (wasActive || reset) && this.sharedClock.active.size===0) {
         this.sharedClock.elapsed = time;
         this.sharedClock.origin = null;
       }
@@ -310,6 +304,10 @@
     }
 
     syncPlayback() {
+      if (this.showcase?.hasAttribute('data-showcase-inspecting')) {
+        this.pauseTracks(true);
+        return;
+      }
       const introActive = this.showcase && document.documentElement.hasAttribute('data-home-intro');
       const canPlay = this.loaded && !this.motion.matches && this.inView && !introActive && !document.hidden &&
         !this.suspended && !this.link?.hidden && this.isConnected;

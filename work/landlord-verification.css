@@ -27,21 +27,14 @@ body.case--verification .study__research figcaption {
   text-align: center;
 }
 body.case--verification .study__dashboard {
-  position: relative;
   flex: 0 0 auto;
   width: 1120px;
   max-width: calc(100vw - 2 * var(--study-gutter));
-  aspect-ratio: 1120 / 431;
   margin: 0;
-  overflow: hidden;
 }
 body.case--verification .study__dashboard > img {
-  position: absolute;
-  top: -11.83%;
-  left: -3.57%;
-  width: 107.14%;
-  height: 111.82%;
-  max-width: none;
+  width: 100%;
+  height: auto;
 }
 /* The copy explorer keeps one layout height across all five checkpoints. */
 body.case--verification .verification-milestones-demo {

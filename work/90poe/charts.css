@@ -1,0 +1,337 @@
+.voyage-charts {
+  --chart-accent: #00a8e1;
+  --chart-secondary: #32435c;
+  --chart-label: #6d7479;
+  --chart-grid: #f0f2f3;
+  display: flex;
+  align-self: start;
+  min-width: 0;
+  min-height: 0;
+  max-height: 100%;
+  flex-direction: column;
+}
+
+.voyage-chart-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 17px 14px 20px;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: #d1dbe0 transparent;
+}
+
+.voyage-chart-toolbar {
+  display: flex;
+  flex: 0 0 auto;
+  justify-content: end;
+  min-block-size: 35px;
+  padding: 4px 12px 2px;
+  border-bottom: 1px solid var(--chart-grid);
+}
+
+.voyage-chart-reset[hidden],
+.voyage-chart-tooltip[hidden] {
+  display: none;
+}
+
+.voyage-chart-reset {
+  min-height: 28px;
+  border: 0;
+  padding: 0 4px;
+  background: transparent;
+  color: #006991;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.voyage-chart-reset:hover {
+  text-decoration: underline;
+}
+
+.voyage-chart + .voyage-chart {
+  margin-top: var(--panel-gap);
+}
+
+.voyage-chart-heading {
+  margin: 0 0 9px;
+  color: var(--ink, #25292d);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+.voyage-chart-heading-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.voyage-chart-unit {
+  flex: 0 0 auto;
+  color: var(--chart-label);
+  font-size: 11px;
+}
+
+.voyage-chart-plot-row {
+  display: flex;
+  min-width: 0;
+  align-items: stretch;
+}
+
+.voyage-chart-plot-frame {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.voyage-chart-plot-frame::before,
+.voyage-chart-plot-frame::after {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  width: 24px;
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease;
+}
+
+.voyage-chart-plot-frame::before {
+  left: 0;
+  background: linear-gradient(to right, var(--surface, #fff), transparent);
+}
+
+.voyage-chart-plot-frame::after {
+  right: 0;
+  background: linear-gradient(to left, var(--surface, #fff), transparent);
+}
+
+.voyage-chart-plot-frame.has-more-left::before,
+.voyage-chart-plot-frame.has-more-right::after { opacity: 1; }
+
+.voyage-chart-axis-column {
+  position: relative;
+  flex: 0 0 30px;
+  color: var(--chart-label);
+  font-size: 11px;
+}
+
+.voyage-chart-axis-value {
+  position: absolute;
+  left: 5px;
+  transform: translateY(-50%);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.voyage-chart-timeline-scroll {
+  flex: 0 0 auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin: 0 44px 2px 14px;
+  scrollbar-width: thin;
+  scrollbar-color: #b8c6cd transparent;
+}
+
+.voyage-chart-timeline-scroll[hidden] {
+  display: none;
+}
+
+.voyage-chart-timeline-spacer {
+  height: 1px;
+}
+
+.voyage-chart-note {
+  margin: 0 0 6px;
+  color: var(--chart-label);
+  font-size: 12px;
+}
+
+.voyage-plot {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  line-height: 1;
+  touch-action: pan-x pan-y pinch-zoom;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.voyage-plot::-webkit-scrollbar {
+  display: none;
+}
+
+.voyage-plot:focus-visible,
+.voyage-chart-reset:focus-visible {
+  outline: 2px solid #006991;
+  outline-offset: 3px;
+}
+
+.voyage-plot svg {
+  display: block;
+  max-width: none;
+  overflow: hidden;
+}
+
+.voyage-chart-hit {
+  cursor: crosshair;
+}
+
+.voyage-chart-grid {
+  stroke: var(--chart-grid);
+}
+
+.voyage-chart-baseline {
+  stroke: #dce3e7;
+}
+
+.voyage-chart-axis {
+  fill: var(--chart-label);
+  font-size: 11px;
+}
+
+.voyage-chart-rule {
+  stroke: #a6b3ba;
+  stroke-dasharray: 3 2;
+  stroke-width: 1;
+}
+
+.voyage-chart-brush {
+  fill: #00a8e1;
+  fill-opacity: 0.13;
+  stroke: #00a8e1;
+  stroke-opacity: 0.7;
+}
+
+.voyage-chart-legend {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  column-gap: 15px;
+  row-gap: 3px;
+  min-height: 15px;
+  margin: 5px 25px 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--chart-label);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.voyage-chart-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.voyage-chart-legend-swatch {
+  flex: 0 0 auto;
+  width: 5px;
+  height: 5px;
+  background: currentColor;
+  border-radius: 50%;
+}
+
+.voyage-chart-legend-swatch.is-outline {
+  border: 1px solid currentColor;
+  background: transparent;
+}
+
+.voyage-chart-legend-swatch.is-line {
+  width: 13px;
+  height: 2px;
+  border-radius: 1px;
+}
+
+.voyage-chart-legend-swatch.is-band,
+.voyage-chart-legend-swatch.is-block {
+  width: 9px;
+  height: 7px;
+  border-radius: 1px;
+}
+
+.voyage-chart-legend-swatch.is-band {
+  border: 1px solid #adb6ba;
+}
+
+.voyage-chart-tooltip {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  inline-size: min(192px, calc(100vw - 16px));
+  inline-size: min(192px, calc(100dvw - 16px));
+  padding: 7px 9px;
+  border: 1px solid #cbd6dc;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 3px 12px #00203317;
+  color: var(--ink, #25292d);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.46;
+  overflow-wrap: anywhere;
+  pointer-events: none;
+}
+
+.voyage-chart-tooltip time {
+  display: block;
+  margin-bottom: 2px;
+  color: #626a70;
+}
+
+.voyage-chart-tooltip strong {
+  font-weight: 700;
+}
+
+.voyage-breach-highlight {
+  stroke: #f9afb1;
+  stroke-width: 3;
+  pointer-events: none;
+}
+
+.voyage-breach-tooltip {
+  border-color: #ef2329;
+}
+
+.voyage-breach-tooltip::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: calc(var(--breach-pointer-x, 50%) - 4px);
+  width: 8px;
+  height: 8px;
+  border-top: 1px solid #ef2329;
+  border-left: 1px solid #ef2329;
+  background: #fff;
+  transform: rotate(45deg);
+}
+
+.voyage-breach-tooltip.is-above::before {
+  top: auto;
+  bottom: -5px;
+  border: 0;
+  border-right: 1px solid #ef2329;
+  border-bottom: 1px solid #ef2329;
+}
+
+.voyage-breach-status {
+  color: #ef2329;
+}
+
+.voyage-chart-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}

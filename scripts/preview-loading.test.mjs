@@ -11,11 +11,13 @@ function browser({ reduced = false, saveData = false } = {}) {
   const microtasks = [];
   const preference = { matches: reduced, addEventListener: (name, fn) => events.set(`motion:${name}`, fn) };
   const connection = { saveData, addEventListener: (name, fn) => events.set(`connection:${name}`, fn) };
+  const showcase = { inspecting: false };
   const videos = Array.from({ length: 2 }, () => {
     const attributes = new Map();
     const source = { dataset: { src: 'preview.mp4' }, hasAttribute: (name) => attributes.has(name),
       set src(url) { attributes.set('src', url); }, get src() { return attributes.get('src'); } };
-    return { source, plays: 0, loads: 0, paused: true,
+    return { source, plays: 0, loads: 0, paused: true, currentTime: 0,
+      closest: (selector) => selector === '.showcase[data-showcase-inspecting]' && showcase.inspecting ? showcase : null,
       hasAttribute: () => true, querySelectorAll: () => [source],
       pause() { this.paused = true; }, load() { this.loads += 1; },
       play() { this.plays += 1; this.paused = false; return Promise.resolve(); },
@@ -33,7 +35,7 @@ function browser({ reduced = false, saveData = false } = {}) {
     addEventListener: (name, fn) => events.set(name, fn) };
   vm.runInNewContext(source + '\ninitVideoVisibility();', { window, document, navigator: { connection }, IntersectionObserver,
     queueMicrotask: (fn) => microtasks.push(fn) });
-  return { videos, root, document, preference, connection,
+  return { videos, root, document, preference, connection, showcase,
     visible(index, value = true) { intersect([{ target: videos[index], isIntersecting: value }]); },
     emit(name) { events.get(name)(); },
     flush() { microtasks.splice(0).forEach((fn) => fn()); },
@@ -69,6 +71,28 @@ test('reduced motion and data-saving mode retain posters without fetching videos
     b.emit('connection:change'); b.flush();
     assert.equal(b.videos[0].loads, 1);
   }
+});
+
+test('showcase inspection rewinds active previews and defers newly visible ones', () => {
+  const b = browser();
+  b.root.active = false;
+  b.visible(0);
+  b.videos[0].currentTime = 2;
+  b.showcase.inspecting = true;
+  b.emit('showcaseinspectionchange'); b.flush();
+  assert.equal(b.videos[0].paused, true);
+  assert.equal(b.videos[0].currentTime, 0);
+
+  b.visible(1);
+  assert.equal(b.videos[1].loads, 0);
+  assert.equal(b.videos[1].paused, true);
+
+  b.showcase.inspecting = false;
+  b.emit('showcaseinspectionchange'); b.flush();
+  assert.equal(b.videos[0].loads, 1);
+  assert.equal(b.videos[0].paused, false);
+  assert.equal(b.videos[1].loads, 1);
+  assert.equal(b.videos[1].paused, false);
 });
 
 test('a replay handoff cannot start a video between finish and restart', () => {
