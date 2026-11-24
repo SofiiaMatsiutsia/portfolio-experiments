@@ -1,0 +1,3 @@
+:HL["/work/voyage-monitor/presentation/_next/static/css/2a5e5fac6fdaea89.css","style"]
+1:[["children",{"s":"__PAGE__","h":160}]]
+0:{"b":"prYNTGP5u0QqAIeQjCQqt","t":{"t":{"s":"","h":80,"c":"$Q1"}}}

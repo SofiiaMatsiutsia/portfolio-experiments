@@ -1,0 +1,10 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+<foreignObject x="-2" y="-2" width="52" height="52"><div xmlns="http://www.w3.org/1999/xhtml" style="backdrop-filter:blur(1px);clip-path:url(#bgblur_0_0_4_clip_path);height:100%;width:100%"></div></foreignObject><g id="vessel" data-figma-bg-blur-radius="2">
+<rect x="0.75" y="0.75" width="46.5" height="46.5" rx="23.25" fill="white" fill-opacity="0.2"/>
+<rect x="0.75" y="0.75" width="46.5" height="46.5" rx="23.25" stroke="white" stroke-width="1.5"/>
+<path id="Rectangle 19 Copy 2" d="M17.0785 37.4962C17.1802 36.3497 18.9164 19.7929 19.254 18.4138C20.5062 13.2986 24.3928 8.69278 25.6007 8.81432C26.8086 8.93585 29.7272 14.5571 30.2117 19.5164C30.3518 20.9508 29.0744 37.5378 28.972 38.6923C28.8696 39.8468 25.578 40.161 22.8443 39.8842C20.1106 39.6075 16.9768 38.6427 17.0785 37.4962Z" fill="#006A9E"/>
+</g>
+<defs>
+<clipPath id="bgblur_0_0_4_clip_path" transform="translate(2 2)"><rect x="0.75" y="0.75" width="46.5" height="46.5" rx="23.25"/>
+</clipPath></defs>
+</svg>
